@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Custo e Arquitetura: GPON vs Tradicional</title>
+    
+    <!-- Chosen Palette: Slate/Neutral with Emerald (GPON/Efficient) and Rose/Orange (Traditional/Legacy) accents -->
+    <!-- Application Structure Plan: The SPA uses a scenario-based dashboard layout. Users select a specific environment (Retail, Gated Community, Industrial). For each, the app dynamically updates to show contextual analysis, a simulated comparative cost chart (CAPEX vs OPEX derived from qualitative report data), and a side-by-side component breakdown. This structure is chosen to allow decision-makers to directly compare the two architectures within the context most relevant to their needs, moving from high-level cost impact down to technical component differences. -->
+    <!-- Visualization & Content Choices: 
+        1. Context Text -> Goal: Inform -> Dynamic text block -> Interaction: Updates on scenario click -> Justification: Sets the stage for the specific environmental challenges. 
+        2. Cost Comparison -> Goal: Compare -> Stacked Bar Chart (Chart.js) -> Interaction: Hover tooltips, dynamic update -> Justification: Effectively visualizes the inferred relative costs (Equipment, Cabling, Maintenance) to fulfill the user's request for a "price comparison" based on the technical descriptions. Library: Chart.js Canvas.
+        3. Component Matrix -> Goal: Compare/Organize -> Side-by-side HTML Grid -> Interaction: Visual comparison -> Justification: Directly maps the provided source report data into an easily readable format, highlighting pros/cons.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 400px; }
+        }
+        .tab-active { border-bottom: 4px solid #10b981; color: #10b981; font-weight: 600; }
+        .tab-inactive { border-bottom: 4px solid transparent; color: #64748b; }
+        .tab-inactive:hover { color: #334155; border-bottom: 4px solid #cbd5e1; }
+        
+        .card-gpon { border-top: 4px solid #10b981; }
+        .card-trad { border-top: 4px solid #f43f5e; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <header class="bg-slate-900 text-white py-8 px-4 shadow-md">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">&#128200; Análise de TCO e Arquitetura de Rede</h1>
+            <p class="text-slate-300 text-lg">Comparativo de Viabilidade: GPON (Óptico) vs Arquitetura Tradicional (Puro IP/UTP)</p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+            <h2 class="text-xl font-bold text-slate-800 mb-4">&#128269; Visão Geral do Estudo</h2>
+            <p class="text-slate-600 leading-relaxed">
+                Este painel interativo analisa três cenários distintos de infraestrutura de rede, contrastando a moderna arquitetura GPON (Redes Ópticas Passivas) com a abordagem tradicional em cobre (UTP). Embora os custos exatos variem, os gráficos abaixo apresentam um <strong>Índice de Custo Relativo Estimado</strong> baseado na necessidade de equipamentos ativos, proteção ambiental e volume de cabeamento extraídos das descrições técnicas do relatório original.
+            </p>
+        </div>
+
+        <div class="mb-8 border-b border-slate-200 flex overflow-x-auto" id="scenario-tabs">
+            <button onclick="setScenario('varejo')" id="tab-varejo" class="tab-active px-6 py-4 text-lg whitespace-nowrap transition-colors duration-200">&#128666; Varejo / Supermercado</button>
+            <button onclick="setScenario('condominio')" id="tab-condominio" class="tab-inactive px-6 py-4 text-lg whitespace-nowrap transition-colors duration-200">&#127960;&#65039; Condomínio Fechado</button>
+            <button onclick="setScenario('industrial')" id="tab-industrial" class="tab-inactive px-6 py-4 text-lg whitespace-nowrap transition-colors duration-200">&#127981; Campus Industrial</button>
+        </div>
+
+        <section id="scenario-content" class="animate-fade-in">
+            
+            <div class="mb-8">
+                <h3 id="scenario-title" class="text-2xl font-bold text-slate-800 mb-2"></h3>
+                <p id="scenario-desc" class="text-slate-600 text-lg"></p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8">
+                <h4 class="text-lg font-bold text-slate-800 mb-6 text-center">Estimativa de Custo Relativo (TCO)</h4>
+                <div class="chart-container">
+                    <canvas id="costChart"></canvas>
+                </div>
+                <p class="text-xs text-center text-slate-400 mt-4">* Os valores representam índices de custo relativo estimados (CAPEX e OPEX) baseados nas descrições de infraestrutura (ex: blindagem, refrigeração, quantidade de switches).</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 card-gpon">
+                    <div class="flex items-center mb-4">
+                        <span class="text-2xl mr-2">&#128994;</span>
+                        <h4 class="text-xl font-bold text-emerald-700">Arquitetura GPON (MDU/OLT)</h4>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4 font-medium">Solução baseada em fibra óptica centralizada.</p>
+                    <ul id="list-gpon" class="space-y-3">
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 card-trad">
+                    <div class="flex items-center mb-4">
+                        <span class="text-2xl mr-2">&#128308;</span>
+                        <h4 class="text-xl font-bold text-rose-700">Arquitetura Tradicional (UTP)</h4>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-4 font-medium">Solução baseada em múltiplos ativos IP e cabeamento metálico.</p>
+                    <ul id="list-trad" class="space-y-3">
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center mt-12">
+        <p>Baseado em análise técnica de arquiteturas de rede. Elementos interativos gerados para fins de visualização de dados.</p>
+    </footer>
+
+    <script>
+        const scenarioData = {
+            varejo: {
+                title: "Cenário 1: Varejo / Supermercado",
+                description: "Neste cenário de alta densidade interna, a arquitetura Tradicional exige centenas de lances de cabo de cobre e múltiplos switches espalhados pelo teto. A solução GPON reduz drasticamente a ocupação de infraestrutura usando fibra monomodo e splitters passivos, concentrando o processamento na OLT.",
+                costs: {
+                    labels: ['GPON (Óptico)', 'Tradicional (Cobre/IP)'],
+                    equipments: [50, 45], 
+                    cabling: [15, 45],
+                    maintenance: [10, 30] 
+                },
+                gpon: [
+                    "<strong>Main Gateway:</strong> Gerenciamento de tráfego/QoS.",
+                    "<strong>OLT:</strong> Concentrador óptico central.",
+                    "<strong>Splitters Passivos 1:32:</strong> Instalados em bandejas (não requerem energia elétrica).",
+                    "<strong>Câmeras GPON Nativas:</strong> Conexão direta via conector SC/APC.",
+                    "<strong>Fibra Drop:</strong> Monomodo, garantindo baixíssima ocupação de calhas e dutos."
+                ],
+                trad: [
+                    "<strong>NVR/VMS:</strong> Servidor de gravação central.",
+                    "<strong>Switch Core:</strong> Agregação central da rede.",
+                    "<strong>Switches PoE de Acesso:</strong> Vários ativos espalhados pelo teto (requerem energia/nobreak).",
+                    "<strong>Cabos UTP Cat6:</strong> Centenas de lances de cobre pesados e espessos.",
+                    "<strong>Patch Panels:</strong> Exigem organização complexa em racks locais."
+                ]
+            },
+            condominio: {
+                title: "Cenário 2: Condomínio Fechado",
+                description: "Em grandes áreas abertas, a rede Tradicional sofre com intempéries. O uso de cobre externo aumenta severamente o risco de queimas por raios e oxidação, exigindo caixas herméticas e conversores ativos. GPON brilha aqui com splitters passivos e imunidade eletromagnética nativa.",
+                costs: {
+                    labels: ['GPON (Óptico)', 'Tradicional (Cobre/IP)'],
+                    equipments: [60, 80], 
+                    cabling: [25, 40],
+                    maintenance: [15, 70] 
+                },
+                gpon: [
+                    "<strong>MDU Agregador:</strong> Localizado centralmente na portaria.",
+                    "<strong>OLT Central:</strong> Alojada com segurança no rack da administração.",
+                    "<strong>Splitters Externos (IP67):</strong> Instalados em postes ou caixas de rua, 100% passivos.",
+                    "<strong>Fibra Trunk/Drop:</strong> Permite distribuição de longa distância sem perda de sinal.",
+                    "<strong>Câmeras GPON de Poste:</strong> Totalmente imunes a surtos elétricos e raios."
+                ],
+                trad: [
+                    "<strong>NVR de Portaria:</strong> Gravação local das imagens.",
+                    "<strong>Switches Industriais PoE:</strong> Necessários nos postes, alto custo e exigem puxar energia elétrica.",
+                    "<strong>Conversores de Mídia:</strong> Adição de mais pontos de falha para interligar postes via fibra.",
+                    "<strong>Protetores de Surto:</strong> Obrigatórios e onerosos em cada câmera e switch.",
+                    "<strong>Cabos UTP Externos:</strong> Alto índice de manutenção devido a oxidação e descargas atmosféricas."
+                ]
+            },
+            industrial: {
+                title: "Cenário 3: Campus Industrial",
+                description: "O ambiente de manufatura é hostil (EMI/RFI, calor, vibração). A rede Tradicional exige investimentos massivos em blindagem (cabos STP, eletrodutos metálicos) e refrigeração de racks de borda. GPON (Arquitetura POL) resolve isso com fibra dielétrica imune a interferências.",
+                costs: {
+                    labels: ['GPON (POL)', 'Tradicional (Cobre/IP)'],
+                    equipments: [70, 110], 
+                    cabling: [20, 80],
+                    maintenance: [20, 60] 
+                },
+                gpon: [
+                    "<strong>Main Gateway:</strong> Terminação de rede e aplicação de políticas de segurança.",
+                    "<strong>OLT (Arquitetura POL):</strong> Gerenciamento unificado e simplificado da LAN industrial.",
+                    "<strong>Splitters Industriais:</strong> Componentes passivos robustos, resistentes a vibração severa.",
+                    "<strong>Fibra Dielétrica:</strong> Material não condutivo, totalmente imune a EMI e RFI industriais.",
+                    "<strong>ONUs Industriais:</strong> Atuam como bridge confiável para integração de câmeras IP legadas."
+                ],
+                trad: [
+                    "<strong>NVR/VMS Central:</strong> Servidor de altíssima capacidade e redundância.",
+                    "<strong>Switches Industriais Robustos:</strong> Equipamentos de elevadíssimo custo por porta.",
+                    "<strong>Cabos STP (Blindados):</strong> Caros, pesados e exigem aterramento rigoroso ponta a ponta.",
+                    "<strong>Eletrodutos Metálicos:</strong> Infraestrutura física pesada obrigatória para reduzir interferência em cabos metálicos.",
+                    "<strong>Racks Climatizados:</strong> Geram alto custo de OPEX (energia/manutenção) para abrigar switches em galpões quentes."
+                ]
+            }
+        };
+
+        let currentChart = null;
+
+        function renderList(listId, items, icon) {
+            const ul = document.getElementById(listId);
+            ul.innerHTML = '';
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.className = "flex items-start bg-slate-50 p-3 rounded-lg border border-slate-100";
+                li.innerHTML = `<span class="mr-3 mt-1 text-sm">${icon}</span> <span class="text-slate-700">${item}</span>`;
+                ul.appendChild(li);
+            });
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('costChart').getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Equipamentos Ativos / Core (Estimativa)',
+                            backgroundColor: '#3b82f6',
+                            data: []
+                        },
+                        {
+                            label: 'Infraestrutura / Cabeamento / Proteção',
+                            backgroundColor: '#8b5cf6',
+                            data: []
+                        },
+                        {
+                            label: 'OPEX (Energia, Manutenção, Surtos)',
+                            backgroundColor: '#f59e0b',
+                            data: []
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            grid: { display: false }
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Índice de Custo Relativo'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            mode: 'index',
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) { label += context.parsed.y + ' un.'; }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChartData(costs) {
+            currentChart.data.labels = costs.labels;
+            currentChart.data.datasets[0].data = costs.equipments;
+            currentChart.data.datasets[1].data = costs.cabling;
+            currentChart.data.datasets[2].data = costs.maintenance;
+            currentChart.update();
+        }
+
+        function setScenario(scenarioKey) {
+            
+            document.querySelectorAll('#scenario-tabs button').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('tab-inactive');
+            });
+            document.getElementById('tab-' + scenarioKey).classList.remove('tab-inactive');
+            document.getElementById('tab-' + scenarioKey).classList.add('tab-active');
+
+            const data = scenarioData[scenarioKey];
+            
+            document.getElementById('scenario-title').innerHTML = data.title;
+            document.getElementById('scenario-desc').innerHTML = data.description;
+
+            renderList('list-gpon', data.gpon, '&#10004;&#65039;');
+            renderList('list-trad', data.trad, '&#9888;&#65039;');
+
+            updateChartData(data.costs);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            setScenario('varejo');
+        });
+    </script>
+</body>
+</html>

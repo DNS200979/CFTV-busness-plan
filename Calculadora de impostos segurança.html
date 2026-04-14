@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Custo Desembarcado (Segurança)</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --secondary: #0056b3;
+            --accent: #f39c12;
+            --bg: #f4f7f6;
+            --text: #333;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h2 {
+            color: var(--primary);
+            margin: 0;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-size: 0.9em;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.2);
+        }
+        .results-panel {
+            background: #eef2f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid var(--secondary);
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .result-row:last-child {
+            border-bottom: none;
+        }
+        .total-box {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .total-box h3 { margin: 0 0 10px 0; font-size: 1.2em; font-weight: normal; }
+        .total-box .value { font-size: 2em; font-weight: bold; color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Calculadora Landed Cost - Segurança Eletrônica</h2>
+        <p>Simulação de importação com políticas comerciais e tributação em cascata.</p>
+    </div>
+
+    <div class="grid">
+        <div class="inputs-panel">
+            <div class="form-group">
+                <label>Produto (NCM):</label>
+                <select id="produto" onchange="calcular()">
+                    <option value="cam_dome">Câmera Speed Dome (8525.89.29)</option>
+                    <option value="cam_wifi_in">Câmera Wi-Fi Interna (8525.89.29)</option>
+                    <option value="cam_wifi_ex">Câmera Wi-Fi Externa (8525.89.29)</option>
+                    <option value="switch_poe">Switch PoE (8517.62.39)</option>
+                    <option value="switch_ger">Switch Gerenciável (8517.62.39)</option>
+                    <option value="switch_nger">Switch Não Gerenciável (8517.62.39)</option>
+                    <option value="cam_cftv">Câmera de Segurança CFTV (8525.89.29)</option>
+                    <option value="nvr">Gravador NVR (8521.90.90)</option>
+                    <option value="alarme">Central de Alarme (8531.10.90)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Valor FOB Base (USD):</label>
+                <input type="text" id="fob" value="1000,00" oninput="calcular()" placeholder="Ex: 1000,50">
+            </div>
+            
+            <div class="grid" style="gap: 10px;">
+                <div class="form-group">
+                    <label>Frete (USD):</label>
+                    <input type="text" id="frete" value="150,00" oninput="calcular()">
+                </div>
+                <div class="form-group">
+                    <label>Seguro (USD):</label>
+                    <input type="text" id="seguro" value="10,00" oninput="calcular()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Taxa de Câmbio (BRL/USD):</label>
+                <input type="text" id="cambio" value="5,00" oninput="calcular()">
+            </div>
+
+            <div class="form-group">
+                <label>Volume (Contêineres):</label>
+                <select id="volume" onchange="calcular()">
+                    <option value="0">1 Contêiner (Base)</option>
+                    <option value="-0.03">2 Contêineres (-3%)</option>
+                    <option value="-0.05">3+ Contêineres (-5%)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Condição de Pagamento:</label>
+                <select id="pagamento" onchange="calcular()">
+                    <option value="-0.03">À vista Antecipado (-3%)</option>
+                    <option value="0" selected>Até 3x (Base)</option>
+                    <option value="0.03">3 a 6x (+3%)</option>
+                    <option value="0.06">6 a 12x (+6%)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="results-panel">
+            <h3 style="margin-top: 0; color: var(--primary);">Detalhamento de Custos</h3>
+            
+            <div class="result-row">
+                <span>FOB Ajustado:</span>
+                <strong id="res_fob_usd">USD 0.00</strong>
+            </div>
+            <div class="result-row" style="background: #e0e6ed; padding: 10px; margin: 10px 0; border-radius: 4px;">
+                <span><strong>Valor CIF:</strong></span>
+                <strong id="res_cif_brl" style="color: var(--secondary);">R$ 0,00</strong>
+            </div>
+            <div class="result-row">
+                <span>Imposto de Importação (II):</span>
+                <strong id="res_ii">R$ 0,00</strong>
+            </div>
+            <div class="result-row">
+                <span>IPI:</span>
+                <strong id="res_ipi">R$ 0,00</strong>
+            </div>
+            <div class="result-row">
+                <span>PIS (2.10%):</span>
+                <strong id="res_pis">R$ 0,00</strong>
+            </div>
+            <div class="result-row">
+                <span>COFINS (9.65%):</span>
+                <strong id="res_cofins">R$ 0,00</strong>
+            </div>
+            <div class="result-row">
+                <span>ICMS (18% por dentro):</span>
+                <strong id="res_icms">R$ 0,00</strong>
+            </div>
+
+            <div class="total-box">
+                <h3>Custo Desembarcado Total</h3>
+                <div class="value" id="res_total">R$ 0,00</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tabela de Impostos por NCM
+    const taxasProduto = {
+        'cam_dome':    { ii: 0.112, ipi: 0.0975, pis: 0.021, cofins: 0.0965, icms: 0.18 },
+        'cam_wifi_in': { ii: 0.112, ipi: 0.0975, pis: 0.021, cofins: 0.0965, icms: 0.18 },
+        'cam_wifi_ex': { ii: 0.112, ipi: 0.0975, pis: 0.021, cofins: 0.0965, icms: 0.18 },
+        'switch_poe':  { ii: 0.096, ipi: 0.0975, pis: 0.021, cofins: 0.0965, icms: 0.18 },
+        'switch_ger':  { ii: 0.096, ipi: 0.0975, pis: 0.021, cofins: 0.0965, icms: 0.18 },
+        'switch_nger': { ii: 0.096, ipi: 0.0975, pis: 0.021, cofins: 0.0965, icms: 0.18 },
+        'cam_cftv':    { ii: 0.112, ipi: 0.0975, pis: 0.021, cofins: 0.0965, icms: 0.18 },
+        'nvr':         { ii: 0.112, ipi: 0.1500, pis: 0.021, cofins: 0.0965, icms: 0.18 },
+        'alarme':      { ii: 0.112, ipi: 0.0000, pis: 0.021, cofins: 0.0965, icms: 0.18 }
+    };
+
+    // Função para tratar inputs (aceita tanto ponto quanto vírgula)
+    function parseNumero(str) {
+        if (!str) return 0;
+        // Troca vírgula por ponto para o JavaScript entender como decimal
+        return parseFloat(str.replace(',', '.')) || 0;
+    }
+
+    // Função para formatar em Reais (BRL)
+    function formatarBRL(valor) {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    // Função para formatar em Dólares (USD)
+    function formatarUSD(valor) {
+        return valor.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    }
+
+    function calcular() {
+        // 1. Capturar Valores dos Inputs
+        let fobBase = parseNumero(document.getElementById('fob').value);
+        let frete = parseNumero(document.getElementById('frete').value);
+        let seguro = parseNumero(document.getElementById('seguro').value);
+        let cambio = parseNumero(document.getElementById('cambio').value);
+        
+        let txVolume = parseFloat(document.getElementById('volume').value);
+        let txPagamento = parseFloat(document.getElementById('pagamento').value);
+        let prodSelect = document.getElementById('produto').value;
+        let taxas = taxasProduto[prodSelect];
+
+        // 2. Aplicar Políticas Comerciais (Limitando desconto máximo a 8%)
+        let modificadorTotal = txVolume + txPagamento;
+        if (modificadorTotal < -0.08) {
+            modificadorTotal = -0.08; // Cap de 8% de desconto
+        }
+
+        let fobAjustado = fobBase * (1 + modificadorTotal);
+
+        // 3. Cálculo do CIF
+        let cifUsd = fobAjustado + frete + seguro;
+        let cifBrl = cifUsd * cambio;
+
+        // 4. Cálculo dos Impostos (Cascata)
+        let valorII = cifBrl * taxas.ii;
+        let valorIPI = (cifBrl + valorII) * taxas.ipi;
+        let valorPIS = cifBrl * taxas.pis;
+        let valorCOFINS = cifBrl * taxas.cofins;
+        
+        // Base de cálculo do ICMS inclui todos os impostos anteriores (por dentro)
+        let baseICMS = (cifBrl + valorII + valorIPI + valorPIS + valorCOFINS) / (1 - taxas.icms);
+        let valorICMS = baseICMS * taxas.icms;
+
+        // 5. Custo Total
+        let custoTotal = cifBrl + valorII + valorIPI + valorPIS + valorCOFINS + valorICMS;
+
+        // 6. Atualizar a Tela
+        document.getElementById('res_fob_usd').innerText = formatarUSD(fobAjustado);
+        document.getElementById('res_cif_brl').innerText = formatarBRL(cifBrl);
+        document.getElementById('res_ii').innerText = formatarBRL(valorII);
+        document.getElementById('res_ipi').innerText = formatarBRL(valorIPI);
+        document.getElementById('res_pis').innerText = formatarBRL(valorPIS);
+        document.getElementById('res_cofins').innerText = formatarBRL(valorCOFINS);
+        document.getElementById('res_icms').innerText = formatarBRL(valorICMS);
+        document.getElementById('res_total').innerText = formatarBRL(custoTotal);
+    }
+
+    // Executa o cálculo inicial ao carregar a página
+    window.onload = calcular;
+</script>
+
+</body>
+</html>

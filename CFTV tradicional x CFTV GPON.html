@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise CFTV: GPON vs PoE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideUp 0.3s ease-out; }
+        .card-active { border-color: #0d9488; background-color: #f0fdfa; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .chart-wrapper { position: relative; width: 100%; height: 320px; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+<header class="bg-slate-900 text-white shadow-2xl">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="flex flex-col lg:flex-row justify-between items-center gap-6">
+            <div>
+                <span class="bg-teal-500/20 text-teal-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Estudo Técnico v4.0</span>
+                <h1 class="text-3xl font-extrabold mt-2 tracking-tight">CCTV Infrastructure: <span class="text-teal-400">Modular Architecture</span></h1>
+                <p class="text-slate-400 mt-1 text-sm">Comparação CAPEX: GPON Passivo vs Tradicional PoE (Custo de Instalação Equalizado).</p>
+            </div>
+            <nav class="flex p-1 bg-slate-800 rounded-xl border border-slate-700">
+                <button onclick="switchTab('scenarios')" id="tab-btn-scenarios" class="px-6 py-2.5 rounded-lg text-xs font-bold transition-all bg-teal-600 text-white shadow-md">Painel de Projetos</button>
+                <button onclick="switchTab('prices')" id="tab-btn-prices" class="px-6 py-2.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white">Tabela de Insumos</button>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-10 w-full flex-grow">
+
+    <section id="scenarios" class="tab-content active">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10" id="scenario-list">
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div class="xl:col-span-2 space-y-6">
+                
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-3">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800" id="sc-title">Carregando...</h2>
+                            <p class="text-slate-500 text-xs" id="sc-subtitle"></p>
+                        </div>
+                        <div id="sc-winner" class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider"></div>
+                    </div>
+                    
+                    <div class="chart-wrapper">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+
+                    <div class="mt-6 grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-teal-50 rounded-xl border border-teal-100 text-center">
+                            <span class="text-teal-700 font-bold text-[10px] uppercase">GPON Modular</span>
+                            <div class="text-xl font-black text-teal-800" id="val-gpon">R$ 0,00</div>
+                        </div>
+                        <div class="p-4 bg-rose-50 rounded-xl border border-rose-100 text-center">
+                            <span class="text-rose-700 font-bold text-[10px] uppercase">Tradicional PoE</span>
+                            <div class="text-xl font-black text-rose-800" id="val-trad">R$ 0,00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 bg-slate-50/30">
+                        <h3 class="font-bold text-slate-800 text-sm tracking-tight">Composição de Orçamento</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="text-slate-400 uppercase text-[9px] font-bold tracking-widest bg-slate-50/30">
+                                <tr>
+                                    <th class="px-6 py-4">Item de Custo</th>
+                                    <th class="px-6 py-4">Arquitetura GPON</th>
+                                    <th class="px-6 py-4">Arquitetura PoE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="composition-body" class="divide-y divide-slate-100">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-base font-bold mb-5 flex items-center gap-2">
+                        <span class="text-teal-400">📊</span> Análise Situacional
+                    </h3>
+                    <div id="tech-analysis" class="space-y-4 text-xs leading-relaxed text-slate-300">
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200">
+                    <h4 class="font-bold text-amber-800 text-xs mb-2">Nota Técnica: Escala vs. Custo</h4>
+                    <p class="text-[11px] text-amber-700 leading-normal">
+                        A versão 4.0 isola o custo de hardware. No cenário de <strong>25 apartamentos</strong>, note como a economia de cabeamento óptico começa a equilibrar com o custo fixo da OLT, criando um cenário de disputa real.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="prices" class="tab-content">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-6 bg-slate-50 border-b border-slate-100">
+                <h2 class="text-xl font-bold text-slate-800">Preços Unitários de Referência</h2>
+                <p class="text-slate-500 text-xs mt-1">Custos médios de mercado utilizados nas projeções de CAPEX.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-100">
+                <div class="p-6">
+                    <h3 class="text-teal-600 font-bold mb-4 uppercase text-[10px] tracking-widest">Insumos GPON</h3>
+                    <ul class="space-y-2.5" id="list-gpon-prices"></ul>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-rose-600 font-bold mb-4 uppercase text-[10px] tracking-widest">Insumos Tradicionais</h3>
+                    <ul class="space-y-2.5" id="list-trad-prices"></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="py-10 border-t border-slate-200 mt-auto bg-white">
+    <div class="max-w-7xl mx-auto px-6 text-center text-slate-400 text-[10px] uppercase tracking-widest font-bold">
+        Estudo de Viabilidade Econômica • Infraestrutura de Segurança Digital • 2024
+    </div>
+</footer>
+
+<script>
+    const prices = {
+        gpon: [
+            { item: 'Câmera IP Standard', val: 450 },
+            { item: 'ONU Bridge (Compacta)', val: 165 },
+            { item: 'Kit Montagem/Caixa/Pig', val: 90 },
+            { item: 'OLT 1 Porta TP-Link', val: 3850 },
+            { item: 'OLT Chassis (Grandes Redes)', val: 12500 },
+            { item: 'Fibra Drop (Metro)', val: 0.85 }
+        ],
+        trad: [
+            { item: 'Câmera IP Standard', val: 450 },
+            { item: 'Switch PoE 8p Giga', val: 850 },
+            { item: 'Switch PoE 24p Giga', val: 2900 },
+            { item: 'Switch Industrial (Poste)', val: 1950 },
+            { item: 'Cabo UTP Cat6 (Metro)', val: 2.20 },
+            { item: 'Rack de Parede 6U', val: 450 }
+        ]
+    };
+
+    const scenarios = [
+        {
+            id: 'vertical',
+            title: 'Cond. Vertical',
+            sub: '25 Apartamentos',
+            winner: 'TRADICIONAL',
+            gTotal: 46250,
+            tTotal: 34500,
+            install: 14000,
+            hardware: 'OLT TP-Link 1P',
+            analysis: 'Com a redução para 25 kits, o custo da OLT (R$ 3.8k) e da ONU em cada ponto (R$ 165) não é compensado pela economia de prumada. O tradicional com 2 switches PoE é mais barato.',
+            details: [
+                { cat: 'Câmeras + ONUs', g: 'R$ 17.625 (25 kits)', t: 'R$ 11.250 (25 cams)' },
+                { cat: 'Ativos de Rede', g: 'R$ 4.250 (OLT 1p)', t: 'R$ 2.450 (2 Sw. PoE)' },
+                { cat: 'Infra/Cabos', g: 'R$ 10.375', t: 'R$ 6.800' },
+                { cat: 'Instalação (Eq.)', g: 'R$ 14.000', t: 'R$ 14.000' }
+            ]
+        },
+        {
+            id: 'horizontal',
+            title: 'Cond. Horizontal',
+            sub: '50 Casas',
+            winner: 'GPON',
+            gTotal: 86400,
+            tTotal: 152800,
+            install: 32000,
+            hardware: 'OLT TP-Link 1P',
+            analysis: 'Cenário perfeito para GPON. Em uma área extensa, o custo do cabo UTP e de switches em postes é proibitivo. A fibra óptica drop passiva reduz o investimento em quase 50%.',
+            details: [
+                { cat: 'Câmeras + ONUs', g: 'R$ 35.250 (50 kits)', t: 'R$ 22.500 (50 cams)' },
+                { cat: 'Ativos de Rede', g: 'R$ 4.250 (OLT 1p)', t: 'R$ 48.000 (Industriais)' },
+                { cat: 'Infra/Cabos', g: 'R$ 14.900', t: 'R$ 50.300' },
+                { cat: 'Instalação (Eq.)', g: 'R$ 32.000', t: 'R$ 32.000' }
+            ]
+        },
+        {
+            id: 'galpao',
+            title: 'Galpão Logístico',
+            sub: '75 Câmeras',
+            winner: 'GPON',
+            gTotal: 98500,
+            tTotal: 125400,
+            install: 25000,
+            hardware: 'OLT TP-Link 1P',
+            analysis: 'Grandes áreas internas exigem vencer o limite de 100m do cobre. A fibra simplifica a infraestrutura de calhas. GPON modular apresenta ROI rápido aqui.',
+            details: [
+                { cat: 'Câmeras + ONUs', g: 'R$ 52.875 (75 kits)', t: 'R$ 33.750 (75 cams)' },
+                { cat: 'Ativos de Rede', g: 'R$ 4.250 (OLT)', t: 'R$ 25.000 (Vários Sw.)' },
+                { cat: 'Infra/Cabos', g: 'R$ 16.375', t: 'R$ 41.650' },
+                { cat: 'Instalação (Eq.)', g: 'R$ 25.000', t: 'R$ 25.000' }
+            ]
+        },
+        {
+            id: 'hotel',
+            title: 'Hotel Resort',
+            sub: '60 Pontos',
+            winner: 'GPON',
+            gTotal: 84200,
+            tTotal: 92600,
+            install: 18000,
+            hardware: 'OLT TP-Link 1P',
+            analysis: 'Estética e convergência. A arquitetura óptica permite expansão futura para Wi-Fi e Telefonia no mesmo cabo. Custo de hardware é competitivo com o PoE.',
+            details: [
+                { cat: 'Câmeras + ONUs', g: 'R$ 42.300', t: 'R$ 27.000' },
+                { cat: 'Ativos de Rede', g: 'R$ 4.250', t: 'R$ 18.000' },
+                { cat: 'Infra/Cabos', g: 'R$ 19.650', t: 'R$ 29.600' },
+                { cat: 'Instalação (Eq.)', g: 'R$ 18.000', t: 'R$ 18.000' }
+            ]
+        },
+        {
+            id: 'middle',
+            title: 'Empresa Média',
+            sub: '15 Câmeras',
+            winner: 'TRADICIONAL',
+            gTotal: 25800,
+            tTotal: 18450,
+            install: 8500,
+            hardware: 'OLT TP-Link 1P',
+            analysis: 'Com 15 câmeras, o custo por porta da OLT é muito alto. O tradicional PoE vence pela simplicidade e baixo custo dos ativos centrais.',
+            details: [
+                { cat: 'Câmeras + ONUs', g: 'R$ 10.575 (15 kits)', t: 'R$ 6.750 (15 cams)' },
+                { cat: 'Ativos de Rede', g: 'R$ 4.250', t: 'R$ 1.500 (Sw. PoE)' },
+                { cat: 'Infra/Cabos', g: 'R$ 2.475', t: 'R$ 1.700' },
+                { cat: 'Instalação (Eq.)', g: 'R$ 8.500', t: 'R$ 8.500' }
+            ]
+        },
+        {
+            id: 'small',
+            title: 'Pequeno Varejo',
+            sub: '3 Câmeras',
+            winner: 'TRADICIONAL',
+            gTotal: 12200,
+            tTotal: 5800,
+            install: 3500,
+            hardware: 'OLT TP-Link 1P',
+            analysis: 'Inviável em GPON. O custo fixo da infraestrutura central mata o projeto. PoE atende com um único cabo e switch básico.',
+            details: [
+                { cat: 'Câmeras + ONUs', g: 'R$ 2.115', t: 'R$ 1.350' },
+                { cat: 'Ativos de Rede', g: 'R$ 4.250', t: 'R$ 850' },
+                { cat: 'Infra/Cabos', g: 'R$ 2.335', t: 'R$ 100' },
+                { cat: 'Instalação (Eq.)', g: 'R$ 3.500', t: 'R$ 3.500' }
+            ]
+        }
+    ];
+
+    let current = scenarios[0];
+    let chart;
+
+    function switchTab(id) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        const isS = id === 'scenarios';
+        document.getElementById('tab-btn-scenarios').className = isS ? "px-6 py-2.5 rounded-lg text-xs font-bold transition-all bg-teal-600 text-white shadow-md" : "px-6 py-2.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white";
+        document.getElementById('tab-btn-prices').className = !isS ? "px-6 py-2.5 rounded-lg text-xs font-bold transition-all bg-teal-600 text-white shadow-md" : "px-6 py-2.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white";
+    }
+
+    function renderScenarios() {
+        const list = document.getElementById('scenario-list');
+        scenarios.forEach(s => {
+            const card = document.createElement('div');
+            card.className = `p-3.5 rounded-xl border-2 border-slate-200 bg-white cursor-pointer transition-all hover:border-teal-300 ${current.id === s.id ? 'card-active' : ''}`;
+            card.id = `card-${s.id}`;
+            card.innerHTML = `<h4 class="font-bold text-[10px] uppercase tracking-wider text-slate-800">${s.title}</h4><p class="text-[9px] text-slate-400 font-bold">${s.sub}</p>`;
+            card.onclick = () => selectScenario(s);
+            list.appendChild(card);
+        });
+    }
+
+    function selectScenario(s) {
+        current = s;
+        document.querySelectorAll('[id^="card-"]').forEach(c => c.classList.remove('card-active'));
+        document.getElementById(`card-${s.id}`).classList.add('card-active');
+        updateUI();
+    }
+
+    function updateUI() {
+        document.getElementById('sc-title').textContent = current.title;
+        document.getElementById('sc-subtitle').textContent = current.sub;
+        
+        const badge = document.getElementById('sc-winner');
+        badge.textContent = `Melhor Custo: ${current.winner}`;
+        badge.className = `px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider ${current.winner === 'GPON' ? 'bg-teal-100 text-teal-700' : 'bg-rose-100 text-rose-700'}`;
+
+        const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+        document.getElementById('val-gpon').textContent = fmt.format(current.gTotal);
+        document.getElementById('val-trad').textContent = fmt.format(current.tTotal);
+
+        const body = document.getElementById('composition-body');
+        body.innerHTML = '';
+        current.details.forEach(d => {
+            body.innerHTML += `<tr><td class="px-6 py-4 font-bold text-slate-700">${d.cat}</td><td class="px-6 py-4 text-teal-600 font-semibold">${d.g}</td><td class="px-6 py-4 text-rose-600 font-semibold">${d.t}</td></tr>`;
+        });
+
+        document.getElementById('tech-analysis').innerHTML = `
+            <div class="space-y-1">
+                <span class="text-teal-400 font-bold text-[9px] uppercase tracking-tighter">Ativo Central Utilizado</span>
+                <p class="text-white font-bold text-sm">${current.hardware}</p>
+            </div>
+            <p class="pt-2 text-slate-400 font-medium">${current.analysis}</p>
+            <div class="pt-4 border-t border-slate-700 flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full ${current.winner === 'GPON' ? 'bg-teal-500' : 'bg-rose-500'}"></div>
+                <span class="text-slate-100 font-bold text-[10px] uppercase">Veredito do Projeto</span>
+            </div>
+        `;
+
+        updateChart();
+    }
+
+    function updateChart() {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        const data = {
+            labels: ['GPON Modular', 'Tradicional PoE'],
+            datasets: [{
+                label: 'CAPEX (R$)',
+                data: [current.gTotal, current.tTotal],
+                backgroundColor: ['#0d9488', '#e11d48'],
+                borderRadius: 10,
+                barThickness: 45
+            }]
+        };
+
+        if (chart) {
+            chart.data = data;
+            chart.update();
+        } else {
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Plus Jakarta Sans', size: 10 }, callback: v => 'R$ ' + (v/1000) + 'k' } },
+                        x: { grid: { display: false }, ticks: { font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 11 } } }
+                    }
+                }
+            });
+        }
+    }
+
+    function renderPrices() {
+        const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+        const gList = document.getElementById('list-gpon-prices');
+        const tList = document.getElementById('list-trad-prices');
+        
+        prices.gpon.forEach(p => gList.innerHTML += `<li class="flex justify-between items-center bg-white border border-slate-100 p-3 rounded-xl"><span class="text-slate-600 text-xs font-medium">${p.item}</span><span class="text-teal-700 font-bold text-xs">${fmt.format(p.val)}</span></li>`);
+        prices.trad.forEach(p => tList.innerHTML += `<li class="flex justify-between items-center bg-white border border-slate-100 p-3 rounded-xl"><span class="text-slate-600 text-xs font-medium">${p.item}</span><span class="text-rose-700 font-bold text-xs">${fmt.format(p.val)}</span></li>`);
+    }
+
+    window.onload = () => {
+        renderScenarios();
+        renderPrices();
+        updateUI();
+    };
+</script>
+
+</body>
+</html>

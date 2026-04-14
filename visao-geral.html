@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visão Geral - DNS-CFTV-TI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, colors: { primary: '#0f172a', secondary: '#334155', accent: '#3b82f6', success: '#10b981', danger: '#ef4444', revenue: '#059669', sales: '#f59e0b' } } } }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; display: flex; flex-direction: column; }
+        .stat-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+    
+    <header class="bg-white border-b border-slate-200 p-4 sticky top-0 z-40 flex justify-between items-center w-full shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">C</div>
+            <span class="text-xl font-extrabold tracking-tight">DNS<span class="text-accent">CFTV-TI</span></span>
+        </div>
+        <span class="text-xs font-semibold bg-slate-100 px-3 py-1.5 rounded text-slate-600">Dados 9 Meses</span>
+    </header>
+
+    <main class="w-full flex-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+            <section class="space-y-8">
+                <header class="bg-white p-8 rounded-2xl border-l-4 border-l-accent shadow-sm border border-slate-200">
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">Plano de Negócios: Segurança Eletrônica</h1>
+                    <p class="mt-3 text-lg text-slate-600 max-w-3xl">
+                        Documento consolidado integrando dados da Receita Federal (NCM), faturamento ABESE, capilaridade estadual, inteligência competitiva e transição tecnológica para suporte à decisão comercial.
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Faturamento 2024</p>
+                        <p class="text-3xl font-extrabold text-primary my-2">R$ 14.0B</p>
+                        <p class="text-sm font-semibold text-success">↑ 16.1% YoY</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center border-t-4 border-t-accent">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Projeção 2026</p>
+                        <p class="text-3xl font-extrabold text-primary my-2">R$ 18.0B</p>
+                        <p class="text-sm font-semibold text-slate-600">CAGR 12.0%</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Adoção de IA</p>
+                        <p class="text-3xl font-extrabold text-primary my-2">64.3%</p>
+                        <p class="text-sm font-semibold text-slate-600">Novos SKUs</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Crescimento Cloud</p>
+                        <p class="text-3xl font-extrabold text-primary my-2">+136%</p>
+                        <p class="text-sm font-semibold text-success">Rede Monuv</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="bg-white border-t border-slate-200 py-8 mt-12">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p class="text-slate-500 text-sm">&copy; 2026 Inteligência de Mercado CFTV. Dados consolidados em Março/2026.</p>
+            </div>
+        </footer>
+    </main>
+</body>
+</html>

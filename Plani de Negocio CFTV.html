@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Inteligência Estratégica: CFTV 2025-2026</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        primary: '#0f172a',    // Slate 900
+                        secondary: '#334155',  // Slate 700
+                        accent: '#3b82f6',     // Blue 500
+                        success: '#10b981',    // Emerald 500
+                        danger: '#ef4444',     // Red 500
+                        revenue: '#059669',    // Green
+                        sales: '#f59e0b'       // Gold
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; display: flex; }
+        
+        /* Sidebar Styles */
+        aside { transition: transform 0.3s ease; }
+        .nav-item { transition: all 0.2s ease; }
+        .nav-item:hover, .nav-item.active { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; border-right: 3px solid #3b82f6; }
+        
+        /* Chart & Map Containers */
+        .chart-container { position: relative; width: 100%; height: 350px; }
+        .radar-container { position: relative; width: 100%; height: 400px; }
+        .map-wrapper { position: relative; width: 100%; height: 450px; border-radius: 0.75rem; overflow: hidden; }
+        
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Card Hover */
+        .stat-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+
+    <aside class="fixed inset-y-0 left-0 w-64 bg-white border-r border-slate-200 z-50 flex flex-col hidden lg:flex">
+        <div class="p-6 border-b border-slate-100 flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">C</div>
+            <span class="text-xl font-extrabold tracking-tight">DNS<span class="text-accent">CFTV-TI</span></span>
+        </div>
+        <nav class="flex-1 py-4 flex flex-col gap-1 overflow-y-auto custom-scrollbar">
+            <a href="#visao-geral" class="nav-item active px-6 py-3 text-sm font-semibold text-slate-600 flex items-center gap-3"><span>📊</span> Visão Geral</a>
+            <a href="#cadeia-suprimentos" class="nav-item px-6 py-3 text-sm font-semibold text-slate-600 flex items-center gap-3"><span>🌍</span> Cadeia e Vendas</a>
+            <a href="#portfolio" class="nav-item px-6 py-3 text-sm font-semibold text-slate-600 flex items-center gap-3"><span>🏷️</span> Portfólio & Preços</a>
+            <a href="#software" class="nav-item px-6 py-3 text-sm font-semibold text-slate-600 flex items-center gap-3"><span>☁️</span> Software & Cloud</a>
+            <a href="#desempenho" class="nav-item px-6 py-3 text-sm font-semibold text-slate-600 flex items-center gap-3"><span>📈</span> Desempenho & Tendências</a>
+            <a href="#tabelas" class="nav-item px-6 py-3 text-sm font-semibold text-slate-600 flex items-center gap-3"><span>📋</span> Base de Dados (Tabelas)</a>
+        </nav>
+        <div class="p-4 border-t border-slate-100 bg-slate-50">
+            <p class="text-[10px] text-slate-500 text-center uppercase tracking-wider font-bold">Horizonte 2025-2026</p>
+        </div>
+    </aside>
+
+    <main class="flex-1 lg:ml-64 w-full">
+        <div class="lg:hidden bg-white border-b border-slate-200 p-4 sticky top-0 z-40 flex justify-between items-center">
+            <span class="text-lg font-bold">Inteli<span class="text-accent">CFTV</span></span>
+            <span class="text-xs font-semibold bg-slate-100 px-2 py-1 rounded text-slate-600">Dados 9 Meses</span>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+            
+            <section id="visao-geral" class="space-y-8 scroll-mt-24">
+                <header class="bg-white p-8 rounded-2xl border-l-4 border-l-accent shadow-sm border border-slate-200">
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">Plano de Negócios: Segurança Eletrônica</h1>
+                    <p class="mt-3 text-lg text-slate-600 max-w-3xl">
+                        Documento consolidado integrando dados da Receita Federal (NCM), faturamento ABESE, capilaridade estadual, inteligência competitiva e transição tecnológica para suporte à decisão comercial.
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Faturamento 2024</p>
+                        <p class="text-3xl font-extrabold text-primary my-2">R$ 14.0B</p>
+                        <p class="text-sm font-semibold text-success">↑ 16.1% YoY</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center border-t-4 border-t-accent">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Projeção 2026</p>
+                        <p class="text-3xl font-extrabold text-primary my-2">R$ 18.0B</p>
+                        <p class="text-sm font-semibold text-slate-600">CAGR 12.0%</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Adoção de IA</p>
+                        <p class="text-3xl font-extrabold text-primary my-2">64.3%</p>
+                        <p class="text-sm font-semibold text-slate-600">Novos SKUs</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Crescimento Cloud</p>
+                        <p class="text-3xl font-extrabold text-primary my-2">+136%</p>
+                        <p class="text-sm font-semibold text-success">Rede Monuv</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cadeia-suprimentos" class="space-y-6 scroll-mt-10">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-accent text-xl">🌍</div>
+                    <h2 class="text-2xl font-bold text-slate-800">Cadeia Logística: Importação (Entrada) vs Vendas (Saída)</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800">Análise de Entrada (NCM)</h3>
+                                <p class="text-sm text-slate-500">Volume de importação alfandegária por categoria.</p>
+                            </div>
+                            <span class="text-[10px] font-bold bg-revenue/10 text-revenue px-2 py-1 rounded">DADOS RFB</span>
+                        </div>
+                        <div class="chart-container"><canvas id="ncmChart"></canvas></div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                        <div class="mb-4">
+                            <h3 class="text-lg font-bold text-slate-800">Fluxo de Saída por Estado</h3>
+                            <p class="text-sm text-slate-500">Distribuição geográfica e Share Regional.</p>
+                        </div>
+                        <div id="sales-map" class="map-wrapper flex-1"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase mb-4">Ranking Completo de Vendas (Market Share)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="state-ranking-grid">
+                        </div>
+                </div>
+            </section>
+
+            <section id="portfolio" class="space-y-6 scroll-mt-10">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xl">🏷️</div>
+                    <h2 class="text-2xl font-bold text-slate-800">Portfólio de Produtos e Estratégia de Preço</h2>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-600 mb-8">Distribuição de preços para câmeras. Note a liderança de volume no segmento analógico vs. a rentabilidade no segmento IP Profissional.</p>
+                    
+                    <div class="chart-container mb-6"><canvas id="camerasChart"></canvas></div>
+                    
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p class="text-sm text-slate-700"><strong>Gerenciadores Físicos (DVR/NVR):</strong> O mercado aponta para a consolidação de gravadores híbridos de 8 e 16 canais como o "MHDX 3116-C" da Intelbras, enquanto modelos mais antigos entram em phase-out. <a href="#tabela-2" class="text-accent hover:underline">Ver detalhes na tabela</a>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="software" class="space-y-6 scroll-mt-10">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 text-xl">☁️</div>
+                    <h2 class="text-2xl font-bold text-slate-800">Software VMS, Cloud & Infraestrutura</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center">
+                        <h3 class="text-lg font-bold text-slate-800 w-full mb-2">Transição de Licenciamento</h3>
+                        <p class="text-sm text-slate-500 w-full mb-6">Mudança de licenças perpétuas para SaaS (Software as a Service).</p>
+                        <div class="w-full max-w-sm h-64"><canvas id="softwareChart"></canvas></div>
+                        <div class="mt-6 p-4 bg-blue-50 text-blue-800 text-sm rounded-xl border border-blue-100">
+                            <strong>Observação Estratégica:</strong> Empresas como Monuv e Gabriel estão capturando mercado de licenças perpétuas (como Digifort) através de baixos custos de entrada e monitoramento colaborativo.
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Infraestrutura e Conectividade</h3>
+                        <p class="text-sm text-slate-500 mb-6">Itens críticos que compõem o Custo Total de Propriedade (TCO).</p>
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-center p-3 hover:bg-slate-50 rounded border-b border-slate-100">
+                                <span class="font-semibold text-slate-700">Conectores BNC/P4</span>
+                                <span class="text-sm text-slate-500">Média R$ 1,20 - R$ 3,90</span>
+                            </li>
+                            <li class="flex justify-between items-center p-3 hover:bg-slate-50 rounded border-b border-slate-100">
+                                <span class="font-semibold text-slate-700">Power Balun</span>
+                                <span class="text-sm text-slate-500">Média R$ 26,00 (Par)</span>
+                            </li>
+                            <li class="flex justify-between items-center p-3 hover:bg-slate-50 rounded border-b border-slate-100">
+                                <span class="font-semibold text-slate-700">Cablagem UTP vs Coaxial</span>
+                                <span class="text-sm text-slate-500">Transição forte para UTP</span>
+                            </li>
+                        </ul>
+                        <a href="#tabela-4" class="inline-block mt-6 text-sm font-bold text-accent bg-blue-50 px-4 py-2 rounded hover:bg-blue-100 transition">Ver Tabela Completa de Custos →</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="desempenho" class="space-y-6 scroll-mt-10">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl">📈</div>
+                    <h2 class="text-2xl font-bold text-slate-800">Desempenho 9 Meses & Gestão de Ciclo de Vida (Phase-Out)</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4">Radar de Performance Setorial</h3>
+                        <div class="radar-container"><canvas id="performanceChart"></canvas></div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-4">Curva de Obsolescência</h3>
+                            <div class="chart-container h-48 mb-6"><canvas id="phaseOutChart"></canvas></div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex gap-3 items-center p-3 bg-red-50 text-red-800 rounded-lg border border-red-100">
+                                <span class="text-xl">⚠️</span>
+                                <div class="text-sm"><strong>Hikvision Linha DS-9600:</strong> Fim de vida em Março/2026.</div>
+                            </div>
+                            <div class="flex gap-3 items-center p-3 bg-amber-50 text-amber-800 rounded-lg border border-amber-100">
+                                <span class="text-xl">⚠️</span>
+                                <div class="text-sm"><strong>Intelbras iMHDX 3008:</strong> Descontinuado (Substituição por IA).</div>
+                            </div>
+                            <div class="flex gap-3 items-center p-3 bg-slate-50 text-slate-800 rounded-lg border border-slate-200">
+                                <span class="text-xl">🔄</span>
+                                <div class="text-sm"><strong>DahuaDDNS:</strong> Substituição obrigatória pelo ecossistema P2P (DMSS).</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm stat-card">
+                        <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent text-2xl mb-4">🤖</div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">AI na Borda (Edge)</h3>
+                        <p class="text-slate-600 text-sm">Em 2026, 75% das câmeras terão chips de IA nativos. O foco sai de "gravar" para "detectar e alertar" sem servidores externos.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm stat-card">
+                        <div class="w-12 h-12 bg-revenue/10 rounded-xl flex items-center justify-center text-revenue text-2xl mb-4">⚡</div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">5G / Wi-Fi 6</h3>
+                        <p class="text-slate-600 text-sm">Dispositivos "Plug & Play" com alta banda. A instalação UTP cairá no residencial, substituída por malhas sem fio.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm stat-card">
+                        <div class="w-12 h-12 bg-sales/10 rounded-xl flex items-center justify-center text-sales text-2xl mb-4">🛡️</div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Cyber-Resiliência</h3>
+                        <p class="text-slate-600 text-sm">Exigência de certificações rígidas (NDAA) contra backdoors por órgãos reguladores, dominando mercado governamental.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tabelas" class="space-y-8 pt-8 border-t-4 border-slate-300 scroll-mt-10">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-slate-900">Base de Dados & Tabelas de Consulta</h2>
+                    <p class="text-slate-500 mt-2">Visão detalhada de todos os modelos, preços e softwares catalogados.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div id="tabela-1" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden scroll-mt-24">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 1: Câmeras e Preços</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-100 text-slate-600">
+                                    <tr><th class="px-4 py-3">Categoria</th><th class="px-4 py-3">Marca</th><th class="px-4 py-3">Modelo</th><th class="px-4 py-3">Preço</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Analógica Entry</td><td>Intelbras</td><td>VHL 1120 B G2</td><td>R$ 111,75</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Analógica Color</td><td>Hikvision</td><td>DS-2CE76D0T...</td><td>R$ 142,72</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Wi-Fi Interna</td><td>Intelbras</td><td>iM3 C (Mibo)</td><td>R$ 229,86</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Wi-Fi Externa</td><td>TP-Link</td><td>Tapo C500</td><td>R$ 289,90</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP Profissional</td><td>Hikvision</td><td>DS-2CD1023...</td><td>R$ 340,68</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP Alta Resist.</td><td>Intelbras</td><td>iM5 SC (Bullet)</td><td>R$ 309,00</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP PTZ IA</td><td>Hikvision</td><td>DS-2DE2C400...</td><td>R$ 492,56</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP Premium</td><td>Intelbras</td><td>IM9 Plus Color</td><td>R$ 1.099,00</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="tabela-2" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden scroll-mt-24">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 2: Gerenciadores Físicos (DVR/NVR)</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-100 text-slate-600">
+                                    <tr><th class="px-4 py-3">Modelo</th><th class="px-4 py-3">Marca</th><th class="px-4 py-3">Canais</th><th class="px-4 py-3">Preço Médio</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">MHDX 3116-C</td><td>Intelbras</td><td>16</td><td>R$ 850 - 950</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">iDS-7208HGHI-M1</td><td>Hikvision</td><td>8</td><td>R$ 450 - 520</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">MHDX 1204</td><td>Intelbras</td><td>4</td><td>R$ 380,00</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium text-red-600">iMHDX 3008 (EOL)</td><td>Intelbras</td><td>8+4 IP</td><td>R$ 700 - 800</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium text-red-600">DS-9632NXI (EOL)</td><td>Hikvision</td><td>32</td><td>R$ 4.500+</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div id="tabela-3" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden scroll-mt-24">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 3: Softwares VMS e Nuvem</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-100 text-slate-600">
+                                    <tr><th class="px-4 py-3">Produto</th><th class="px-4 py-3">Licença</th><th class="px-4 py-3">Preço Médio</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Digifort Enterprise</td><td>Perpétua (32c)</td><td>R$ 16.000,00</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Monuv (Cloud)</td><td>SaaS / Mês</td><td>R$ 899 (mín)</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Camerite</td><td>SaaS / Franquia</td><td>R$ 2 a 5 / user</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Gabriel</td><td>SaaS / Mês</td><td>R$ 15 - 30 / cam</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="tabela-4" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden scroll-mt-24">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 4: Custos de Infraestrutura</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-100 text-slate-600">
+                                    <tr><th class="px-4 py-3">Produto</th><th class="px-4 py-3">Tipo / Uso</th><th class="px-4 py-3">Preço</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Conector BNC</td><td>Mola/Parafuso (Coaxial)</td><td>R$ 1,25</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Conector BNC</td><td>Borne (UTP)</td><td>R$ 1,23 - 3,90</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Conector P4 Macho</td><td>Com Borne (12V)</td><td>R$ 0,68 - 2,50</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Power Balun</td><td>Par (30 metros)</td><td>R$ 26,00</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Kit Conectores</td><td>16 BNC + 8 P4</td><td>R$ 36,50</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
+        <footer class="bg-white border-t border-slate-200 py-8 mt-12">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p class="text-slate-500 text-sm">&copy; 2026 Inteligência de Mercado CFTV. Dados consolidados em Março/2026. Dashboard Unificado.</p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Set global Chart.js typography
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        Chart.defaults.color = '#64748b';
+
+        // --- DATASETS ---
+        const ncmData = [
+            { code: '8525.89.29', label: 'Câmeras IP (Alta Res.)', value: 450000, color: '#3b82f6' },
+            { code: '8521.90.00', label: 'Gravadores Vídeo (NVR)', value: 280000, color: '#1e293b' },
+            { code: '8525.89.19', label: 'Câmeras Analógicas/Híb.', value: 150000, color: '#60a5fa' },
+            { code: '8544.42.00', label: 'Acessórios/Cablagem', value: 120000, color: '#93c5fd' },
+            { code: '8517.62.94', label: 'Switches/PoE', value: 95000, color: '#cbd5e1' }
+        ];
+
+        const salesByState = [
+            { id: 'SP', name: 'São Paulo', value: 38.5 }, { id: 'RJ', name: 'Rio de Janeiro', value: 12.2 },
+            { id: 'MG', name: 'Minas Gerais', value: 10.8 }, { id: 'PR', name: 'Paraná', value: 8.4 },
+            { id: 'SC', name: 'Santa Catarina', value: 7.9 }, { id: 'RS', name: 'Rio Grande do Sul', value: 6.1 },
+            { id: 'BA', name: 'Bahia', value: 4.5 }, { id: 'PE', name: 'Pernambuco', value: 3.2 },
+            { id: 'GO', name: 'Goiás', value: 2.8 }, { id: 'DF', name: 'Distrito Federal', value: 2.1 },
+            { id: 'AM', name: 'Amazonas', value: 1.8 }, { id: 'MT', name: 'Mato Grosso', value: 1.7 }
+        ];
+
+        // --- INITIALIZATION FUNCTIONS ---
+        function initCharts() {
+            // 1. NCM Bar Chart
+            new Chart(document.getElementById('ncmChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ncmData.map(d => d.label),
+                    datasets: [{
+                        label: 'Volume Importação',
+                        data: ncmData.map(d => d.value),
+                        backgroundColor: ncmData.map(d => d.color),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { callback: v => v/1000 + 'k' } },
+                        y: { grid: { display: false }, ticks: { font: { weight: '600' } } }
+                    }
+                }
+            });
+
+            // 2. Camera Prices Bar Chart
+            new Chart(document.getElementById('camerasChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Analógica Entry', 'Analógica Color', 'Wi-Fi Int.', 'Wi-Fi Ext.', 'IP Prof.', 'IP Alta Res.', 'IP PTZ IA', 'IP Premium'],
+                    datasets: [{
+                        label: 'Preço Médio (R$)',
+                        data: [111.75, 142.72, 229.86, 289.90, 340.68, 309.00, 492.56, 1099.00],
+                        backgroundColor: '#3b82f6', borderRadius: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // 3. Software Doughnut Chart
+            new Chart(document.getElementById('softwareChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['On-premise (Perpétua)', 'SaaS (Assinatura)', 'Híbrida'],
+                    datasets: [{
+                        data: [45, 48, 7],
+                        backgroundColor: ['#1e293b', '#3b82f6', '#cbd5e1'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // 4. Performance Radar Chart
+            new Chart(document.getElementById('performanceChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Faturamento', 'Adoção IA', 'Crescimento Cloud', 'Base Instalada', 'Novos Pontos', 'Penetração'],
+                    datasets: [{
+                        label: 'Métrica 0-100',
+                        data: [82, 64.3, 88, 75, 70, 68],
+                        borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        pointBackgroundColor: '#1e293b'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // 5. Phase Out Line Chart
+            new Chart(document.getElementById('phaseOutChart'), {
+                type: 'line',
+                data: {
+                    labels: ['2023', '2024', '2025', '2026'],
+                    datasets: [
+                        { label: 'Analógico Legado', data: [78, 62, 45, 30], borderColor: '#ef4444', tension: 0.4 },
+                        { label: 'IP / IA / Cloud', data: [22, 38, 55, 70], borderColor: '#10b981', tension: 0.4 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        // --- PLOTLY MAP ---
+        function initMap() {
+            const data = [{
+                type: 'choropleth',
+                locationmode: 'geojson-id',
+                geojson: 'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson',
+                locations: salesByState.map(s => s.id),
+                z: salesByState.map(s => s.value),
+                text: salesByState.map(s => `${s.name}: ${s.value}%`),
+                colorscale: [[0, '#f8fafc'], [0.2, '#93c5fd'], [0.5, '#3b82f6'], [1, '#1e293b']],
+                autocolorscale: false,
+                marker: { line: { color: 'white', width: 1 } },
+                featureidkey: 'properties.sigla',
+                hoverinfo: 'text'
+            }];
+            const layout = {
+                geo: { scope: 'south america', center: { lat: -15.5, lon: -54.5 }, projection: { scale: 3.5 }, showland: true, landcolor: '#f1f5f9', bgcolor: 'rgba(0,0,0,0)' },
+                margin: { l: 0, r: 0, t: 0, b: 0 }, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            Plotly.newPlot('sales-map', data, layout, { responsive: true, displayModeBar: false });
+        }
+
+        // --- POPULATE RANKING ---
+        function populateRanking() {
+            const grid = document.getElementById('state-ranking-grid');
+            salesByState.forEach((state, i) => {
+                grid.innerHTML += `
+                    <div class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50">
+                        <div class="w-8 h-8 rounded bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">${i+1}º</div>
+                        <div class="flex-1">
+                            <div class="flex justify-between text-sm">
+                                <span class="font-bold text-slate-700">${state.id}</span>
+                                <span class="font-bold text-accent">${state.value}%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1"><div class="bg-accent h-1.5 rounded-full" style="width: ${state.value * 2}%"></div></div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // --- INTERSECTION OBSERVER FOR SIDEBAR NAVIGATION ---
+        function setupNavigation() {
+            const sections = document.querySelectorAll("section");
+            const navItems = document.querySelectorAll(".nav-item");
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        navItems.forEach((link) => {
+                            link.classList.remove("active");
+                            if (link.getAttribute("href").substring(1) === entry.target.id) {
+                                link.classList.add("active");
+                            }
+                        });
+                    }
+                });
+            }, { threshold: 0.3, rootMargin: "0px 0px -50% 0px" });
+
+            sections.forEach((section) => observer.observe(section));
+        }
+
+        // --- INIT ALL ---
+        window.onload = () => {
+            initCharts();
+            initMap();
+            populateRanking();
+            setupNavigation();
+        };
+    </script>
+</body>
+</html>

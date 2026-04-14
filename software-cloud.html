@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software & Cloud - DNS CFTV-TI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, colors: { primary: '#0f172a', secondary: '#334155', accent: '#3b82f6' } } } }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; display: flex; flex-direction: column; }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+    
+    <header class="bg-white border-b border-slate-200 p-4 sticky top-0 z-40 flex justify-between items-center w-full shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">C</div>
+            <span class="text-xl font-extrabold tracking-tight">Inteli<span class="text-accent">CFTV</span></span>
+        </div>
+        <span class="text-xs font-semibold bg-slate-100 px-3 py-1.5 rounded text-slate-600">Dados 9 Meses</span>
+    </header>
+
+    <main class="w-full flex-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+            <section class="space-y-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 text-xl">☁️</div>
+                    <h2 class="text-2xl font-bold text-slate-800">Software VMS, Cloud & Infraestrutura</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center">
+                        <h3 class="text-lg font-bold text-slate-800 w-full mb-2">Transição de Licenciamento</h3>
+                        <p class="text-sm text-slate-500 w-full mb-6">Mudança de licenças perpétuas para SaaS (Software as a Service).</p>
+                        <div class="w-full max-w-sm h-64"><canvas id="softwareChart"></canvas></div>
+                        <div class="mt-6 p-4 bg-blue-50 text-blue-800 text-sm rounded-xl border border-blue-100">
+                            <strong>Observação Estratégica:</strong> Empresas como Monuv e Gabriel estão capturando mercado de licenças perpétuas (como Digifort) através de baixos custos de entrada e monitoramento colaborativo.
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">Infraestrutura e Conectividade</h3>
+                        <p class="text-sm text-slate-500 mb-6">Itens críticos que compõem o Custo Total de Propriedade (TCO).</p>
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-center p-3 hover:bg-slate-50 rounded border-b border-slate-100">
+                                <span class="font-semibold text-slate-700">Conectores BNC/P4</span>
+                                <span class="text-sm text-slate-500">Média R$ 1,20 - R$ 3,90</span>
+                            </li>
+                            <li class="flex justify-between items-center p-3 hover:bg-slate-50 rounded border-b border-slate-100">
+                                <span class="font-semibold text-slate-700">Power Balun</span>
+                                <span class="text-sm text-slate-500">Média R$ 26,00 (Par)</span>
+                            </li>
+                            <li class="flex justify-between items-center p-3 hover:bg-slate-50 rounded border-b border-slate-100">
+                                <span class="font-semibold text-slate-700">Cablagem UTP vs Coaxial</span>
+                                <span class="text-sm text-slate-500">Transição forte para UTP</span>
+                            </li>
+                        </ul>
+                        <a href="tabelas.html" class="inline-block mt-6 text-sm font-bold text-accent bg-blue-50 px-4 py-2 rounded hover:bg-blue-100 transition">Ver Tabela Completa de Custos →</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        Chart.defaults.color = '#64748b';
+
+        window.onload = () => {
+            new Chart(document.getElementById('softwareChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['On-premise (Perpétua)', 'SaaS (Assinatura)', 'Híbrida'],
+                    datasets: [{ data: [45, 48, 7], backgroundColor: ['#1e293b', '#3b82f6', '#cbd5e1'], borderWidth: 0 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Dados - DNS CFTV-TI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, colors: { primary: '#0f172a', secondary: '#334155', accent: '#3b82f6' } } } }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; display: flex; flex-direction: column; }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+    
+    <header class="bg-white border-b border-slate-200 p-4 sticky top-0 z-40 flex justify-between items-center w-full shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">C</div>
+            <span class="text-xl font-extrabold tracking-tight">Inteli<span class="text-accent">CFTV</span></span>
+        </div>
+        <span class="text-xs font-semibold bg-slate-100 px-3 py-1.5 rounded text-slate-600">Dados 9 Meses</span>
+    </header>
+
+    <main class="w-full flex-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+            <section class="space-y-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-slate-900">Base de Dados & Tabelas de Consulta</h2>
+                    <p class="text-slate-500 mt-2">Visão detalhada de todos os modelos, preços e softwares catalogados.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 1: Câmeras e Preços</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-100 text-slate-600"><tr><th class="px-4 py-3">Categoria</th><th class="px-4 py-3">Marca</th><th class="px-4 py-3">Modelo</th><th class="px-4 py-3">Preço</th></tr></thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Analógica Entry</td><td>Intelbras</td><td>VHL 1120 B G2</td><td>R$ 111,75</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Analógica Color</td><td>Hikvision</td><td>DS-2CE76D0T...</td><td>R$ 142,72</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Wi-Fi Interna</td><td>Intelbras</td><td>iM3 C (Mibo)</td><td>R$ 229,86</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Wi-Fi Externa</td><td>TP-Link</td><td>Tapo C500</td><td>R$ 289,90</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP Profissional</td><td>Hikvision</td><td>DS-2CD1023...</td><td>R$ 340,68</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP Alta Resist.</td><td>Intelbras</td><td>iM5 SC (Bullet)</td><td>R$ 309,00</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP PTZ IA</td><td>Hikvision</td><td>DS-2DE2C400...</td><td>R$ 492,56</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP Premium</td><td>Intelbras</td><td>IM9 Plus Color</td><td>R$ 1.099,00</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 2: Gerenciadores Físicos (DVR/NVR)</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-100 text-slate-600"><tr><th class="px-4 py-3">Modelo</th><th class="px-4 py-3">Marca</th><th class="px-4 py-3">Canais</th><th class="px-4 py-3">Preço Médio</th></tr></thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">MHDX 3116-C</td><td>Intelbras</td><td>16</td><td>R$ 850 - 950</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">iDS-7208HGHI-M1</td><td>Hikvision</td><td>8</td><td>R$ 450 - 520</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">MHDX 1204</td><td>Intelbras</td><td>4</td><td>R$ 380,00</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium text-red-600">iMHDX 3008 (EOL)</td><td>Intelbras</td><td>8+4 IP</td><td>R$ 700 - 800</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium text-red-600">DS-9632NXI (EOL)</td><td>Hikvision</td><td>32</td><td>R$ 4.500+</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 3: Softwares VMS e Nuvem</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-100 text-slate-600"><tr><th class="px-4 py-3">Produto</th><th class="px-4 py-3">Licença</th><th class="px-4 py-3">Preço Médio</th></tr></thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Digifort Enterprise</td><td>Perpétua (32c)</td><td>R$ 16.000,00</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Monuv (Cloud)</td><td>SaaS / Mês</td><td>R$ 899 (mín)</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Camerite</td><td>SaaS / Franquia</td><td>R$ 2 a 5 / user</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Gabriel</td><td>SaaS / Mês</td><td>R$ 15 - 30 / cam</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 4: Custos de Infraestrutura</h3></div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="bg-slate-100 text-slate-600"><tr><th class="px-4 py-3">Produto</th><th class="px-4 py-3">Tipo / Uso</th><th class="px-4 py-3">Preço</th></tr></thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Conector BNC</td><td>Mola/Parafuso</td><td>R$ 1,25</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Conector BNC</td><td>Borne (UTP)</td><td>R$ 1,23 - 3,90</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Conector P4 Macho</td><td>Com Borne (12V)</td><td>R$ 0,68 - 2,50</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Power Balun</td><td>Par (30 metros)</td><td>R$ 26,00</td></tr>
+                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Kit Conectores</td><td>16 BNC + 8 P4</td><td>R$ 36,50</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

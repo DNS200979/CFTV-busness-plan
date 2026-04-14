@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadeia Logística e Vendas - InteliCFTV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, colors: { primary: '#0f172a', secondary: '#334155', accent: '#3b82f6', success: '#10b981', danger: '#ef4444', revenue: '#059669', sales: '#f59e0b' } } } }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; display: flex; flex-direction: column; }
+        .chart-container { position: relative; width: 100%; height: 350px; }
+        .map-wrapper { position: relative; width: 100%; height: 450px; border-radius: 0.75rem; overflow: hidden; }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+    
+    <header class="bg-white border-b border-slate-200 p-4 sticky top-0 z-40 flex justify-between items-center w-full shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">C</div>
+            <span class="text-xl font-extrabold tracking-tight">DNS<span class="text-accent">CFTV-TI</span></span>
+        </div>
+        <span class="text-xs font-semibold bg-slate-100 px-3 py-1.5 rounded text-slate-600">Dados 9 Meses</span>
+    </header>
+
+    <main class="w-full flex-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+            <section class="space-y-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-accent text-xl">🌍</div>
+                    <h2 class="text-2xl font-bold text-slate-800">Cadeia Logística: Importação vs Vendas</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800">Análise de Entrada (NCM)</h3>
+                                <p class="text-sm text-slate-500">Volume de importação alfandegária por categoria.</p>
+                            </div>
+                            <span class="text-[10px] font-bold bg-revenue/10 text-revenue px-2 py-1 rounded">DADOS RFB</span>
+                        </div>
+                        <div class="chart-container"><canvas id="ncmChart"></canvas></div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                        <div class="mb-4">
+                            <h3 class="text-lg font-bold text-slate-800">Fluxo de Saída por Estado</h3>
+                            <p class="text-sm text-slate-500">Distribuição geográfica e Share Regional.</p>
+                        </div>
+                        <div id="sales-map" class="map-wrapper flex-1"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase mb-4">Ranking Completo de Vendas (Market Share)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="state-ranking-grid"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        Chart.defaults.color = '#64748b';
+
+        const ncmData = [
+            { code: '8525.89.29', label: 'Câmeras IP (Alta Res.)', value: 450000, color: '#3b82f6' },
+            { code: '8521.90.00', label: 'Gravadores Vídeo (NVR)', value: 280000, color: '#1e293b' },
+            { code: '8525.89.19', label: 'Câmeras Analógicas/Híb.', value: 150000, color: '#60a5fa' },
+            { code: '8544.42.00', label: 'Acessórios/Cablagem', value: 120000, color: '#93c5fd' },
+            { code: '8517.62.94', label: 'Switches/PoE', value: 95000, color: '#cbd5e1' }
+        ];
+
+        const salesByState = [
+            { id: 'SP', name: 'São Paulo', value: 38.5 }, { id: 'RJ', name: 'Rio de Janeiro', value: 12.2 },
+            { id: 'MG', name: 'Minas Gerais', value: 10.8 }, { id: 'PR', name: 'Paraná', value: 8.4 },
+            { id: 'SC', name: 'Santa Catarina', value: 7.9 }, { id: 'RS', name: 'Rio Grande do Sul', value: 6.1 },
+            { id: 'BA', name: 'Bahia', value: 4.5 }, { id: 'PE', name: 'Pernambuco', value: 3.2 },
+            { id: 'GO', name: 'Goiás', value: 2.8 }, { id: 'DF', name: 'Distrito Federal', value: 2.1 },
+            { id: 'AM', name: 'Amazonas', value: 1.8 }, { id: 'MT', name: 'Mato Grosso', value: 1.7 }
+        ];
+
+        window.onload = () => {
+            new Chart(document.getElementById('ncmChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ncmData.map(d => d.label),
+                    datasets: [{ label: 'Volume Importação', data: ncmData.map(d => d.value), backgroundColor: ncmData.map(d => d.color), borderRadius: 6 }]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+                    scales: { x: { grid: { display: false }, ticks: { callback: v => v/1000 + 'k' } }, y: { grid: { display: false }, ticks: { font: { weight: '600' } } } }
+                }
+            });
+
+            Plotly.newPlot('sales-map', [{
+                type: 'choropleth', locationmode: 'geojson-id',
+                geojson: 'https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson',
+                locations: salesByState.map(s => s.id), z: salesByState.map(s => s.value),
+                text: salesByState.map(s => `${s.name}: ${s.value}%`),
+                colorscale: [[0, '#f8fafc'], [0.2, '#93c5fd'], [0.5, '#3b82f6'], [1, '#1e293b']],
+                autocolorscale: false, marker: { line: { color: 'white', width: 1 } },
+                featureidkey: 'properties.sigla', hoverinfo: 'text'
+            }], {
+                geo: { scope: 'south america', center: { lat: -15.5, lon: -54.5 }, projection: { scale: 3.5 }, showland: true, landcolor: '#f1f5f9', bgcolor: 'rgba(0,0,0,0)' },
+                margin: { l: 0, r: 0, t: 0, b: 0 }, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)'
+            }, { responsive: true, displayModeBar: false });
+
+            const grid = document.getElementById('state-ranking-grid');
+            salesByState.forEach((state, i) => {
+                grid.innerHTML += `
+                    <div class="flex items-center gap-3 p-3 rounded-xl border border-slate-100 bg-slate-50">
+                        <div class="w-8 h-8 rounded bg-white border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">${i+1}º</div>
+                        <div class="flex-1">
+                            <div class="flex justify-between text-sm"><span class="font-bold text-slate-700">${state.id}</span><span class="font-bold text-accent">${state.value}%</span></div>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1"><div class="bg-accent h-1.5 rounded-full" style="width: ${state.value * 2}%"></div></div>
+                        </div>
+                    </div>`;
+            });
+        };
+    </script>
+</body>
+</html>

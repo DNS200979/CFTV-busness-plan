@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora TCO: GPON vs Tradicional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #0d9488;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        .chart-container { position: relative; width: 100%; height: 350px; }
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid #e2e8f0; }
+        .comparison-card { transition: all 0.3s ease; }
+        input[type="range"] { accent-color: #0d9488; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+<!-- Chosen Palette: Slate & Teal (Profissional/Tecnológico) -->
+<!-- Application Structure Plan:
+    1. Painel de Controle: Sliders para quantidade de câmeras e distância média.
+    2. Resumo Dinâmico: Cards que mostram o valor total e o "Veredito" (qual é mais barato).
+    3. Gráfico Interativo: Visualização em tempo real das barras de custo.
+    4. Detalhamento de Ativos: Tabela que mostra como o sistema calculou a quantidade de Switches ou Splitters necessária.
+-->
+<!-- Visualization & Content Choices:
+    - Gráfico de Barras: Comparativo direto de CAPEX.
+    - Lógica de Switches: Calcula automaticamente quantos switches de 24p ou 8p são necessários.
+    - Lógica GPON: Alterna entre OLT de 1 porta (TP-Link) e Chassis (Grandes Redes) conforme a densidade.
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<header class="bg-slate-900 text-white py-8 px-6 shadow-xl">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+            <span class="bg-teal-500/20 text-teal-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase italic">Simulador de Viabilidade v1.0</span>
+            <h1 class="text-3xl font-extrabold mt-2 tracking-tight">CCTV <span class="text-teal-400">Architect Tool</span></h1>
+            <p class="text-slate-400 text-sm mt-1">Calculadora dinâmica de CAPEX: GPON Modular vs Tradicional PoE.</p>
+        </div>
+        <div class="text-right hidden md:block">
+            <p class="text-xs text-slate-500 font-bold uppercase tracking-tighter">Instalação Equalizada</p>
+            <p class="text-xs text-slate-500">Mão de obra baseada em densidade</p>
+        </div>
+    </div>
+</header>
+
+<main class="flex-grow max-w-6xl mx-auto px-6 py-10 w-full">
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- COLUNA DE CONTROLES (ESQUERDA) -->
+        <div class="lg:col-span-4 space-y-6">
+            <div class="glass-panel p-6 rounded-3xl shadow-sm space-y-8">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span>🎮</span> Parâmetros do Projeto
+                </h3>
+
+                <!-- Controle de Pontos -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-end">
+                        <label class="text-sm font-bold text-slate-600 uppercase tracking-wide">Número de Câmeras</label>
+                        <span class="text-2xl font-black text-teal-600" id="cam-count-display">32</span>
+                    </div>
+                    <input type="range" id="cam-range" min="1" max="512" value="32" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400 uppercase">
+                        <span>1 Un.</span>
+                        <span>256 Un.</span>
+                        <span>512 Un.</span>
+                    </div>
+                </div>
+
+                <!-- Controle de Distância -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-end">
+                        <label class="text-sm font-bold text-slate-600 uppercase tracking-wide">Distância Média (m)</label>
+                        <span class="text-xl font-bold text-slate-700" id="dist-display">40m</span>
+                    </div>
+                    <input type="range" id="dist-range" min="10" max="300" step="10" value="40" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400 uppercase">
+                        <span>Curta (10m)</span>
+                        <span>Longa (300m)</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100">
+                    <div class="bg-slate-50 p-4 rounded-2xl">
+                        <h4 class="text-xs font-bold text-slate-500 mb-2 uppercase">Configuração Atual</h4>
+                        <div class="space-y-2 text-xs text-slate-700 font-medium">
+                            <div class="flex justify-between"><span>Ativo GPON:</span> <span id="cfg-gpon-olt">OLT TP-Link</span></div>
+                            <div class="flex justify-between"><span>Ativo Trad:</span> <span id="cfg-trad-sw">Switches PoE</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-amber-50 p-6 rounded-3xl border border-amber-200">
+                <p class="text-xs text-amber-800 leading-relaxed italic">
+                    "O ponto de virada geralmente ocorre quando a economia de cabos ópticos e a centralização de ativos superam o custo fixo inicial da OLT e das ONUs individuais."
+                </p>
+            </div>
+        </div>
+
+        <!-- COLUNA DE RESULTADOS (DIREITA) -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Cards de Resumo -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="verdict-card" class="md:col-span-2 p-6 rounded-3xl text-center shadow-lg transform scale-100 transition-all">
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-70">Melhor Escolha Financeira</span>
+                    <h2 class="text-3xl font-black mt-1" id="verdict-text">---</h2>
+                    <p class="text-sm font-medium mt-1 opacity-80" id="verdict-diff">Economia estimada de R$ 0,00</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 rounded-3xl shadow-sm">
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+
+            <!-- DIAGRAMAS DE TOPOLOGIA -->
+            <div class="col-span-full mt-8">
+                <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <span>🏗️</span> Diagramas de Topologia
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- GPON Diagram -->
+                    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-teal-500"></div>
+                            <h4 class="font-extrabold text-slate-800 uppercase">Arquitetura GPON</h4>
+                        </div>
+                        <div id="gpon-diagram" class="bg-slate-50 rounded-xl p-4 overflow-x-auto min-h-96">
+                            <!-- SVG Injetado -->
+                        </div>
+                    </div>
+
+                    <!-- Traditional PoE Diagram -->
+                    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                            <h4 class="font-extrabold text-slate-800 uppercase">Arquitetura PoE</h4>
+                        </div>
+                        <div id="poe-diagram" class="bg-slate-50 rounded-xl p-4 overflow-x-auto min-h-96">
+                            <!-- SVG Injetado -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalhamento de Itens -->
+            <div class="col-span-full bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden mt-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                    
+                    <!-- Lado GPON -->
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-teal-500"></div>
+                            <h4 class="font-extrabold text-slate-800 text-sm uppercase">Detalhes GPON</h4>
+                        </div>
+                        <ul id="details-gpon" class="space-y-2 text-xs text-slate-600">
+                            <!-- Injetado via JS -->
+                        </ul>
+                    </div>
+
+                    <!-- Lado Tradicional -->
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                            <h4 class="font-extrabold text-slate-800 text-sm uppercase">Detalhes Tradicional</h4>
+                        </div>
+                        <ul id="details-trad" class="space-y-2 text-xs text-slate-600">
+                            <!-- Injetado via JS -->
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<footer class="py-8 border-t border-slate-200 mt-auto bg-white">
+    <div class="max-w-6xl mx-auto px-6 text-center text-slate-400 text-[10px] uppercase font-bold tracking-widest">
+        Parametrizado com: ONU Bridge R$165 | OLT TP-Link R$3850 | Cat6 R$2.20/m | Drop R$0.85/m
+    </div>
+</footer>
+
+<script>
+    // --- DATABASE DE PREÇOS (v5.0) ---
+    const DB = {
+        gpon: {
+            cam: 450,
+            onu: 165,
+            kit: 90,
+            olt1p: 3850,
+            olt8p: 12500,
+            cable: 0.85, // por metro
+            splitter: 140 // média
+        },
+        trad: {
+            cam: 450,
+            cable: 2.20, // por metro
+            sw8p: 850,
+            sw24p: 2900,
+            rack: 450
+        },
+        install_per_point: 250 // Mão de obra equalizada por ponto
+    };
+
+    let chartInstance = null;
+
+    const camInput = document.getElementById('cam-range');
+    const distInput = document.getElementById('dist-range');
+
+    function calculate() {
+        const n = parseInt(camInput.value);
+        const d = parseInt(distInput.value);
+
+        // Atualiza UI
+        document.getElementById('cam-count-display').textContent = n;
+        document.getElementById('dist-display').textContent = d + 'm';
+
+        // --- CÁLCULO TRADICIONAL ---
+        let sw24_needed = Math.floor(n / 24);
+        let sw8_needed = (n % 24 > 0) ? 1 : 0;
+        let rack_needed = Math.ceil((sw24_needed + sw8_needed) / 4); // 1 rack para cada 4 ativos
+
+        const trad_cams = n * DB.trad.cam;
+        const trad_sw = (sw24_needed * DB.trad.sw24p) + (sw8_needed * DB.trad.sw8p);
+        const trad_cables = n * d * DB.trad.cable;
+        const trad_racks = rack_needed * DB.trad.rack;
+        const trad_install = n * DB.install_per_point;
+        
+        const total_trad = trad_cams + trad_sw + trad_cables + trad_racks + trad_install;
+
+        // --- CÁLCULO GPON ---
+        let olt_type = (n <= 128) ? 'olt1p' : 'olt8p';
+        let olt_cost = DB.gpon[olt_type];
+        let splitter_count = Math.ceil(n / 16); // Estimativa de splitters
+
+        const gpon_cams = n * DB.gpon.cam;
+        const gpon_onus = n * DB.gpon.onu;
+        const gpon_kits = n * DB.gpon.kit;
+        const gpon_cables = n * d * DB.gpon.cable;
+        const gpon_splitters = splitter_count * DB.gpon.splitter;
+        const gpon_install = n * DB.install_per_point;
+
+        const total_gpon = gpon_cams + gpon_onus + gpon_kits + gpon_cables + gpon_splitters + olt_cost + gpon_install;
+
+        // --- ATUALIZA VERDITO ---
+        const verdictCard = document.getElementById('verdict-card');
+        const verdictText = document.getElementById('verdict-text');
+        const verdictDiff = document.getElementById('verdict-diff');
+        const diff = Math.abs(total_gpon - total_trad);
+        const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        if (total_gpon < total_trad) {
+            verdictText.textContent = "Tecnologia GPON";
+            verdictText.className = "text-3xl font-black mt-1 text-teal-800";
+            verdictCard.className = "md:col-span-2 p-6 rounded-3xl text-center shadow-lg glass-panel border-teal-200 bg-teal-50";
+            verdictDiff.textContent = `Economia de ${fmt.format(diff)} em relação ao PoE`;
+        } else {
+            verdictText.textContent = "Tecnologia PoE Tradicional";
+            verdictText.className = "text-3xl font-black mt-1 text-rose-800";
+            verdictCard.className = "md:col-span-2 p-6 rounded-3xl text-center shadow-lg glass-panel border-rose-200 bg-rose-50";
+            verdictDiff.textContent = `Economia de ${fmt.format(diff)} em relação ao GPON`;
+        }
+
+        // Atualiza Config
+        document.getElementById('cfg-gpon-olt').textContent = (olt_type === 'olt1p') ? 'OLT 1-Porta (TP-Link)' : 'OLT Chassis 8-Portas';
+        document.getElementById('cfg-trad-sw').textContent = `${sw24_needed}x 24p + ${sw8_needed}x 8p`;
+
+        // Detalhes da Tabela
+        updateDetails(n, d, { trad_sw, trad_cables, trad_racks, total_trad }, { gpon_onus, gpon_splitters, gpon_cables, olt_cost, total_gpon });
+
+        // Gráfico
+        updateChart(total_gpon, total_trad);
+    }
+
+    function updateDetails(n, d, t, g) {
+        const fmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+        
+        const gList = document.getElementById('details-gpon');
+        gList.innerHTML = `
+            <li class="flex justify-between"><span>${n} ONUs Bridge:</span> <b>${fmt.format(g.gpon_onus)}</b></li>
+            <li class="flex justify-between"><span>Central (OLT):</span> <b>${fmt.format(g.olt_cost)}</b></li>
+            <li class="flex justify-between"><span>Fibra Drop (${n * d}m):</span> <b>${fmt.format(g.gpon_cables)}</b></li>
+            <li class="flex justify-between"><span>Acessórios/Splitters:</span> <b>${fmt.format(g.gpon_splitters)}</b></li>
+            <li class="flex justify-between pt-2 border-t border-slate-100 font-bold text-teal-700 uppercase"><span>Investimento:</span> <span>${fmt.format(g.total_gpon)}</span></li>
+        `;
+
+        const tList = document.getElementById('details-trad');
+        tList.innerHTML = `
+            <li class="flex justify-between"><span>Ativos (Switches):</span> <b>${fmt.format(t.trad_sw)}</b></li>
+            <li class="flex justify-between"><span>Cabo Cat6 (${n * d}m):</span> <b>${fmt.format(t.trad_cables)}</b></li>
+            <li class="flex justify-between"><span>Infra (Racks/Civil):</span> <b>${fmt.format(t.trad_racks)}</b></li>
+            <li class="flex justify-between"><span>Câmeras IP:</span> <b>${fmt.format(n * DB.trad.cam)}</b></li>
+            <li class="flex justify-between pt-2 border-t border-slate-100 font-bold text-rose-700 uppercase"><span>Investimento:</span> <span>${fmt.format(t.total_trad)}</span></li>
+        `;
+    }
+
+    function updateChart(gpon, trad) {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        const data = {
+            labels: ['GPON Modular', 'Tradicional PoE'],
+            datasets: [{
+                label: 'CAPEX Total (R$)',
+                data: [gpon, trad],
+                backgroundColor: ['#0d9488', '#e11d48'],
+                borderRadius: 12,
+                barThickness: 60
+            }]
+        };
+
+        if (chartInstance) {
+            chartInstance.data = data;
+            chartInstance.update();
+        } else {
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(ctx.parsed.y)
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            grid: { color: '#f1f5f9' },
+                            ticks: { callback: v => 'R$ ' + (v/1000) + 'k' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+    }
+
+    camInput.addEventListener('input', calculate);
+    distInput.addEventListener('input', calculate);
+
+    // Init
+    window.onload = calculate;
+</script>
+
+</body>
+</html>
