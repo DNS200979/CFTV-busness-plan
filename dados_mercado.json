@@ -1,0 +1,177 @@
+{
+  "tabelas": {
+    "cameras": [
+      {
+        "categoria": "Analógica Entry",
+        "marca": "Intelbras",
+        "modelo": "VHL 1120 B G2",
+        "preco_venda": 111.75,
+        "preco_fob": 0.00,
+        "distribuidor_principal": ""
+      },
+      {
+        "categoria": "Analógica Color",
+        "marca": "Hikvision",
+        "modelo": "DS-2CE76D0T...",
+        "preco_venda": 142.72,
+        "preco_fob": 0.00,
+        "distribuidor_principal": ""
+      },
+      {
+        "categoria": "Wi-Fi Interna",
+        "marca": "Intelbras",
+        "modelo": "iM3 C (Mibo)",
+        "preco_venda": 229.86,
+        "preco_fob": 0.00,
+        "distribuidor_principal": ""
+      },
+      {
+        "categoria": "Wi-Fi Externa",
+        "marca": "TP-Link",
+        "modelo": "Tapo C500",
+        "preco_venda": 289.90,
+        "preco_fob": 0.00,
+        "distribuidor_principal": ""
+      },
+      {
+        "categoria": "IP Profissional",
+        "marca": "Hikvision",
+        "modelo": "DS-2CD1023...",
+        "preco_venda": 340.68,
+        "preco_fob": 0.00,
+        "distribuidor_principal": ""
+      },
+      {
+        "categoria": "IP Alta Resist.",
+        "marca": "Intelbras",
+        "modelo": "iM5 SC (Bullet)",
+        "preco_venda": 309.00,
+        "preco_fob": 0.00,
+        "distribuidor_principal": ""
+      },
+      {
+        "categoria": "IP PTZ IA",
+        "marca": "Hikvision",
+        "modelo": "DS-2DE2C400...",
+        "preco_venda": 492.56,
+        "preco_fob": 0.00,
+        "distribuidor_principal": ""
+      },
+      {
+        "categoria": "IP Premium",
+        "marca": "Intelbras",
+        "modelo": "IM9 Plus Color",
+        "preco_venda": 1099.00,
+        "preco_fob": 0.00,
+        "distribuidor_principal": ""
+      }
+    ],
+    "gravadores_nvr_dvr": [
+      {
+        "modelo": "MHDX 3116-C",
+        "marca": "Intelbras",
+        "canais": "16",
+        "preco_medio": 900.00,
+        "observacao": "Média calculada entre 850 e 950"
+      },
+      {
+        "modelo": "iDS-7208HGHI-M1",
+        "marca": "Hikvision",
+        "canais": "8",
+        "preco_medio": 485.00,
+        "observacao": "Média calculada entre 450 e 520"
+      },
+      {
+        "modelo": "MHDX 1204",
+        "marca": "Intelbras",
+        "canais": "4",
+        "preco_medio": 380.00,
+        "observacao": ""
+      },
+      {
+        "modelo": "iMHDX 3008",
+        "marca": "Intelbras",
+        "canais": "8+4 IP",
+        "preco_medio": 750.00,
+        "observacao": "Produto em fim de vida (EOL)"
+      },
+      {
+        "modelo": "DS-9632NXI",
+        "marca": "Hikvision",
+        "canais": "32",
+        "preco_medio": 4500.00,
+        "observacao": "Produto em fim de vida (EOL)"
+      }
+    ],
+    "softwares_vms": [
+      {
+        "produto": "Digifort Enterprise",
+        "licenca": "Perpétua (32c)",
+        "preco_medio": 16000.00
+      },
+      {
+        "produto": "Monuv (Cloud)",
+        "licenca": "SaaS / Mês",
+        "preco_medio": 899.00
+      },
+      {
+        "produto": "Camerite",
+        "licenca": "SaaS / Franquia",
+        "preco_medio": 3.50,
+        "observacao": "Média calculada entre R$ 2 a R$ 5 por usuário"
+      },
+      {
+        "produto": "Gabriel",
+        "licenca": "SaaS / Mês",
+        "preco_medio": 22.50,
+        "observacao": "Média calculada entre R$ 15 e R$ 30 por câmera"
+      }
+    ],
+    "infraestrutura": [
+      {
+        "produto": "Conector BNC",
+        "tipo": "Mola/Parafuso (Coaxial)",
+        "preco": 1.25
+      },
+      {
+        "produto": "Conector BNC",
+        "tipo": "Borne (UTP)",
+        "preco": 2.56
+      },
+      {
+        "produto": "Conector P4 Macho",
+        "tipo": "Com Borne (12V)",
+        "preco": 1.59
+      },
+      {
+        "produto": "Power Balun",
+        "tipo": "Par (30 metros)",
+        "preco": 26.00
+      },
+      {
+        "produto": "Kit Conectores",
+        "tipo": "16 BNC + 8 P4",
+        "preco": 36.50
+      }
+    ]
+  },
+  "parametros_calculadora": {
+    "gpon": {
+      "camera_ip_standard": 450.00,
+      "onu_bridge": 165.00,
+      "kit_caixa_montagem": 90.00,
+      "olt_1_porta": 3850.00,
+      "olt_8_portas": 12500.00,
+      "cabo_fibra_drop_metro": 0.85,
+      "splitter_medio": 140.00
+    },
+    "tradicional_poe": {
+      "camera_ip_standard": 450.00,
+      "cabo_utp_cat6_metro": 2.20,
+      "switch_8p_poe": 850.00,
+      "switch_24p_poe": 2900.00,
+      "rack_parede_6u": 450.00
+    },
+    "mao_de_obra_por_ponto": 250.00
+  }
+}
