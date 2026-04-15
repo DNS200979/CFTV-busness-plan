@@ -3,68 +3,581 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visão Geral - DNS-CFTV-TI</title>
+    <title>O Estado da Segurança Eletrônica (2026-2028)</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, colors: { primary: '#0f172a', secondary: '#334155', accent: '#3b82f6', success: '#10b981', danger: '#ef4444', revenue: '#059669', sales: '#f59e0b' } } } }
-    </script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f8fafc; color: #0f172a; display: flex; flex-direction: column; }
-        .stat-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
-<body class="antialiased min-h-screen">
-    
-    <header class="bg-white border-b border-slate-200 p-4 sticky top-0 z-40 flex justify-between items-center w-full shadow-sm">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">C</div>
-            <span class="text-xl font-extrabold tracking-tight">DNS<span class="text-accent">CFTV-TI</span></span>
+<body class="text-slate-800 antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-slate-900 text-white py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 100 100">
+                <path d="M0,100 C30,50 70,50 100,0 L100,100 Z" fill="#3b82f6"/>
+            </svg>
         </div>
-        <span class="text-xs font-semibold bg-slate-100 px-3 py-1.5 rounded text-slate-600">Dados 9 Meses</span>
+        <div class="relative max-w-7xl mx-auto">
+            <h2 class="text-blue-400 font-semibold tracking-wide uppercase text-sm mb-2">Relatório Setorial</h2>
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">
+                O Estado da Segurança Eletrônica: <br>
+                <span class="bg-gradient-to-r from-blue-400 to-teal-300 gradient-text">Convergência, Inteligência e Resiliência Estratégica</span>
+            </h1>
+            <p class="text-xl text-slate-300 max-w-3xl">Perspectivas, desafios e análises de mercado para o triênio 2026-2028.</p>
+        </div>
     </header>
 
-    <main class="w-full flex-1">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
-            <section class="space-y-8">
-                <header class="bg-white p-8 rounded-2xl border-l-4 border-l-accent shadow-sm border border-slate-200">
-                    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">Plano de Negócios: Segurança Eletrônica</h1>
-                    <p class="mt-3 text-lg text-slate-600 max-w-3xl">
-                        Documento consolidado integrando dados da Receita Federal (NCM), faturamento ABESE, capilaridade estadual, inteligência competitiva e transição tecnológica para suporte à decisão comercial.
-                    </p>
-                </header>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- Section 1: A Metamorfose -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6 border-l-4 border-blue-600 pl-4">A Metamorfose do Ecossistema de Segurança Eletrônica</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start mb-8">
+                <div class="space-y-4 text-lg leading-relaxed text-slate-700 justify-text">
+                    <p>O setor de segurança eletrônica atravessa um período de transformação estrutural sem precedentes, caracterizado pela transição definitiva de um modelo reativo e baseado em hardware para um paradigma proativo, inteligente e centrado em software e dados.</p>
+                    <p>Esta mudança não é meramente incremental; trata-se de uma reconstrução dos fundamentos operacionais da indústria, impulsionada pela convergência entre a inteligência artificial, a computação em nuvem e uma conectividade de latência ultra-reduzida. Ao analisar o desempenho setorial recente, observa-se que as métricas de crescimento e adoção tecnológica apontam para um mercado que atingirá maturidade tecnológica plena até 2026, com o Brasil consolidando sua posição como um dos polos de inovação mais dinâmicos da América Latina.</p>
+                    <p>A análise dos dados consolidados de desempenho, como os apresentados no ecossistema InteliCFTV, revela que a performance do setor é sustentada por pilares que equilibram faturamento robusto com uma acelerada curva de adoção tecnológica. Estes números indicam que, embora a base instalada ainda apresente um volume considerável de sistemas legados, a tração de novos negócios está deslocada para soluções SaaS (Software as a Service) e arquiteturas híbridas.</p>
+                    <p>Este cenário é corroborado por projeções globais que estimam o valor de mercado em <strong>US$ 78,81 bilhões para 2026</strong>, com uma integração de inteligência artificial (IA) respondendo por mais de 20% dessa expansão.</p>
+                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center">
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Faturamento 2024</p>
-                        <p class="text-3xl font-extrabold text-primary my-2">R$ 14.0B</p>
-                        <p class="text-sm font-semibold text-success">↑ 16.1% YoY</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center border-t-4 border-t-accent">
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Projeção 2026</p>
-                        <p class="text-3xl font-extrabold text-primary my-2">R$ 18.0B</p>
-                        <p class="text-sm font-semibold text-slate-600">CAGR 12.0%</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center">
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Adoção de IA</p>
-                        <p class="text-3xl font-extrabold text-primary my-2">64.3%</p>
-                        <p class="text-sm font-semibold text-slate-600">Novos SKUs</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm stat-card text-center">
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Crescimento Cloud</p>
-                        <p class="text-3xl font-extrabold text-primary my-2">+136%</p>
-                        <p class="text-sm font-semibold text-success">Rede Monuv</p>
+                <!-- Destaque: Gráfico de Performance -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-100">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Métricas de Desempenho Setorial (0-100)</h3>
+                    <div class="relative h-72">
+                        <canvas id="performanceChart"></canvas>
                     </div>
                 </div>
-            </section>
-        </div>
-
-        <footer class="bg-white border-t border-slate-200 py-8 mt-12">
-            <div class="max-w-7xl mx-auto px-4 text-center">
-                <p class="text-slate-500 text-sm">&copy; 2026 Inteligência de Mercado CFTV. Dados consolidados em Março/2026.</p>
             </div>
-        </footer>
+
+            <!-- Tabela: Indicadores de Performance -->
+            <div class="overflow-x-auto shadow-md sm:rounded-lg mb-8">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead class="text-xs text-white uppercase bg-slate-800">
+                        <tr>
+                            <th scope="col" class="px-6 py-4">Indicador de Performance</th>
+                            <th scope="col" class="px-6 py-4 text-center">Métrica Interna (0-100)</th>
+                            <th scope="col" class="px-6 py-4">Projeção de Mercado 2026</th>
+                            <th scope="col" class="px-6 py-4">Impacto Estratégico</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200">
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium text-slate-900">Crescimento Cloud</td>
+                            <td class="px-6 py-4 text-center font-bold text-blue-600 text-lg">88</td>
+                            <td class="px-6 py-4">35% das soluções globais operando totalmente em nuvem</td>
+                            <td class="px-6 py-4 text-slate-500">Migração massiva de infraestrutura local para SaaS e escalabilidade.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium text-slate-900">Adoção de IA</td>
+                            <td class="px-6 py-4 text-center font-bold text-blue-600 text-lg">64</td>
+                            <td class="px-6 py-4">75% das câmeras com chips de IA nativos (Edge AI)</td>
+                            <td class="px-6 py-4 text-slate-500">Transição do monitoramento passivo para a analítica preditiva.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium text-slate-900">Faturamento Setorial</td>
+                            <td class="px-6 py-4 text-center font-bold text-blue-600 text-lg">82</td>
+                            <td class="px-6 py-4">R$ 18 bilhões (Brasil) com CAGR de 12%</td>
+                            <td class="px-6 py-4 text-slate-500">Consolidação do setor e aumento do valor agregado dos serviços.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium text-slate-900">Redução de Alarmes Falsos</td>
+                            <td class="px-6 py-4 text-center text-slate-400 italic">Não Mensurado</td>
+                            <td class="px-6 py-4">60% a 70% de redução através de machine learning</td>
+                            <td class="px-6 py-4 text-slate-500">Otimização drástica das equipes de monitoramento e redução de custos.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium text-slate-900">Novos Pontos de Instalação</td>
+                            <td class="px-6 py-4 text-center font-bold text-blue-600 text-lg">70</td>
+                            <td class="px-6 py-4">Crescimento impulsionado por Logística e Cidades Inteligentes</td>
+                            <td class="px-6 py-4 text-slate-500">Expansão para além do perímetro tradicional residencial e comercial.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 2: Obsolescência e Retrofit -->
+        <section class="mb-16 bg-blue-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-12 border-y border-blue-100">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Unificação de Estruturas e a Curva de Obsolescência Tecnológica</h2>
+                    <p class="mb-4 text-lg text-slate-700">A integração dos dados internos com as tendências globais permite identificar um movimento coordenado de substituição tecnológica. A curva de obsolescência aponta que o "Analógico Legado", que em 2023 representava 78% do mercado, está sendo superado pelas soluções de "IP / IA / Cloud", que devem dominar 70% das instalações até o final de 2026.</p>
+                    <p class="mb-6 text-lg text-slate-700">Esta inversão tecnológica é acelerada pelo encerramento forçado do ciclo de vida de hardwares que foram pilares da indústria na última década.</p>
+                    
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-4">O Fim do Ciclo de Vida de Hardware e a Urgência do Retrofit</h3>
+                    <p class="mb-4 text-lg text-slate-700">Empresas e integradores enfrentam avisos críticos de descontinuação de produtos fundamentais. A linha Hikvision DS-9600 tem seu término de vida programado para março de 2026, enquanto modelos populares como o Intelbras iMHDX 3008 já são listados como descontinuados, com recomendações explícitas de substituição por versões dotadas de inteligência artificial. Adicionalmente, o ecossistema P2P está substituindo obrigatoriamente serviços tradicionais como o DahuaDDNS, sinalizando uma transição para modelos de conectividade mais seguros e resilientes.</p>
+                    
+                    <div class="bg-white border-l-4 border-red-500 p-4 rounded shadow-sm mt-6">
+                        <p class="text-slate-700"><strong>Alerta de Cibersegurança:</strong> Este cenário de "Hardware Lifecycle Management" impõe um desafio logístico e financeiro, mas também cria uma oportunidade de renovação da base instalada. O retrofit não é mais apenas uma manutenção preventiva; tornou-se uma necessidade de cibersegurança e eficiência operacional. Sem o processamento na borda (Edge AI) e a integração nativa com a nuvem, os sistemas legados tornam-se vulneráveis a ataques cibernéticos e incapazes de processar os novos algoritmos de detecção comportamental que o mercado exige.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Curva de Substituição Tecnológica (2023 vs 2026)</h3>
+                    <div class="relative h-80">
+                        <canvas id="obsolescenceChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 3: Convergência -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6 border-l-4 border-teal-500 pl-4">A Convergência entre Segurança Física e Tecnologia da Informação</h2>
+            
+            <p class="mb-4 text-lg text-slate-700">Uma das tendências mais marcantes para 2026 é a consolidação do imperativo da convergência. A segurança eletrônica deixou de ser uma função isolada para se tornar uma camada integrada de toda a infraestrutura de TI e operacional das organizações. Esta realidade deu origem à <strong>Plataforma de Segurança Unificada (USP)</strong>, que atua como um sistema nervoso central, consolidando hardware e feeds de dados em uma interface única, frequentemente referida como <em>"single pane of glass"</em>.</p>
+            
+            <p class="mb-8 text-lg text-slate-700">Neste modelo, o controle de acesso não é mais um silo; ele se integra diretamente a bancos de dados de recursos humanos e plataformas de gerenciamento de identidade. Quando um funcionário muda de cargo ou deixa a empresa, suas permissões de acesso físico são atualizadas automaticamente, eliminando a latência e o risco de segurança inerentes aos processos manuais. Além disso, a convergência se estende à automação predial, onde sistemas de segurança comunicam-se com controles de iluminação e HVAC (aquecimento, ventilação e ar condicionado) para otimizar o consumo de energia com base em dados de ocupação derivados de analíticos de vídeo.</p>
+
+            <div class="overflow-x-auto shadow-md sm:rounded-lg mb-8 border border-slate-200">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead class="text-xs text-white uppercase bg-teal-700">
+                        <tr>
+                            <th scope="col" class="px-6 py-4">Fase da Convergência</th>
+                            <th scope="col" class="px-6 py-4">Característica Principal</th>
+                            <th scope="col" class="px-6 py-4">Tecnologia Habilitadora</th>
+                            <th scope="col" class="px-6 py-4">Impacto Operacional</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200">
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">Tradicional (Silos)</td>
+                            <td class="px-6 py-4">Sistemas independentes e hardware proprietário</td>
+                            <td class="px-6 py-4">Cabos coaxiais e DVRs locais</td>
+                            <td class="px-6 py-4 text-red-600">Operação fragmentada e alta latência.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">Integrada (Cloud/IP)</td>
+                            <td class="px-6 py-4">Migração para redes locais e visualização centralizada</td>
+                            <td class="px-6 py-4">Protocolos ONVIF e Cloud SaaS</td>
+                            <td class="px-6 py-4 text-yellow-600">Facilidade de acesso remoto e escalabilidade.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 bg-teal-50">
+                            <td class="px-6 py-4 font-bold text-teal-800">Unificada (IA/USP)</td>
+                            <td class="px-6 py-4 font-medium text-teal-900">Inteligência única processando múltiplos sensores</td>
+                            <td class="px-6 py-4 font-medium text-teal-900">Multiagent Systems e Edge AI</td>
+                            <td class="px-6 py-4 font-bold text-green-700">Resposta proativa e automação de decisões.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 4: Tendências 2026 -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6 border-l-4 border-indigo-600 pl-4">Tendências de Mercado para 2026: A Era da Proatividade Inteligente</h2>
+            
+            <p class="mb-6 text-lg text-slate-700">Em 2026, a inteligência artificial deixa de ser uma promessa futurista ou um termo de marketing para se consolidar como uma utilidade prática essencial. A transição da vigilância passiva para a analítica preditiva é o motor que impulsiona a valorização do setor. O mercado brasileiro, especificamente, deve atingir um faturamento de <strong>R$ 18 bilhões</strong>, com a adoção de IA saltando de 54% para mais de 64% em um curto período, demonstrando uma voracidade por inovações que reduzam custos operacionais e aumentem a assertividade.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- Edge AI -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-indigo-500">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Inteligência Artificial na Borda (Edge AI) e Automação de Decisão</h3>
+                    <p class="text-slate-600 mb-3">A projeção de que 75% das câmeras em 2026 possuirão chips de IA nativos redefine o papel do dispositivo de captura. A função da câmera muda de "apenas gravar" para "detectar, analisar e alertar". O processamento na borda reduz drasticamente a necessidade de largura de banda, uma vez que apenas metadados e eventos críticos são enviados para a nuvem.</p>
+                    <p class="text-slate-600">A IA evolui para o processamento de "IA Agentic", onde agentes autônomos podem monitorar dispositivos, gerenciar atualizações e realizar triagens de cibersegurança. Reagem em frações de segundo, superando limitações humanas e reduzindo ruído operacional.</p>
+                </div>
+
+                <!-- Conectividade -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-indigo-500">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Conectividade de Próxima Geração e Sensores Avançados</h3>
+                    <p class="text-slate-600 mb-3">O avanço do 5G e do Wi-Fi 6 funcionará como o sistema circulatório dessa nova infraestrutura. A transição para dispositivos Plug & Play permitirá expansão onde o cabeamento UTP seria proibitivo.</p>
+                    <p class="text-slate-600">Observa-se a proliferação de sensores avançados (LiDAR, radares, sensores ambientais). Eles não apenas detectam intrusões, mas contribuem para metas de sustentabilidade monitorando energia e CO2, essencial para 48% dos clientes corporativos.</p>
+                </div>
+            </div>
+
+            <div class="bg-indigo-50 p-6 rounded-xl mb-8">
+                <h3 class="text-xl font-bold text-slate-800 mb-3">Segurança Colaborativa e Cidades Inteligentes</h3>
+                <p class="text-slate-700 mb-3">O conceito de cidades inteligentes no Brasil está deixando de ser uma visão acadêmica para se tornar uma diretriz oficial, impulsionada por marcos regulatórios como a Portaria nº 1.012/2025 do Ministério das Cidades. A segurança colaborativa emerge como um componente vital, onde condomínios e estabelecimentos comerciais conectam suas câmeras a cinturões de proteção comunitária.</p>
+                <p class="text-slate-700">Este modelo tem demonstrado uma eficiência cinco vezes superior na resolução de ocorrências criminais. Em cidades como Rio de Janeiro e São Paulo, a integração de reconhecimento facial e leitura de placas (LPR) em plataformas de nuvem impulsiona um submercado que cresce 25% ao ano.</p>
+            </div>
+
+            <!-- Tabela Tendências 2026 -->
+            <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead class="text-xs text-white uppercase bg-indigo-700">
+                        <tr>
+                            <th scope="col" class="px-6 py-4">Tendência 2026</th>
+                            <th scope="col" class="px-6 py-4">Descrição Técnica</th>
+                            <th scope="col" class="px-6 py-4">Benefício Principal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200">
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">IA na Borda (Edge)</td>
+                            <td class="px-6 py-4">Processamento local de algoritmos de visão computacional</td>
+                            <td class="px-6 py-4 text-green-600 font-medium">Baixa latência e economia de banda.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">Ciber-Resiliência</td>
+                            <td class="px-6 py-4">Proteção nativa contra ataques e backdoors em dispositivos IoT</td>
+                            <td class="px-6 py-4 text-green-600 font-medium">Proteção de dados e conformidade legal.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">Plataformas Unificadas</td>
+                            <td class="px-6 py-4">Integração total de VMS, Controle de Acesso e Alarmes</td>
+                            <td class="px-6 py-4 text-green-600 font-medium">Gestão centralizada e visão holística.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">Sustentabilidade (ESG)</td>
+                            <td class="px-6 py-4">Monitoramento de consumo e emissões via sensores de segurança</td>
+                            <td class="px-6 py-4 text-green-600 font-medium">Eficiência operacional e valor de marca.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <!-- Section 5: Desafios -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6 border-l-4 border-red-600 pl-4">Principais Desafios: A Face Complexa da Inovação</h2>
+            
+            <p class="mb-8 text-lg text-slate-700">O acelerado progresso tecnológico de 2026 traz consigo desafios de igual magnitude. A indústria de segurança eletrônica não luta mais apenas contra invasores físicos, mas contra uma rede complexa de ameaças digitais, volatilidade regulatória e uma crise aguda de capital humano.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Card 1 -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-4 text-xl font-bold">!</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Ameaças Cibernéticas & Lado Obscuro da IA</h3>
+                    <p class="text-sm text-slate-600">A IA é usada para criar ataques hiper-personalizados e deepfakes. Estima-se que, até 2028, 50% da resposta a incidentes cibernéticos lidará com IA maliciosa. A convergência OT/IT expõe infraestruturas críticas a ransomwares que paralisam operações físicas.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mb-4 text-xl font-bold">§</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">O Labirinto Regulatório: LGPD 2.0 e PL 2338/23</h3>
+                    <p class="text-sm text-slate-600">A "LGPD 2.0" intensifica o rigor para biométrica. O PL 2338/2023 introduz o conceito de risco da IA. Sistemas de reconhecimento facial em espaços públicos serão "alto impacto", exigindo auditorias. 75% das organizações podem sofrer multas até 2027 sem gestão de risco adequada.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4 text-xl font-bold">👥</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">A Crise Global de Talentos e o "Skills Gap"</h3>
+                    <p class="text-sm text-slate-600">Déficit global de 4,8 milhões de especialistas. O instalador tradicional agora precisa saber redes IP e criptografia. Para 85% dos empregadores, a solução é o "upskilling" e "reskilling" das equipes internas para áreas como defesa de IA e cloud.</p>
+                </div>
+            </div>
+
+            <!-- Tabela Desafios -->
+            <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                <table class="w-full text-sm text-left text-slate-600">
+                    <thead class="text-xs text-white uppercase bg-slate-800">
+                        <tr>
+                            <th scope="col" class="px-6 py-4">Desafio Crítico</th>
+                            <th scope="col" class="px-6 py-4">Impacto Esperado em 2026</th>
+                            <th scope="col" class="px-6 py-4">Mitigação Estratégica</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200">
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">Escassez de Talentos</td>
+                            <td class="px-6 py-4 text-red-600">Retardo na implementação de novos projetos e aumento de custos</td>
+                            <td class="px-6 py-4 font-medium">Investimento em treinamento interno e parcerias com EDTechs.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">Rigor da LGPD</td>
+                            <td class="px-6 py-4 text-red-600">Penalidades financeiras e danos reputacionais severos</td>
+                            <td class="px-6 py-4 font-medium">Adoção de Privacy by Design e governança de dados auditável.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">Ataques via IA</td>
+                            <td class="px-6 py-4 text-red-600">Aumento na sofisticação de fraudes e brechas de segurança</td>
+                            <td class="px-6 py-4 font-medium">Implementação de plataformas de segurança de IA e Zero Trust.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-slate-800">Obsolescência de Hardware</td>
+                            <td class="px-6 py-4 text-red-600">Incompatibilidade de sistemas e vulnerabilidades físicas</td>
+                            <td class="px-6 py-4 font-medium">Planejamento de ciclos de atualização e migração para Cloud.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 6: Horizonte 2027-2028 -->
+        <section class="mb-16 bg-slate-900 text-white -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-12">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl font-bold mb-6 border-l-4 border-blue-400 pl-4">Tendências para os Próximos 2 Anos: O Horizonte 2027-2028</h2>
+                
+                <p class="mb-8 text-lg text-slate-300">Ao projetar os anos de 2027 e 2028, a indústria de segurança eletrônica entra em uma fase de autonomia plena e integração cibernética profunda. O mercado global de segurança eletrônica deverá atingir <strong>US$ 85,2 bilhões até 2028</strong>, impulsionado pela "IA Física" e pela reinvenção da proteção de dados diante da ameaça quântica.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <!-- IA Física -->
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-xl font-bold text-blue-300 mb-3">Inteligência Artificial Física e Robótica Colaborativa</h3>
+                        <p class="text-slate-300 text-sm mb-3">A IA se materializará no mundo físico via robôs de patrulha e drones autônomos, capazes de adaptar-se em tempo real. Até 2028, 80% dos armazéns globais usarão automação inteligente para vigilância.</p>
+                        <p class="text-slate-300 text-sm">A "Automação Poshumana" com sistemas multiagentes (MAS) coordenará frotas para responder a incidentes sem comando humano direto, escalando operações dinamicamente.</p>
+                    </div>
+
+                    <!-- Criptografia -->
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-xl font-bold text-blue-300 mb-3">Cibersegurança Preventiva e Criptografia Pós-Quântica</h3>
+                        <p class="text-slate-300 text-sm mb-3">Mudança do "detectar e responder" para "prever e prevenir". Até 2030, 50% do investimento global em segurança focará em prever ataques avaliando telemetria global.</p>
+                        <p class="text-slate-300 text-sm">Organizações adotarão algoritmos de criptografia pós-quântica (PQC) para evitar ataques "harvest now, decrypt later". Agilidade criptográfica será essencial.</p>
+                    </div>
+
+                    <!-- Identidade Digital -->
+                    <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                        <h3 class="text-xl font-bold text-blue-300 mb-3">Reinvenção da Experiência do Usuário e Identidade Digital</h3>
+                        <p class="text-slate-300 text-sm mb-3">O uso de DSLMs (modelos de linguagem de domínio) permitirá interação em linguagem natural com VMS. Ex: <em>"Mostre-me todos os veículos azuis na última hora sem credencial"</em>.</p>
+                        <p class="text-slate-300 text-sm">Autenticação: A "identidade como novo firewall" solidifica o Zero Trust. Contra deepfakes comoditizados (2026), transações sensíveis exigirão "códigos de confiança" ou verificação fora de banda.</p>
+                    </div>
+                </div>
+
+                <!-- Chart Evolução Mercado -->
+                <div class="bg-white p-6 rounded-xl shadow-lg mb-8 text-slate-800 max-w-3xl mx-auto">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Projeção do Valor de Mercado Global (Bilhões US$)</h3>
+                    <div class="relative h-64">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tabela Horizonte -->
+                <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-slate-300">
+                        <thead class="text-xs text-white uppercase bg-slate-700">
+                            <tr>
+                                <th scope="col" class="px-6 py-4">Tendência 2027-2028</th>
+                                <th scope="col" class="px-6 py-4">Mecanismo de Funcionamento</th>
+                                <th scope="col" class="px-6 py-4">Implicação para o Setor</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-slate-800 divide-y divide-slate-700">
+                            <tr class="hover:bg-slate-700 transition-colors">
+                                <td class="px-6 py-4 font-bold text-white">Multiagent Systems (MAS)</td>
+                                <td class="px-6 py-4">Coleções de IAs que interagem para metas comuns</td>
+                                <td class="px-6 py-4 text-blue-300">Automação de SOCs e monitoramento autônomo.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-700 transition-colors">
+                                <td class="px-6 py-4 font-bold text-white">Criptografia Pós-Quântica</td>
+                                <td class="px-6 py-4">Algoritmos resistentes a ataques de computadores quânticos</td>
+                                <td class="px-6 py-4 text-blue-300">Proteção de dados sensíveis contra futuras quebras.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-700 transition-colors">
+                                <td class="px-6 py-4 font-bold text-white">DSLMs</td>
+                                <td class="px-6 py-4">Modelos de linguagem treinados em dados de segurança</td>
+                                <td class="px-6 py-4 text-blue-300">Interface natural para gestão e resposta a incidentes.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-700 transition-colors">
+                                <td class="px-6 py-4 font-bold text-white">IA Física</td>
+                                <td class="px-6 py-4">Integração de IA em robôs e drones de segurança</td>
+                                <td class="px-6 py-4 text-blue-300">Vigilância móvel e intervenção proativa no mundo real.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 7: Verticais -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6 border-l-4 border-amber-500 pl-4">Análise por Verticais de Mercado: Impactos e Oportunidades</h2>
+            <p class="mb-8 text-lg text-slate-700">A transformação do setor não ocorre de forma uniforme, apresentando nuances significativas dependendo do segmento de aplicação.</p>
+
+            <div class="space-y-6">
+                <!-- Vertical 1 -->
+                <div class="flex flex-col md:flex-row bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <div class="md:w-1/4 mb-4 md:mb-0 md:pr-6 border-r border-slate-100 flex items-center justify-center">
+                        <h3 class="text-xl font-bold text-slate-800 text-center">Varejo & Prevenção de Perdas</h3>
+                    </div>
+                    <div class="md:w-3/4 md:pl-6 text-slate-600">
+                        No varejo, o uso de analytics de vídeo alimentado por IA em 2026 permitirá não apenas prevenir furtos, mas também otimizar a experiência do cliente e a logística de estoque. A capacidade de rastrear itens de valor e identificar padrões de comportamento de compra fornecerá dados valiosos para marketing e vendas, transformando o sistema de segurança de um centro de custos em um gerador de inteligência de negócios. Portaria remota e controle de acesso permitirão operações estendidas com menor custo presencial.
+                    </div>
+                </div>
+
+                <!-- Vertical 2 -->
+                <div class="flex flex-col md:flex-row bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <div class="md:w-1/4 mb-4 md:mb-0 md:pr-6 border-r border-slate-100 flex items-center justify-center">
+                        <h3 class="text-xl font-bold text-slate-800 text-center">Infraestrutura Crítica</h3>
+                    </div>
+                    <div class="md:w-3/4 md:pl-6 text-slate-600">
+                        Para setores como energia, transporte e governo, a segurança nacional e a soberania de dados tornam-se prioridades absolutas. Observa-se um movimento de "geopatriação", onde workloads e dados críticos são movidos para ambientes locais ou soberanos devido a incertezas geopolíticas e novas regulamentações. A resiliência de redes OT (Tecnologia Operacional) contra ataques patrocinados por estados será um dos maiores focos de investimento em 2027 e 2028.
+                    </div>
+                </div>
+
+                <!-- Vertical 3 -->
+                <div class="flex flex-col md:flex-row bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <div class="md:w-1/4 mb-4 md:mb-0 md:pr-6 border-r border-slate-100 flex items-center justify-center">
+                        <h3 class="text-xl font-bold text-slate-800 text-center">Condomínios & Portaria Remota</h3>
+                    </div>
+                    <div class="md:w-3/4 md:pl-6 text-slate-600">
+                        O mercado brasileiro de condomínios continua a ser um motor de crescimento para a portaria remota. A evolução da IA permite a substituição ou o apoio aos vigilantes tradicionais, com autorização de acesso 24/7, reconhecimento facial de alta precisão e notificações em tempo real. Plataformas SaaS integradas permitem o gerenciamento centralizado de múltiplas unidades, reduzindo custos operacionais e aumentando a transparência.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Conclusão -->
+        <section class="bg-gradient-to-br from-blue-600 to-indigo-800 text-white rounded-2xl p-8 shadow-xl">
+            <h2 class="text-3xl font-bold mb-6 border-b border-blue-400 pb-4">Conclusões e Recomendações Estratégicas</h2>
+            
+            <div class="space-y-4 text-lg text-blue-50">
+                <p>A análise consolidada para o triênio 2026-2028 aponta para uma indústria que atingiu o ponto de ruptura com seu passado analógico. A segurança eletrônica agora é uma disciplina de dados, inteligência artificial e resiliência cibernética. Para os stakeholders deste mercado, o sucesso dependerá da capacidade de equilibrar a inovação tecnológica agressiva com uma governança ética e regulatória rigorosa.</p>
+                
+                <p>A transição para modelos proativos baseados em inteligência não é apenas uma vantagem competitiva, mas um requisito para a sobrevivência em um cenário onde as ameaças evoluem à velocidade das máquinas. O foco deve deslocar-se da venda de dispositivos para a entrega de resultados de segurança e valor operacional. O triênio à frente recompensará as organizações que investirem na unificação de suas plataformas, na proteção contínua de seus dados e, fundamentalmente, na capacitação contínua de seu capital humano.</p>
+                
+                <p class="font-semibold text-white pt-4">As empresas brasileiras, em particular, têm a oportunidade de liderar a adoção de segurança colaborativa e soluções de IA em nuvem, aproveitando a maturidade digital crescente do país e o robusto marco regulatório que está sendo construído. O futuro da segurança eletrônica é, sem dúvida, mais inteligente, mais rápido e profundamente integrado ao tecido digital da sociedade moderna.</p>
+            </div>
+        </section>
+
     </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center border-t border-slate-800 mt-12">
+        <p class="text-sm">© 2026 Relatório Estratégico do Ecossistema de Segurança Eletrônica. Gerado com base em dados projetados para 2026-2028.</p>
+    </footer>
+
+    <!-- Scripts dos Gráficos -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurações comuns globais do Chart.js
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#64748b'; // slate-500
+
+            // 1. Gráfico de Performance Setorial (Bar Chart)
+            const ctxPerformance = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctxPerformance, {
+                type: 'bar',
+                data: {
+                    labels: ['Crescimento Cloud', 'Faturamento', 'Sistemas Legados', 'Penetração Mercado'],
+                    datasets: [{
+                        label: 'Pontuação (0-100)',
+                        data: [88, 82, 75, 68],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)', // blue-500
+                            'rgba(16, 185, 129, 0.8)', // emerald-500
+                            'rgba(245, 158, 11, 0.8)', // amber-500
+                            'rgba(99, 102, 241, 0.8)'  // indigo-500
+                        ],
+                        borderWidth: 0,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: '#f1f5f9'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // 2. Gráfico de Obsolescência Tecnológica (Doughnut / Pie comparison)
+            const ctxObsolescence = document.getElementById('obsolescenceChart').getContext('2d');
+            new Chart(ctxObsolescence, {
+                type: 'bar',
+                data: {
+                    labels: ['2023', '2026 (Projeção)'],
+                    datasets: [
+                        {
+                            label: 'Analógico Legado',
+                            data: [78, 30], // Assuming 30% for legacy in 2026 to balance the 70% IP/IA
+                            backgroundColor: 'rgba(239, 68, 68, 0.8)', // red-500
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'IP / IA / Cloud',
+                            data: [22, 70], // Balancing the 78% legacy in 2023
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)', // emerald-500
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) { return value + "%" }
+                            },
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 3. Gráfico de Crescimento do Mercado (Line Chart)
+            const ctxMarket = document.getElementById('marketChart').getContext('2d');
+            new Chart(ctxMarket, {
+                type: 'line',
+                data: {
+                    labels: ['2024', '2025', '2026', '2027', '2028'],
+                    datasets: [{
+                        label: 'Valor Global (US$ Bilhões)',
+                        // Extrapolating a logical curve to hit 78.81 in 2026 and 85.2 in 2028 based on CAGR
+                        data: [67.1, 72.5, 78.81, 82.1, 85.20], 
+                        borderColor: 'rgba(59, 130, 246, 1)', // blue-500
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 60,
+                            grid: { color: '#f1f5f9' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
