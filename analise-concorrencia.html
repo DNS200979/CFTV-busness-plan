@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inteligência de Mercado CFTV Brasil | Fiberhome Strategy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6', // Teal
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        },
+                        dark: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #334155; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            height: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; max-width: 100%; }
+        }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .tab-active { border-bottom: 2px solid #0d9488; color: #0d9488; font-weight: 600; }
+        
+        /* Hide scrollbar for horizontal scroll areas */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased font-sans">
+
+    <!-- Chosen Palette: Slate (Neutrals) + Teal (Brand/Interactive) + Amber (Alerts). Calm, professional, tech-oriented. -->
+    
+    <!-- Application Structure Plan: 
+         1. Header: Contextualizes the tool.
+         2. Market Overview & Threat Alert: Establishes the current landscape and immediate massive threat (WEG/Huawei) to set urgency.
+         3. Competitor Radar: Interactive cards to explore specific rivals (Strengths/Weaknesses).
+         4. Pricing Intelligence: Interactive table filtering by category to understand unit economics.
+         5. Strategic Synthesis: Recommendations for Fiberhome based on the data explored above.
+         Rationale: Guides the user from understanding the environment and big shifts down to tactical pricing and finally strategic action. -->
+
+    <!-- Visualization & Content Choices:
+         - Market Share: Chart.js Doughnut. Goal: Compare dominance. Justification: Quickly shows Intelbras's grip vs others.
+         - Competitor Details: Interactive HTML Cards + JS toggle. Goal: Organize/Compare. Justification: Keeps UI clean while offering deep dives into specific companies.
+         - Price Analysis: HTML Table with JS Filter Buttons. Goal: Inform/Organize. Justification: Best format for specific numerical comparison across categories.
+         - WEG/Huawei Alert: Highlighted CSS Block. Goal: Inform/Change. Justification: Needs to stand out visually as a market disruptor. -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="bg-dark text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">Market<span class="text-brand-500">Map</span> CFTV</h1>
+                <p class="text-xs text-slate-400">Projeto de Entrada | Fiberhome Brasil</p>
+            </div>
+            <div class="hidden md:flex space-x-6 text-sm">
+                <a href="#cenario" class="hover:text-brand-100 transition">Cenário Macro</a>
+                <a href="#concorrentes" class="hover:text-brand-100 transition">Radar de Concorrentes</a>
+                <a href="#precos" class="hover:text-brand-100 transition">Tabela de Preços</a>
+                <a href="#estrategia" class="hover:text-brand-100 transition font-semibold text-brand-500">Estratégia</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-12">
+
+        <!-- INTRO & WEG/HUAWEI ALERT -->
+        <section id="cenario" class="space-y-6 pt-6">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Visão Geral & Dinâmica de Mercado</h2>
+                <p class="text-slate-600 max-w-3xl">O mercado brasileiro de CFTV é historicamente concentrado, dominado por forte presença de marca local com manufatura importada. No entanto, o cenário em 2026 aponta para uma disrupção severa, exigindo da Fiberhome um posicionamento ágil e focado em verticais de alto valor.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Market Share Chart -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm col-span-1 lg:col-span-1 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-800 mb-1">Market Share Estimado (2025/2026)</h3>
+                        <p class="text-xs text-slate-500 mb-4">Volume de equipamentos em projetos SMB e Enterprise</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="marketShareChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- WEG/Huawei Alert -->
+                <div class="bg-amber-50 p-6 rounded-xl border border-amber-200 shadow-sm col-span-1 lg:col-span-2 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <span class="text-9xl">&#9888;</span> <!-- Unicode Alert Icon -->
+                    </div>
+                    <div class="relative z-10">
+                        <div class="inline-flex items-center space-x-2 bg-amber-200 text-amber-800 px-3 py-1 rounded-full text-xs font-bold mb-4 uppercase tracking-wide">
+                            <span>&#128226;</span> Atualização Crítica de Mercado
+                        </div>
+                        <h3 class="text-2xl font-bold text-amber-900 mb-3">O Efeito WEG + Huawei</h3>
+                        <p class="text-amber-800 mb-4 leading-relaxed">
+                            Fortes indícios de mercado confirmam a entrada da <strong>WEG</strong> (gigante nacional de motores e automação) no segmento de segurança eletrônica, utilizando tecnologia core da <strong>Huawei</strong> (chips, IA e óptica).
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div class="bg-white/60 p-4 rounded-lg">
+                                <h4 class="font-bold text-amber-900 text-sm mb-1">O que isso significa?</h4>
+                                <ul class="text-sm text-amber-800 space-y-1 list-disc list-inside">
+                                    <li>Produção nacional (PPB) agressiva pela WEG.</li>
+                                    <li>Tecnologia de ponta (Reconhecimento facial avançado, Analytics nativo) democratizada pela Huawei.</li>
+                                    <li>Rede de integradores elétricos/industriais da WEG sendo convertida para CFTV.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white/60 p-4 rounded-lg border-l-4 border-amber-500">
+                                <h4 class="font-bold text-brand-900 text-sm mb-1">Impacto para a Fiberhome</h4>
+                                <p class="text-sm text-slate-700">A entrada não pode ser focada apenas em "preço vs Intelbras". A Fiberhome deve alavancar seu DNA de telecom (GPON/Fibra) para oferecer CFTV IP de alta capacidade de tráfego, mirando ISPs e Cidades Inteligentes, evitando o confronto direto no varejo SMB onde a WEG atacará.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPETITOR RADAR -->
+        <section id="concorrentes" class="pt-8 border-t border-slate-200">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-slate-800">Radar de Concorrentes Principais</h2>
+                <p class="text-slate-600">Selecione uma empresa para analisar seu portfólio, pontos fortes e fracos no Brasil.</p>
+            </div>
+
+            <!-- Tabs/Selector -->
+            <div class="flex space-x-2 overflow-x-auto no-scrollbar pb-2 mb-6 border-b border-slate-200" id="competitor-tabs">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Detail Panel -->
+            <div id="competitor-detail" class="bg-white rounded-xl border border-slate-200 shadow-md p-6 lg:p-8 min-h-[300px]">
+                <p class="text-slate-400 text-center mt-10">Selecione um concorrente acima para ver os detalhes.</p>
+            </div>
+        </section>
+
+        <!-- PRICING TABLE -->
+        <section id="precos" class="pt-8 border-t border-slate-200">
+            <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Análise de Preços (Sell-out Médio Estimado)</h2>
+                    <p class="text-slate-600 text-sm">Valores de referência no varejo/distribuidor para integradores (em R$).</p>
+                </div>
+                <div class="flex space-x-2" id="price-filters">
+                    <!-- Buttons injected via JS -->
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm whitespace-nowrap">
+                        <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-4">Categoria / Produto Base</th>
+                                <th class="px-6 py-4">Intelbras</th>
+                                <th class="px-6 py-4">Hikvision</th>
+                                <th class="px-6 py-4">Marcas de Entrada (Giga/Vizzion)</th>
+                                <th class="px-6 py-4 text-brand-600">Target Fiberhome</th>
+                            </tr>
+                        </thead>
+                        <tbody id="price-table-body" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- STRATEGY SYNTHESIS -->
+        <section id="estrategia" class="pt-8 border-t border-slate-200 pb-12">
+            <h2 class="text-2xl font-bold text-brand-900 mb-6">Recomendações Estratégicas para Fiberhome</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl border-t-4 border-brand-500 shadow-sm card-hover">
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">1. Nicho ISP e Smart City</h3>
+                    <p class="text-sm text-slate-600">Não lute na prateleira do distribuidor contra Intelbras/Giga. Venda a câmera acoplada à solução de infraestrutura óptica (OLT/ONT) que a Fiberhome já domina. Câmeras IP de alta resolução como extensão da rede do Provedor de Internet.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-t-4 border-brand-500 shadow-sm card-hover">
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">2. Posicionamento de Preço</h3>
+                    <p class="text-sm text-slate-600">O target deve ficar entre Hikvision (tecnologia) e Intelbras (marca). Não tente ser a mais barata (Giga domina aqui). Ofereça o melhor custo-benefício em <strong>projetos IP</strong>, subsidiando NVRs se a infra de rede for Fiberhome.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-t-4 border-brand-500 shadow-sm card-hover">
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">3. Defesa contra WEG/Huawei</h3>
+                    <p class="text-sm text-slate-600">A WEG terá capilaridade brutal. A Fiberhome deve se blindar integrando seu software de gestão de CFTV com seu NMS de redes (UNM2000). A facilidade de gerenciar a câmera E o roteador no mesmo painel é um diferencial que a WEG não terá inicialmente.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-dark text-slate-400 py-6 text-center text-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>Projeto Estratégico Interno - Simulação de Inteligência de Mercado. Dados estimados para fins de planejamento.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. CHART: MARKET SHARE ---
+        const ctx = document.getElementById('marketShareChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Intelbras', 'Hikvision', 'Dahua', 'Giga/Multi', 'Outros'],
+                datasets: [{
+                    data: [55, 18, 12, 10, 5],
+                    backgroundColor: [
+                        '#1e293b', // Dark Slate for Intelbras
+                        '#3b82f6', // Blue for Hikvision
+                        '#8b5cf6', // Purple for Dahua
+                        '#f59e0b', // Amber for Giga
+                        '#cbd5e1'  // Gray for others
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ~' + context.parsed + '%';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // --- 2. COMPETITOR DATA & LOGIC ---
+        const competitors = [
+            {
+                id: 'intelbras',
+                name: 'Intelbras',
+                color: 'text-slate-800 border-slate-800',
+                solutions: 'Portfólio completo (IP, Analógico HD, Wi-Fi), NVRs, Alarmes, Controle de Acesso, Redes. Domina o ecossistema SMB e Residencial.',
+                strengths: ['Maior rede de distribuição e integradores do Brasil', 'Suporte técnico local excepcional e troca expressa', 'Marca sinônimo de categoria no varejo', 'Software de gestão amigável para leigos (SIM Next/ISIC)'],
+                weaknesses: ['Tecnologia core muitas vezes defasada em relação a asiáticas puras', 'Preço premium em linhas de projeto (IP alta resolução)', 'Dependência de fornecedores OEM chineses (risco cambial)']
+            },
+            {
+                id: 'hikvision',
+                name: 'Hikvision',
+                color: 'text-blue-600 border-blue-600',
+                solutions: 'Líder global. Câmeras IP com IA avançada, Térmicas, ColorVu (cor no escuro), Analógico (Turbo HD), Switches industriais.',
+                strengths: ['Tecnologia de ponta (melhor sensor/imagem pelo preço)', 'Preços muito agressivos em projetos grandes', 'Ampla variedade de produtos para verticais específicas (varejo, trânsito)'],
+                weaknesses: ['Políticas de garantia e RMA mais burocráticas no Brasil', 'Guerra de preços entre seus próprios distribuidores destrói margem do integrador', 'Softwares (iVMS) complexos para usuários residenciais']
+            },
+            {
+                id: 'dahua',
+                name: 'Dahua',
+                color: 'text-purple-600 border-purple-600',
+                solutions: 'Vice-líder global. Tecnologia HDCVI (analógica), IP, Full-color, Soluções de IoT e Display (painéis de LED).',
+                strengths: ['Alta capacidade de inovação em hardware', 'Forte em projetos governamentais e de cidades inteligentes no Brasil', 'Preços competitivos na linha IP de entrada'],
+                weaknesses: ['Brand awareness muito inferior a Intelbras no mercado de baixo custo', 'Rede de suporte em reconstrução no país após mudanças estruturais']
+            },
+            {
+                id: 'giga',
+                name: 'Giga (Multilaser)',
+                color: 'text-amber-600 border-amber-600',
+                solutions: 'Foco total no mercado de entrada. Analógico AHD, IP básico, Wi-Fi residencial.',
+                strengths: ['Preço extremamente baixo (linha de combate)', 'Força de distribuição nacional da Multilaser', 'Fácil de vender em pequenos comércios e residências simples'],
+                weaknesses: ['Qualidade de construção e durabilidade inferiores', 'Software básico e instável', 'Nenhum apelo para projetos de médio/grande porte (ausência de IA)']
+            }
+        ];
+
+        const tabsContainer = document.getElementById('competitor-tabs');
+        const detailContainer = document.getElementById('competitor-detail');
+
+        function renderCompetitor(id) {
+            const comp = competitors.find(c => c.id === id);
+            
+            // Update tabs
+            Array.from(tabsContainer.children).forEach(btn => {
+                if(btn.dataset.id === id) {
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('text-slate-500', 'border-transparent');
+                } else {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('text-slate-500', 'border-transparent');
+                }
+            });
+
+            // Update content
+            detailContainer.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/3 border-r border-slate-100 pr-4">
+                        <h3 class="text-3xl font-bold ${comp.color.split(' ')[0]} mb-4">${comp.name}</h3>
+                        <div class="mb-4">
+                            <h4 class="text-xs uppercase text-slate-400 font-bold mb-1">Portfólio / Soluções</h4>
+                            <p class="text-sm text-slate-700 leading-relaxed">${comp.solutions}</p>
+                        </div>
+                    </div>
+                    <div class="md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="flex items-center space-x-2 mb-3">
+                                <span class="bg-green-100 text-green-700 rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs">+</span>
+                                <h4 class="font-bold text-slate-800">Pontos Fortes</h4>
+                            </div>
+                            <ul class="space-y-2">
+                                ${comp.strengths.map(s => `<li class="text-sm text-slate-600 flex items-start"><span class="text-green-500 mr-2">&#10003;</span> <span>${s}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-2 mb-3">
+                                <span class="bg-red-100 text-red-700 rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs">-</span>
+                                <h4 class="font-bold text-slate-800">Pontos Fracos</h4>
+                            </div>
+                            <ul class="space-y-2">
+                                ${comp.weaknesses.map(w => `<li class="text-sm text-slate-600 flex items-start"><span class="text-red-400 mr-2">&#10005;</span> <span>${w}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize Tabs
+        competitors.forEach((c, index) => {
+            const btn = document.createElement('button');
+            btn.dataset.id = c.id;
+            btn.className = `px-4 py-2 font-medium text-sm whitespace-nowrap border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition`;
+            btn.innerText = c.name;
+            btn.onclick = () => renderCompetitor(c.id);
+            tabsContainer.appendChild(btn);
+        });
+        
+        // Load first competitor
+        if(competitors.length > 0) renderCompetitor(competitors[0].id);
+
+
+        // --- 3. PRICING TABLE DATA & LOGIC ---
+        const priceData = [
+            { category: 'IP', item: 'Câmera IP Bullet 2MP (Externa, PoE)', intelbras: 'R$ 280 - 350', hikvision: 'R$ 220 - 290', entrada: 'R$ 150 - 190', target: 'R$ 230 - 260' },
+            { category: 'IP', item: 'Câmera IP Dome 4MP (Interna, Microfone)', intelbras: 'R$ 450 - 550', hikvision: 'R$ 380 - 450', entrada: 'R$ 280 - 320', target: 'R$ 350 - 390' },
+            { category: 'Wi-Fi', item: 'Câmera Wi-Fi Robô (Pan/Tilt) 2MP', intelbras: 'R$ 250 - 290', hikvision: 'R$ 210 - 250', entrada: 'R$ 130 - 160', target: 'R$ 180 - 210' },
+            { category: 'Wi-Fi', item: 'Câmera Wi-Fi Externa 2MP c/ Iluminação', intelbras: 'R$ 350 - 420', hikvision: 'R$ 320 - 380', entrada: 'R$ 190 - 240', target: 'R$ 280 - 320' },
+            { category: 'Analógica', item: 'Câmera Analógica HD 1MP (Plástico)', intelbras: 'R$ 85 - 110', hikvision: 'R$ 70 - 90', entrada: 'R$ 55 - 70', target: 'Não Focar' },
+            { category: 'Analógica', item: 'Câmera Analógica Full HD 2MP (Metal)', intelbras: 'R$ 140 - 180', hikvision: 'R$ 120 - 150', entrada: 'R$ 90 - 110', target: 'Não Focar' },
+            { category: 'NVR', item: 'NVR 8 Canais PoE', intelbras: 'R$ 800 - 1100', hikvision: 'R$ 650 - 900', entrada: 'R$ 450 - 600', target: 'R$ 700 - 850' },
+            { category: 'Acessórios', item: 'Switch PoE 8 Portas Gigabit', intelbras: 'R$ 450 - 550', hikvision: 'R$ 380 - 480', entrada: 'R$ 250 - 350', target: 'R$ 350 - 420' }
+        ];
+
+        const filterCategories = ['Todos', 'IP', 'Wi-Fi', 'Analógica', 'NVR', 'Acessórios'];
+        const priceFiltersContainer = document.getElementById('price-filters');
+        const priceTableBody = document.getElementById('price-table-body');
+
+        function renderTable(filter) {
+            priceTableBody.innerHTML = '';
+            
+            // Update buttons visually
+            Array.from(priceFiltersContainer.children).forEach(btn => {
+                if(btn.innerText === filter) {
+                    btn.classList.add('bg-slate-800', 'text-white');
+                    btn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+                } else {
+                    btn.classList.remove('bg-slate-800', 'text-white');
+                    btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+                }
+            });
+
+            const filteredData = filter === 'Todos' ? priceData : priceData.filter(d => d.category === filter);
+
+            filteredData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition";
+                
+                // Highlight logic for target price
+                const targetClass = row.target === 'Não Focar' ? 'text-slate-400 italic' : 'font-bold text-brand-600 bg-brand-50/50';
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-medium"><span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded mr-2">${row.category}</span> ${row.item}</td>
+                    <td class="px-6 py-4">${row.intelbras}</td>
+                    <td class="px-6 py-4">${row.hikvision}</td>
+                    <td class="px-6 py-4 text-slate-500">${row.entrada}</td>
+                    <td class="px-6 py-4 ${targetClass}">${row.target}</td>
+                `;
+                priceTableBody.appendChild(tr);
+            });
+        }
+
+        // Initialize Table Filters
+        filterCategories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = `px-3 py-1.5 text-xs font-medium rounded-md border transition`;
+            btn.innerText = cat;
+            btn.onclick = () => renderTable(cat);
+            priceFiltersContainer.appendChild(btn);
+        });
+
+        // Load initial table state
+        renderTable('Todos');
+
+    </script>
+</body>
+</html>
