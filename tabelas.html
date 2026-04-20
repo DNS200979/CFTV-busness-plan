@@ -3,105 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base de Dados - DNS CFTV-TI</title>
+    <title>Comparativo Técnico: Analógico vs Digital - DNS CFTV-TI</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
-        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, colors: { primary: '#0f172a', secondary: '#334155', accent: '#3b82f6' } } } }
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, 
+                    colors: { 
+                        primary: '#0f172a', 
+                        secondary: '#334155', 
+                        accent: '#3b82f6',
+                        analog: '#94a3b8',
+                        digital: '#10b981'
+                    } 
+                } 
+            } 
+        }
     </script>
     <style>
-        body { background-color: #f8fafc; color: #0f172a; display: flex; flex-direction: column; }
+        body { background-color: #f8fafc; color: #0f172a; }
+        .table-container { background: white; border-radius: 1.5rem; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .sticky-header th { position: sticky; top: 0; background: #f8fafc; z-index: 10; padding: 12px 16px; }
+        .card-comparison { transition: transform 0.2s ease; }
+        .card-comparison:hover { transform: translateY(-4px); }
     </style>
 </head>
 <body class="antialiased min-h-screen">
     
-    <header class="bg-white border-b border-slate-200 p-4 sticky top-0 z-40 flex justify-between items-center w-full shadow-sm">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">C</div>
-            <span class="text-xl font-extrabold tracking-tight">Inteli<span class="text-accent">CFTV</span></span>
+    <header class="bg-white border-b border-slate-200 p-6 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">D</div>
+                <h1 class="text-xl font-extrabold tracking-tight">Estudo de Viabilidade: <span class="text-digital">Analógico vs Digital</span></h1>
+            </div>
+            <span class="text-xs font-semibold bg-slate-100 px-3 py-1.5 rounded text-slate-600 uppercase tracking-wider">Versão 2.0 - Foco em Infraestrutura</span>
         </div>
-        <span class="text-xs font-semibold bg-slate-100 px-3 py-1.5 rounded text-slate-600">Dados 9 Meses</span>
     </header>
 
-    <main class="w-full flex-1">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
-            <section class="space-y-8">
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl font-bold text-slate-900">Base de Dados & Tabelas de Consulta</h2>
-                    <p class="text-slate-500 mt-2">Visão detalhada de todos os modelos, preços e softwares catalogados.</p>
-                </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 1: Câmeras e Preços</h3></div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left">
-                                <thead class="bg-slate-100 text-slate-600"><tr><th class="px-4 py-3">Categoria</th><th class="px-4 py-3">Marca</th><th class="px-4 py-3">Modelo</th><th class="px-4 py-3">Preço</th></tr></thead>
-                                <tbody class="divide-y divide-slate-100 text-slate-700">
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Analógica Entry</td><td>Intelbras</td><td>VHL 1120 B G2</td><td>R$ 111,75</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Analógica Color</td><td>Hikvision</td><td>DS-2CE76D0T...</td><td>R$ 142,72</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Wi-Fi Interna</td><td>Intelbras</td><td>iM3 C (Mibo)</td><td>R$ 229,86</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Wi-Fi Externa</td><td>TP-Link</td><td>Tapo C500</td><td>R$ 289,90</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP Profissional</td><td>Hikvision</td><td>DS-2CD1023...</td><td>R$ 340,68</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP Alta Resist.</td><td>Intelbras</td><td>iM5 SC (Bullet)</td><td>R$ 309,00</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP PTZ IA</td><td>Hikvision</td><td>DS-2DE2C400...</td><td>R$ 492,56</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">IP Premium</td><td>Intelbras</td><td>IM9 Plus Color</td><td>R$ 1.099,00</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+        <!-- Crescimento e Tendência -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+                <h2 class="text-3xl font-bold text-slate-900">A Morte do Coaxial</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    A migração para sistemas **Digitais (IP)** não é apenas uma questão de resolução, mas de inteligência. Enquanto o analógico (DVR/Coaxial) estagnou na transmissão de sinal, o digital permite o uso de IA na ponta e simplificação de infraestrutura via PoE (Power over Ethernet).
+                </p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-5 bg-slate-100 rounded-3xl border border-slate-200">
+                        <p class="text-[10px] font-bold text-slate-500 uppercase">Analógico (DVR)</p>
+                        <p class="text-2xl font-black text-slate-400">-22% aa</p>
+                        <p class="text-[10px] text-slate-400 mt-1">Obsolescência técnica</p>
                     </div>
-
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 2: Gerenciadores Físicos (DVR/NVR)</h3></div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left">
-                                <thead class="bg-slate-100 text-slate-600"><tr><th class="px-4 py-3">Modelo</th><th class="px-4 py-3">Marca</th><th class="px-4 py-3">Canais</th><th class="px-4 py-3">Preço Médio</th></tr></thead>
-                                <tbody class="divide-y divide-slate-100 text-slate-700">
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">MHDX 3116-C</td><td>Intelbras</td><td>16</td><td>R$ 850 - 950</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">iDS-7208HGHI-M1</td><td>Hikvision</td><td>8</td><td>R$ 450 - 520</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">MHDX 1204</td><td>Intelbras</td><td>4</td><td>R$ 380,00</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium text-red-600">iMHDX 3008 (EOL)</td><td>Intelbras</td><td>8+4 IP</td><td>R$ 700 - 800</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium text-red-600">DS-9632NXI (EOL)</td><td>Hikvision</td><td>32</td><td>R$ 4.500+</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="p-5 bg-digital/10 rounded-3xl border border-digital/20">
+                        <p class="text-[10px] font-bold text-digital uppercase">Digital (NVR/IP)</p>
+                        <p class="text-2xl font-black text-digital">+45% aa</p>
+                        <p class="text-[10px] text-digital/70 mt-1">Crescimento sustentado por IA</p>
                     </div>
                 </div>
+            </div>
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm h-80">
+                <canvas id="marketChart"></canvas>
+            </div>
+        </section>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 3: Softwares VMS e Nuvem</h3></div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left">
-                                <thead class="bg-slate-100 text-slate-600"><tr><th class="px-4 py-3">Produto</th><th class="px-4 py-3">Licença</th><th class="px-4 py-3">Preço Médio</th></tr></thead>
-                                <tbody class="divide-y divide-slate-100 text-slate-700">
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Digifort Enterprise</td><td>Perpétua (32c)</td><td>R$ 16.000,00</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Monuv (Cloud)</td><td>SaaS / Mês</td><td>R$ 899 (mín)</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Camerite</td><td>SaaS / Franquia</td><td>R$ 2 a 5 / user</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Gabriel</td><td>SaaS / Mês</td><td>R$ 15 - 30 / cam</td></tr>
-                                </tbody>
-                            </table>
+        <!-- Comparativo de Hardware e Cabos -->
+        <section class="space-y-8">
+            <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                <span>📊</span> Comparativo de Componentes
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Infraestrutura -->
+                <div class="table-container">
+                    <div class="bg-slate-50 p-4 border-b border-slate-200 font-bold text-slate-700 flex justify-between">
+                        <span>Cabo Coaxial vs UTP (Rede)</span>
+                        <span class="text-xs text-slate-400">Preço p/ Metro</span>
+                    </div>
+                    <table class="w-full text-sm text-left">
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="px-4 py-4 font-medium">Coaxial 4mm + Bipolar (80% cobre)</td>
+                                <td class="px-4 py-4 text-right font-bold text-slate-600">R$ 2,85</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-4 font-medium text-digital">UTP Cat5e (100% cobre)</td>
+                                <td class="px-4 py-4 text-right font-bold text-digital">R$ 2,10</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-4 font-medium">Conector BNC + Borne</td>
+                                <td class="px-4 py-4 text-right font-bold text-slate-600">R$ 6,50/un</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-4 font-medium text-digital">Conector RJ45 (Pass-through)</td>
+                                <td class="px-4 py-4 text-right font-bold text-digital">R$ 1,80/un</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Gravação -->
+                <div class="table-container">
+                    <div class="bg-slate-50 p-4 border-b border-slate-200 font-bold text-slate-700">DVR vs NVR (16 Canais)</div>
+                    <table class="w-full text-sm text-left">
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="px-4 py-4 font-medium">DVR 5em1 (MHDX)</td>
+                                <td class="px-4 py-4 text-right font-bold text-slate-600">R$ 980,00</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-4 font-medium text-digital">NVR IP (Série 3000)</td>
+                                <td class="px-4 py-4 text-right font-bold text-digital">R$ 1.850,00</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-4 font-medium">Fonte Chaveada 12V 20A</td>
+                                <td class="px-4 py-4 text-right font-bold text-slate-600">R$ 120,00</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-4 font-medium text-digital">Switch PoE 16 Portas Giga</td>
+                                <td class="px-4 py-4 text-right font-bold text-digital">R$ 1.150,00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cenários de Instalação -->
+        <section class="space-y-10">
+            <h2 class="text-2xl font-bold text-slate-800">Cenários: Custo Real de Implantação</h2>
+            
+            <div class="grid grid-cols-1 gap-12">
+                <!-- Cenário 1: Condomínio Vertical -->
+                <div class="bg-white rounded-[2rem] border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="bg-primary p-6 text-white flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-bold">Condomínio Vertical (Torre Única)</h3>
+                            <p class="text-xs text-slate-400">24 Câmeras • Prumada centralizada</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="bg-digital px-3 py-1 rounded-full text-[10px] font-bold uppercase">Digital Vence</span>
                         </div>
                     </div>
-
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div class="bg-slate-50 p-4 border-b border-slate-200"><h3 class="font-bold text-slate-800">Tabela 4: Custos de Infraestrutura</h3></div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left">
-                                <thead class="bg-slate-100 text-slate-600"><tr><th class="px-4 py-3">Produto</th><th class="px-4 py-3">Tipo / Uso</th><th class="px-4 py-3">Preço</th></tr></thead>
-                                <tbody class="divide-y divide-slate-100 text-slate-700">
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Conector BNC</td><td>Mola/Parafuso</td><td>R$ 1,25</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Conector BNC</td><td>Borne (UTP)</td><td>R$ 1,23 - 3,90</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Conector P4 Macho</td><td>Com Borne (12V)</td><td>R$ 0,68 - 2,50</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Power Balun</td><td>Par (30 metros)</td><td>R$ 26,00</td></tr>
-                                    <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-medium">Kit Conectores</td><td>16 BNC + 8 P4</td><td>R$ 36,50</td></tr>
-                                </tbody>
-                            </table>
+                    <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-100">
+                        <div class="p-8 space-y-4">
+                            <h4 class="font-bold text-slate-400 uppercase text-[10px] tracking-widest">Opção Analógica (DVR)</h4>
+                            <ul class="text-sm space-y-2 text-slate-600">
+                                <li class="flex justify-between"><span>Hardware + Cabos Coaxiais</span> <span class="font-bold">R$ 8.900</span></li>
+                                <li class="flex justify-between"><span>Fontes + Conectores BNC</span> <span class="font-bold">R$ 1.450</span></li>
+                                <li class="flex justify-between"><span>Mão de Obra (Passagem difícil)</span> <span class="font-bold">R$ 9.600</span></li>
+                                <li class="flex justify-between text-slate-900 font-bold border-t pt-2"><span>SUBTOTAL</span> <span>R$ 19.950</span></li>
+                            </ul>
+                        </div>
+                        <div class="p-8 space-y-4 bg-digital/5">
+                            <h4 class="font-bold text-digital uppercase text-[10px] tracking-widest">Opção Digital (IP/PoE)</h4>
+                            <ul class="text-sm space-y-2 text-slate-700">
+                                <li class="flex justify-between"><span>Hardware + Cabos UTP</span> <span class="font-bold">R$ 12.400</span></li>
+                                <li class="flex justify-between"><span>Switch PoE (Sem fontes locais)</span> <span class="font-bold">R$ 2.300</span></li>
+                                <li class="flex justify-between"><span>Mão de Obra (Instalação rápida)</span> <span class="font-bold">R$ 6.000</span></li>
+                                <li class="flex justify-between text-digital font-bold border-t border-digital/20 pt-2"><span>SUBTOTAL</span> <span>R$ 20.700</span></li>
+                            </ul>
+                            <p class="text-[10px] text-digital/70 mt-4 italic">*Diferença de apenas 4% no CAPEX, com ganho de 100% em IA.</p>
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
+
+                <!-- Cenário 2: Condomínio Horizontal -->
+                <div class="bg-white rounded-[2rem] border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="bg-secondary p-6 text-white flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-bold">Condomínio Horizontal (Loteamento)</h3>
+                            <p class="text-xs text-slate-400">48 Câmeras • Longas distâncias (Perímetro)</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="bg-digital px-3 py-1 rounded-full text-[10px] font-bold uppercase">Digital Essencial</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-100">
+                        <div class="p-8 space-y-4">
+                            <h4 class="font-bold text-slate-400 uppercase text-[10px] tracking-widest">Opção Analógica (Coaxial)</h4>
+                            <p class="text-[10px] text-danger font-bold uppercase">⚠️ Limitação de Sinal (Max 300m)</p>
+                            <ul class="text-sm space-y-2 text-slate-600">
+                                <li class="flex justify-between"><span>Repetidores + Fontes Locais</span> <span class="font-bold">R$ 4.200</span></li>
+                                <li class="flex justify-between"><span>Infraestrutura Coaxial Pesada</span> <span class="font-bold">R$ 15.800</span></li>
+                                <li class="flex justify-between"><span>Manutenção Pós-Raios</span> <span class="font-bold text-danger">Alta</span></li>
+                                <li class="flex justify-between text-slate-900 font-bold border-t pt-2"><span>SUBTOTAL ESTIMADO</span> <span>R$ 58.000</span></li>
+                            </ul>
+                        </div>
+                        <div class="p-8 space-y-4 bg-digital/5">
+                            <h4 class="font-bold text-digital uppercase text-[10px] tracking-widest">Opção Digital (Rede/Fibra)</h4>
+                            <p class="text-[10px] text-digital font-bold uppercase">✅ Sem perda de sinal</p>
+                            <ul class="text-sm space-y-2 text-slate-700">
+                                <li class="flex justify-between"><span>Switches de Borda PoE</span> <span class="font-bold">R$ 7.800</span></li>
+                                <li class="flex justify-between"><span>Lançamento de Fibra/UTP</span> <span class="font-bold">R$ 11.200</span></li>
+                                <li class="flex justify-between"><span>Segurança contra Surtos</span> <span class="font-bold text-digital">Alta</span></li>
+                                <li class="flex justify-between text-digital font-bold border-t border-digital/20 pt-2"><span>SUBTOTAL ESTIMADO</span> <span>R$ 44.500</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cenário 3: Galpão Logístico -->
+                <div class="bg-white rounded-[2rem] border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="bg-slate-800 p-6 text-white flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-bold">Galpão Logístico (Warehouse)</h3>
+                            <p class="text-xs text-slate-400">80 Câmeras • Pé direito alto • EMI Alta</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="bg-digital px-3 py-1 rounded-full text-[10px] font-bold uppercase">ROI em 12 meses</span>
+                        </div>
+                    </div>
+                    <div class="p-8 overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                <tr>
+                                    <th class="pb-4">Item de Custo</th>
+                                    <th class="pb-4">Analógico (DVR)</th>
+                                    <th class="pb-4 text-digital">Digital (NVR/IP)</th>
+                                    <th class="pb-4">Por que o Digital?</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr>
+                                    <td class="py-4 font-bold">Cabeamento</td>
+                                    <td class="py-4">R$ 32.000 (Coaxial)</td>
+                                    <td class="py-4 font-bold text-digital">R$ 21.000 (UTP/Fibra)</td>
+                                    <td class="py-4 text-xs">Menor volume de cabos e tubulações.</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 font-bold">Equipamentos</td>
+                                    <td class="py-4">R$ 28.000</td>
+                                    <td class="py-4 font-bold text-digital">R$ 49.000</td>
+                                    <td class="py-4 text-xs">Custo de hardware IP é maior, compensado em infra.</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 font-bold">Mão de Obra</td>
+                                    <td class="py-4">R$ 45.000</td>
+                                    <td class="py-4 font-bold text-digital">R$ 28.000</td>
+                                    <td class="py-4 text-xs">Instalação 40% mais rápida.</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="py-4 font-black">TOTAL CAPEX</td>
+                                    <td class="py-4 font-black">R$ 105.000</td>
+                                    <td class="py-4 font-black text-digital">R$ 98.000</td>
+                                    <td class="py-4 font-black text-digital">ECONOMIA DE R$ 7.000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
+
+    <footer class="bg-white border-t border-slate-200 py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-4">
+            <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">DNS CFTV-TI • Estudo de Tecnologia 2026</p>
+            <div class="flex justify-center gap-6">
+                <span class="text-[10px] font-bold text-slate-300">#FIMDOCOAXIAL</span>
+                <span class="text-[10px] font-bold text-slate-300">#IPFIRST</span>
+                <span class="text-[10px] font-bold text-slate-300">#SEGURANÇADIGITAL</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = () => {
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['2023', '2024', '2025', '2026 (Proj)'],
+                    datasets: [
+                        { 
+                            label: 'Analógico (Share %)', 
+                            data: [70, 55, 38, 22], 
+                            backgroundColor: '#94a3b8',
+                            borderRadius: 8
+                        },
+                        { 
+                            label: 'Digital IP (Share %)', 
+                            data: [30, 45, 62, 78], 
+                            backgroundColor: '#10b981',
+                            borderRadius: 8
+                        }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 6, font: { size: 10 } } } 
+                    },
+                    scales: { 
+                        y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } },
+                        x: { grid: { display: false } } 
+                    }
+                }
+            });
+        };
+    </script>
 </body>
 </html>
