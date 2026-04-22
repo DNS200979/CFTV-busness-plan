@@ -3,79 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software & Cloud: Ecossistema Digital de Segurança - DNS CFTV-TI</title>
+    <title>Software & Cloud: Ecossistema Digital de Segurança - FiberHome</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = { 
             theme: { 
                 extend: { 
-                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }, 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }, 
                     colors: { 
-                        primary: '#0f172a', 
-                        secondary: '#334155', 
-                        accent: '#0d9488', 
-                        indigo: '#4f46e5',
-                        cloud: '#0ea5e9'
+                        navy: {
+                            800: '#001a40',
+                            900: '#001533',
+                            950: '#000c20'
+                        },
+                        orange: {
+                            500: '#F26522',
+                            600: '#d95a1e',
+                        },
+                        slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 800: '#1e293b', 900: '#0f172a' }
                     } 
                 } 
             } 
         }
     </script>
     <style>
-        body { background-color: #f8fafc; color: #0f172a; }
-        .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
-        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        body { background-color: #f8fafc; color: #1e293b; }
+        .gradient-bg { background: linear-gradient(135deg, #000c20 0%, #001533 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
         .software-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .software-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .software-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border-color: #F26522; }
+        .tuya-flow-box { @apply bg-white border-2 border-navy-900 rounded-xl p-4 text-center shadow-md relative z-10 w-full md:w-1/3; }
+        .tuya-arrow { @apply hidden md:flex text-orange-500 font-bold text-2xl z-0 -mx-4; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body class="antialiased min-h-screen">
     
-    <header class="gradient-bg text-white py-14 px-6 shadow-2xl relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-cloud opacity-10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
-        <div class="max-w-7xl mx-auto relative z-10">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="bg-cloud/20 text-cloud px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Estratégia Digital 2026</span>
+    <!-- HEADER FIBERHOME -->
+    <header class="gradient-bg text-white py-14 px-6 shadow-2xl relative overflow-hidden border-b-4 border-orange-500">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-orange-500 opacity-10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+        <div class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="bg-orange-500/20 text-orange-500 border border-orange-500/30 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Estratégia Digital 2026</span>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Software & <span class="text-orange-500">Cloud Ecosystem</span></h1>
+                <p class="text-slate-300 mt-4 text-lg max-w-2xl leading-relaxed">Foco na inteligência de dados, provisionamento simplificado para ISPs e integração massiva via plataforma IoT.</p>
             </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Software & <span class="text-cloud">Cloud Ecosystem</span></h1>
-            <p class="text-slate-400 mt-4 text-lg max-w-3xl leading-relaxed">Foco total na inteligência de dados, provisionamento simplificado e convergência entre soluções locais e nuvem (VSaaS).</p>
+            <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20 hidden md:block">
+                <img src="FH_LOGO.png" alt="FiberHome Logo" class="h-12 object-contain" onerror="this.outerHTML='<span class=\'text-3xl font-extrabold italic\'>Fiber<span class=\'text-orange-500\'>Home</span></span>'">
+            </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
 
+        <!-- NOVA SEÇÃO: ESTUDO ESTRATÉGICO TUYA -->
+        <section class="bg-white rounded-[2rem] p-8 md:p-12 border border-slate-200 shadow-sm relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-2 h-full bg-orange-500"></div>
+            
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-navy-900 mb-4">Estudo Estratégico: Parceria Tuya Smart (IoT & Smart Home)</h2>
+                <p class="text-slate-600 text-lg max-w-4xl">
+                    Para capturar o mercado B2C (Varejo) e o segmento de provedores (ISP SVA) de forma acelerada, a FiberHome deve integrar seu hardware à plataforma **Tuya Smart**. Esta parceria elimina o custo e o tempo de desenvolvimento de um aplicativo proprietário do zero, fornecendo um ecossistema pronto e escalável.
+                </p>
+            </div>
+
+            <!-- Arquitetura Tuya (HTML Flow) -->
+            <div class="bg-slate-50 rounded-2xl p-8 border border-slate-200 mb-10">
+                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-6 text-center">Fluxo da Arquitetura OEM/PaaS</h3>
+                
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
+                    <!-- Step 1 -->
+                    <div class="tuya-flow-box">
+                        <div class="text-3xl mb-2">📷</div>
+                        <h4 class="font-bold text-navy-900">Hardware FiberHome</h4>
+                        <p class="text-xs text-slate-500 mt-2">Câmeras Wi-Fi embarcadas com o **Tuya SDK** diretamente na fábrica.</p>
+                    </div>
+                    
+                    <div class="tuya-arrow">➔</div>
+                    
+                    <!-- Step 2 -->
+                    <div class="tuya-flow-box border-orange-500 bg-orange-50/30">
+                        <div class="text-3xl mb-2">☁️</div>
+                        <h4 class="font-bold text-orange-600">Tuya IoT Cloud</h4>
+                        <p class="text-xs text-slate-500 mt-2">Infraestrutura PaaS global (AWS/Azure). Gerencia streaming P2P e armazenamento.</p>
+                    </div>
+
+                    <div class="tuya-arrow">➔</div>
+                    
+                    <!-- Step 3 -->
+                    <div class="tuya-flow-box">
+                        <div class="text-3xl mb-2">📱</div>
+                        <h4 class="font-bold text-navy-900">App "FiberHome Smart"</h4>
+                        <p class="text-xs text-slate-500 mt-2">Aplicativo *White-label* com a marca FH. Integração nativa com Alexa e Google Home.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benefícios da Parceria -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="p-5 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-orange-500 text-2xl mb-3">🚀</div>
+                    <h4 class="font-bold text-navy-900 mb-2">Go-To-Market Ágil</h4>
+                    <p class="text-sm text-slate-600">Lançamento do aplicativo completo em menos de 30 dias. Interface já validada por milhões de usuários globais.</p>
+                </div>
+                <div class="p-5 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-orange-500 text-2xl mb-3">💡</div>
+                    <h4 class="font-bold text-navy-900 mb-2">Ecossistema Conectado</h4>
+                    <p class="text-sm text-slate-600">A câmera interage com fechaduras, lâmpadas e sensores de outras marcas compatíveis com Tuya. Fomenta o *cross-sell*.</p>
+                </div>
+                <div class="p-5 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-orange-500 text-2xl mb-3">💰</div>
+                    <h4 class="font-bold text-navy-900 mb-2">Receita Recorrente (Cloud)</h4>
+                    <p class="text-sm text-slate-600">O cliente pode comprar a gravação em nuvem via App. A receita é dividida (Rev-Share) entre a Tuya e a FiberHome.</p>
+                </div>
+                <div class="p-5 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-orange-500 text-2xl mb-3">🔐</div>
+                    <h4 class="font-bold text-navy-900 mb-2">Argumento ISP</h4>
+                    <p class="text-sm text-slate-600">O ISP entrega ao assinante um único App (FiberHome Smart) para controlar a câmera do comodato e o roteador Wi-Fi.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- SEÇÃO: PROVISIONAMENTO E INSTALAÇÃO -->
         <section>
             <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 rounded-2xl bg-teal-100 flex items-center justify-center text-accent text-2xl shadow-sm">⚡</div>
+                <div class="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-600 text-2xl shadow-sm">⚡</div>
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-800">Provisionamento e Ativação Instantânea</h2>
-                    <p class="text-slate-500 text-sm">Simplificando o "Day 1" do instalador e integrador.</p>
+                    <h2 class="text-2xl font-bold text-navy-900">Provisionamento e Ativação Instantânea (B2B)</h2>
+                    <p class="text-slate-500 text-sm">Simplificando o "Day 1" do instalador e do provedor (ISP).</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass-card p-6 rounded-3xl software-card border-t-4 border-accent">
-                    <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2">
+                <div class="glass-card p-6 rounded-3xl software-card border-t-4 border-navy-900">
+                    <h3 class="font-bold text-navy-900 mb-2 flex items-center gap-2">
                         <span>📱</span> Zero-Touch Activation
                     </h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Substitui o antigo comissionamento manual. Através de um App, o instalador vincula o hardware à conta Cloud via serial, sem configurar IPs ou abrir portas no roteador.</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">Substitui o antigo comissionamento manual. O instalador lê o QR Code da câmera e a vincula ao sistema central, sem configurar IPs ou redirecionar portas no roteador cliente.</p>
                 </div>
-                <div class="glass-card p-6 rounded-3xl software-card border-t-4 border-accent">
-                    <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2">
+                <div class="glass-card p-6 rounded-3xl software-card border-t-4 border-navy-900">
+                    <h3 class="font-bold text-navy-900 mb-2 flex items-center gap-2">
                         <span>📡</span> Auto-Config P2P
                     </h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Conexão via túnel criptografado direto com o servidor de stream. Essencial para redes de ISPs que utilizam CGNAT, onde o IP externo não é acessível.</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">Conexão via túnel criptografado direto com o servidor. Essencial para redes de ISPs que utilizam CGNAT (IPv4 compartilhado), onde o IP externo não é acessível publicamente.</p>
                 </div>
-                <div class="glass-card p-6 rounded-3xl software-card border-t-4 border-accent">
-                    <h3 class="font-bold text-slate-800 mb-2 flex items-center gap-2">
-                        <span>🛠️</span> Provisionamento em Lote
+                <div class="glass-card p-6 rounded-3xl software-card border-t-4 border-navy-900">
+                    <h3 class="font-bold text-navy-900 mb-2 flex items-center gap-2">
+                        <span>🛠️</span> Integração UNM2000
                     </h3>
-                    <p class="text-sm text-slate-600 leading-relaxed">Ferramentas de desktop para configuração de centenas de dispositivos simultaneamente, aplicando políticas de senhas e firmware de forma centralizada.</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">Perspectiva de integrar a gerência dos NVRs e OLTs sob o mesmo painel FiberHome, dando ao provedor uma visão unificada da saúde da rede e do status da gravação.</p>
                 </div>
             </div>
         </section>
@@ -83,8 +163,8 @@
         <!-- SEÇÃO: DIRETÓRIO DE SOFTWARES (VMS E CLOUD) -->
         <section class="space-y-10">
             <div class="text-center max-w-3xl mx-auto">
-                <h2 class="text-3xl font-bold text-slate-900">Diretório de Soluções e Integração</h2>
-                <p class="text-slate-500 mt-2">Mapeamento dos principais players de VMS (Video Management Software) e VSaaS (Video Surveillance as a Service) para o mercado brasileiro.</p>
+                <h2 class="text-3xl font-bold text-navy-900">Diretório de Integrações de Mercado (VMS)</h2>
+                <p class="text-slate-500 mt-2">Mapeamento dos principais players de software corporativo nos quais o hardware FiberHome deve estar homologado via protocolo ONVIF.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -92,71 +172,71 @@
                 <!-- On-Premise / Enterprise -->
                 <div class="space-y-4">
                     <div class="flex items-center gap-2 px-2">
-                        <span class="w-3 h-3 rounded-full bg-slate-800"></span>
-                        <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest">Enterprise & On-Premise</h3>
+                        <span class="w-3 h-3 rounded-full bg-navy-900"></span>
+                        <h3 class="font-bold text-navy-900 uppercase text-xs tracking-widest">Enterprise & On-Premise</h3>
                     </div>
                     <div class="bg-white rounded-3xl border border-slate-200 p-6 space-y-4 shadow-sm">
-                        <div class="border-b pb-4">
+                        <div class="border-b border-slate-100 pb-4">
                             <h4 class="font-bold text-slate-900">Digifort</h4>
                             <p class="text-xs text-slate-500 italic">Padrão Ouro no Brasil</p>
-                            <p class="text-xs text-slate-600 mt-2">Líder em projetos públicos e grandes perímetros. Integração obrigatória para qualquer novo hardware IP.</p>
+                            <p class="text-xs text-slate-600 mt-2">Líder em projetos públicos e grandes perímetros. Integração obrigatória para câmeras IP Profissionais FiberHome.</p>
                         </div>
-                        <div class="border-b pb-4">
+                        <div class="border-b border-slate-100 pb-4">
                             <h4 class="font-bold text-slate-900">D-Guard (Seventh)</h4>
-                            <p class="text-xs text-slate-500 italic">O motor das centrais de monitoramento</p>
-                            <p class="text-xs text-slate-600 mt-2">Foco total em empresas de segurança e portaria remota. Essencial para o B2B nacional.</p>
+                            <p class="text-xs text-slate-500 italic">Central de Monitoramento</p>
+                            <p class="text-xs text-slate-600 mt-2">O motor das portarias remotas. Essencial para o B2B nacional e condomínios.</p>
                         </div>
                         <div>
                             <h4 class="font-bold text-slate-900">Milestone / Genetec</h4>
                             <p class="text-xs text-slate-500 italic">High-End Global</p>
-                            <p class="text-xs text-slate-600 mt-2">Sistemas de arquitetura aberta para missões críticas (aeroportos, estádios).</p>
+                            <p class="text-xs text-slate-600 mt-2">Sistemas de arquitetura aberta para missões críticas (aeroportos, rodovias).</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Cloud Nativo / VSaaS -->
                 <div class="space-y-4">
-                    <div class="flex items-center gap-2 px-2 text-cloud">
-                        <span class="w-3 h-3 rounded-full bg-cloud"></span>
-                        <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest text-cloud">Cloud Nativo (SaaS)</h3>
+                    <div class="flex items-center gap-2 px-2 text-orange-500">
+                        <span class="w-3 h-3 rounded-full bg-orange-500"></span>
+                        <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest text-orange-500">Cloud Nacional (VSaaS)</h3>
                     </div>
-                    <div class="bg-white rounded-3xl border border-cloud/30 p-6 space-y-4 shadow-sm shadow-cloud/5">
-                        <div class="border-b pb-4">
+                    <div class="bg-white rounded-3xl border border-orange-200 p-6 space-y-4 shadow-sm shadow-orange-500/5">
+                        <div class="border-b border-slate-100 pb-4">
                             <h4 class="font-bold text-slate-900">Monuv</h4>
-                            <p class="text-xs text-cloud font-semibold uppercase tracking-tighter">Foco em Integradores</p>
-                            <p class="text-xs text-slate-600 mt-2">Plataforma brasileira focada em recorrente. Permite ao instalador vender câmeras como serviço.</p>
+                            <p class="text-xs text-orange-600 font-semibold uppercase tracking-tighter">Foco em Integradores</p>
+                            <p class="text-xs text-slate-600 mt-2">Plataforma focada em receita recorrente. Homologar a FH aqui facilita a venda para pequenos provedores.</p>
                         </div>
-                        <div class="border-b pb-4">
+                        <div class="border-b border-slate-100 pb-4">
                             <h4 class="font-bold text-slate-900">Camerite</h4>
-                            <p class="text-xs text-cloud font-semibold uppercase tracking-tighter">Segurança Colaborativa</p>
-                            <p class="text-xs text-slate-600 mt-2">Líder em vizinhança solidária. Modelo de franquias de monitoramento colaborativo.</p>
+                            <p class="text-xs text-orange-600 font-semibold uppercase tracking-tighter">Segurança Colaborativa</p>
+                            <p class="text-xs text-slate-600 mt-2">Modelo de franquias de vizinhança. Alta demanda por câmeras IP LPR e bullet.</p>
                         </div>
                         <div>
                             <h4 class="font-bold text-slate-900">Gabriel</h4>
-                            <p class="text-xs text-cloud font-semibold uppercase tracking-tighter">AI & Inteligência Urbana</p>
-                            <p class="text-xs text-slate-600 mt-2">Foco em cidades inteligentes e integração de feeds para segurança pública.</p>
+                            <p class="text-xs text-orange-600 font-semibold uppercase tracking-tighter">AI & Inteligência Urbana</p>
+                            <p class="text-xs text-slate-600 mt-2">Foco em cidades e postes inteligentes com integração de feeds para segurança pública.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Novos Potenciais & Open Source -->
                 <div class="space-y-4">
-                    <div class="flex items-center gap-2 px-2 text-indigo">
-                        <span class="w-3 h-3 rounded-full bg-indigo"></span>
-                        <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest text-indigo">Potenciais & Open Source</h3>
+                    <div class="flex items-center gap-2 px-2 text-slate-500">
+                        <span class="w-3 h-3 rounded-full bg-slate-500"></span>
+                        <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest">Open Source & Edge</h3>
                     </div>
-                    <div class="bg-white rounded-3xl border border-indigo/20 p-6 space-y-4 shadow-sm">
-                        <div class="border-b pb-4">
-                            <h4 class="font-bold text-slate-900">Eagle Eye Networks</h4>
-                            <p class="text-xs text-slate-500">O maior VSaaS global. Potencial de entrada forte no Brasil via parcerias ISP.</p>
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 space-y-4 shadow-sm">
+                        <div class="border-b border-slate-100 pb-4">
+                            <h4 class="font-bold text-slate-900">Frigate AI</h4>
+                            <p class="text-xs text-slate-500">Focado em detecção local via IA. Excelente para projetos customizados de baixo custo desenvolvidos por ISPs.</p>
                         </div>
-                        <div class="border-b pb-4">
-                            <h4 class="font-bold text-slate-900">Verkada</h4>
-                            <p class="text-xs text-slate-500">Software + Hardware unificados. O benchmark de experiência de usuário moderno.</p>
+                        <div class="border-b border-slate-100 pb-4">
+                            <h4 class="font-bold text-slate-900">Home Assistant</h4>
+                            <p class="text-xs text-slate-500">O hub definitivo de casas inteligentes (automação). Câmeras FH devem suportar RTSP aberto para funcionar aqui.</p>
                         </div>
                         <div>
-                            <h4 class="font-bold text-slate-900">Frigate AI (Open Source)</h4>
-                            <p class="text-xs text-slate-500">Focado em detecção local via IA. Excelente para projetos customizados de baixo custo com ISPs.</p>
+                            <h4 class="font-bold text-slate-900">ZoneMinder / Shinobi</h4>
+                            <p class="text-xs text-slate-500">Alternativas gratuitas de NVR corporativo para empresas reduzindo custo de licenciamento.</p>
                         </div>
                     </div>
                 </div>
@@ -165,57 +245,50 @@
         </section>
 
         <!-- SEÇÃO: UX PARA USUÁRIO FINAL -->
-        <section class="bg-white rounded-[3rem] p-8 md:p-12 border border-slate-200 shadow-sm">
+        <section class="bg-navy-900 rounded-[3rem] p-8 md:p-12 border border-navy-800 shadow-xl text-white">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-800 mb-6">Interface e Interação: A Experiência do Usuário</h2>
-                    <p class="text-slate-600 text-lg mb-8">O valor do software não está na imagem guardada, mas na facilidade de **recuperar a informação**. Focamos no "One Click Search".</p>
+                    <h2 class="text-3xl font-bold text-white mb-6">Interface B2B: O Diferencial NVR/VMS FiberHome</h2>
+                    <p class="text-slate-300 text-lg mb-8">No mercado B2B, o valor do software não está apenas em gravar, mas na facilidade de **recuperar a informação**. Nossos sistemas devem focar no "One Click Search".</p>
                     
                     <div class="space-y-6">
-                        <div class="flex gap-4 p-4 hover:bg-slate-50 rounded-2xl transition">
-                            <div class="shrink-0 w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center font-bold">🔍</div>
+                        <div class="flex gap-4 p-4 hover:bg-white/5 rounded-2xl transition border border-transparent hover:border-white/10">
+                            <div class="shrink-0 w-10 h-10 bg-orange-500/20 text-orange-400 border border-orange-500/30 rounded-lg flex items-center justify-center font-bold">🔍</div>
                             <div>
-                                <h4 class="font-bold text-slate-800 text-sm">Busca Forense por Metadados</h4>
-                                <p class="text-xs text-slate-500">Filtre por: "Veículo Vermelho", "Pessoa com Mochila", "Cruzamento de Linha" em segundos.</p>
+                                <h4 class="font-bold text-white text-sm">Busca Forense por Metadados (IA)</h4>
+                                <p class="text-xs text-slate-400 mt-1">Filtre por: "Veículo Vermelho", "Pessoa com Mochila", "Cruzamento de Linha" em segundos.</p>
                             </div>
                         </div>
-                        <div class="flex gap-4 p-4 hover:bg-slate-50 rounded-2xl transition">
-                            <div class="shrink-0 w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center font-bold">🎞️</div>
+                        <div class="flex gap-4 p-4 hover:bg-white/5 rounded-2xl transition border border-transparent hover:border-white/10">
+                            <div class="shrink-0 w-10 h-10 bg-orange-500/20 text-orange-400 border border-orange-500/30 rounded-lg flex items-center justify-center font-bold">🌐</div>
                             <div>
-                                <h4 class="font-bold text-slate-800 text-sm">Resumo de Vídeo (Video Synopsis)</h4>
-                                <p class="text-xs text-slate-500">Visualize 24h de gravação em 5 minutos através de eventos sobrepostos de forma inteligente.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 p-4 hover:bg-slate-50 rounded-2xl transition">
-                            <div class="shrink-0 w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center font-bold">🌐</div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 text-sm">Web-Client Full HTML5</h4>
-                                <p class="text-xs text-slate-500">Acesso via Chrome/Safari/Edge sem necessidade de ActiveX ou Plugins. Performance nativa.</p>
+                                <h4 class="font-bold text-white text-sm">Web-Client Full HTML5</h4>
+                                <p class="text-xs text-slate-400 mt-1">Acesso ao NVR via Chrome/Edge sem necessidade de instalar plugins ultrapassados (como ActiveX). Performance nativa.</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-slate-900 rounded-[2.5rem] p-4 shadow-2xl relative">
+                <div class="bg-navy-950 rounded-[2.5rem] p-4 shadow-2xl relative border border-slate-800">
                     <!-- Ilustração da UI de Busca -->
-                    <div class="bg-slate-800 rounded-2xl p-4 space-y-4">
-                        <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">Filtros Ativos</span>
-                            <span class="text-[10px] bg-accent px-2 py-0.5 rounded text-white">Carro</span>
+                    <div class="bg-[#001026] rounded-2xl p-4 space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase">Filtros Ativos (Edge AI)</span>
+                            <span class="text-[10px] bg-orange-500 px-2 py-0.5 rounded text-white font-bold">Veículo</span>
                         </div>
                         <div class="grid grid-cols-3 gap-2">
-                            <div class="aspect-square bg-slate-700 rounded-lg border border-white/5 animate-pulse"></div>
-                            <div class="aspect-square bg-slate-700 rounded-lg border border-white/5 animate-pulse"></div>
-                            <div class="aspect-square bg-slate-700 rounded-lg border border-white/5 animate-pulse"></div>
+                            <div class="aspect-square bg-slate-800 rounded-lg border border-white/5 animate-pulse"></div>
+                            <div class="aspect-square bg-slate-800 rounded-lg border border-white/5 animate-pulse"></div>
+                            <div class="aspect-square bg-slate-800 rounded-lg border border-white/5 animate-pulse"></div>
                         </div>
-                        <div class="h-2 w-full bg-slate-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-accent w-2/3"></div>
+                        <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden mt-4">
+                            <div class="h-full bg-orange-500 w-3/4"></div>
                         </div>
                     </div>
-                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-slate-200">
+                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-slate-200 text-slate-900">
                         <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">IA Stats</p>
-                        <p class="text-xl font-bold text-accent">99.8%</p>
-                        <p class="text-[10px] text-slate-500 font-medium">Precisão de Detecção</p>
+                        <p class="text-xl font-bold text-orange-500">99.8%</p>
+                        <p class="text-[10px] text-slate-500 font-medium">Precisão de Detecção LPR</p>
                     </div>
                 </div>
             </div>
@@ -225,7 +298,7 @@
 
     <footer class="py-10 border-t border-slate-200 mt-auto bg-white text-center">
         <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">
-            DNS CFTV-TI • Ecossistema de Software & Cloud • 2026
+            FiberHome Strategy • Ecossistema de Software, IoT & Cloud • 2026
         </p>
     </footer>
 
