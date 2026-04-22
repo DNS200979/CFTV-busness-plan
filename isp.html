@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano Estratégico: Segurança & Infraestrutura para ISPs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Deep Navy (#001533) & Vibrant Orange (#F26522) based on FiberHome Logo -->
+    <!-- Application Structure Plan: Dashboard Executivo. Na aba "Portfólio", foi adicionada uma tabela detalhada com o Top 5 produtos do ISP, comparativo de preços com a concorrência (Intelbras, Multi, Hikvision, OEM) e a proposta de preço FiberHome calculada (-10% do 2º colocado). As demais seções permanecem inalteradas para manter a coesão do relatório. -->
+    <!-- Visualization & Content Choices: 
+         1. Mercado -> Gráfico Doughnut para Market Share de Fornecedores + Cards + Tabela Top ISPs.
+         2. Portfólio -> Grid HTML/CSS existente + NOVA Tabela de Benchmarking de Preços.
+         3. Supply Chain -> Gráfico Radar.
+         4. Modelo B2B2C -> Gráfico de Linha + Cards B2C. 
+         Biblioteca: Chart.js (Canvas). HTML/Tailwind para diagramas e tabelas. Sem SVG/Mermaid. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #1E293B; }
+        
+        /* Cores da Identidade Visual (FiberHome) */
+        :root {
+            --fh-navy: #001533;
+            --fh-orange: #F26522;
+        }
+
+        .theme-navy-bg { background-color: var(--fh-navy); }
+        .theme-navy-text { color: var(--fh-navy); }
+        .theme-orange-bg { background-color: var(--fh-orange); }
+        .theme-orange-text { color: var(--fh-orange); }
+        
+        /* ESTILIZAÇÃO OBRIGATÓRIA DOS CONTAINERS DE GRÁFICOS */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 45vh;
+            min-height: 300px;
+            max-height: 450px;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #E2E8F0;
+        }
+
+        .chart-container-small {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin: auto;
+        }
+
+        /* Navegação */
+        .tab-content { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .tab-content.active { display: block; }
+        
+        /* Estilos específicos para abas no header escuro */
+        .tab-btn { border-bottom: 3px solid transparent; }
+        .tab-btn.active { border-bottom: 3px solid var(--fh-orange); color: var(--fh-orange) !important; font-weight: 700; }
+        .tab-btn:hover:not(.active) { color: white !important; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards e Elementos */
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--fh-navy);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .info-card-orange {
+            border-left-color: var(--fh-orange);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navegação Superior -->
+    <header class="theme-navy-bg shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo Tipográfico -->
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-3xl font-extrabold italic text-white tracking-tight">Fiber<span class="theme-orange-text">Home</span></span>
+                    <span class="ml-2 px-2 py-0.5 border border-gray-500 rounded text-xs text-gray-300 tracking-widest uppercase hidden sm:block">Estratégia B2B</span>
+                </div>
+                <div class="hidden md:flex space-x-8 h-full">
+                    <button onclick="switchTab('mercado')" class="tab-btn active text-gray-300 px-3 py-5 text-sm font-medium transition-colors h-full flex items-center">📊 Mercado & Concorrência</button>
+                    <button onclick="switchTab('portfolio')" class="tab-btn text-gray-300 px-3 py-5 text-sm font-medium transition-colors h-full flex items-center">📦 Portfólio & Preços</button>
+                    <button onclick="switchTab('supply')" class="tab-btn text-gray-300 px-3 py-5 text-sm font-medium transition-colors h-full flex items-center">🚢 Logística</button>
+                    <button onclick="switchTab('b2b2c')" class="tab-btn text-gray-300 px-3 py-5 text-sm font-medium transition-colors h-full flex items-center">🤝 Comodato & B2C</button>
+                </div>
+                <!-- Menu Mobile -->
+                <div class="md:hidden flex items-center py-2">
+                    <select onchange="switchTab(this.value)" class="bg-gray-800 border border-gray-700 text-white text-sm rounded focus:ring-[#F26522] focus:border-[#F26522] block w-full p-2">
+                        <option value="mercado">📊 Mercado & Concorrência</option>
+                        <option value="portfolio">📦 Portfólio & Preços</option>
+                        <option value="supply">🚢 Logística</option>
+                        <option value="b2b2c">🤝 Comodato & B2C</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Área Principal de Conteúdo -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- ABA 1: Mercado -->
+        <section id="mercado" class="tab-content active">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold theme-navy-text mb-2">Análise de Mercado, ISPs e Fornecedores</h1>
+                <p class="text-gray-600 text-lg">
+                    Cenário atual de SVA (Serviços de Valor Adicionado), mapeamento dos principais players provedores e a radiografia de quem fornece a tecnologia (hardware) para eles hoje.
+                </p>
+            </div>
+
+            <!-- TABELA TOP ISPs -->
+            <div class="mb-10 bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
+                <div class="theme-navy-bg px-6 py-4 flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-white">🏆 Top 12 ISPs Regionais: Potencial de Segurança & Casa Inteligente</h2>
+                    <span class="text-xs text-blue-100 bg-[#002866] px-2 py-1 rounded font-medium border border-blue-800">Mapeamento de Demanda</span>
+                </div>
+                
+                <div class="p-4 bg-gray-50 border-b border-gray-200">
+                    <p class="text-sm text-gray-700">Principais grupos de ISPs no Brasil que estruturam planos de <strong>Segurança Residencial e Smart Home</strong>. O volume estimado refere-se ao <em>Run-Rate</em> de compra mensal de equipamentos (Câmeras IP/Wi-Fi, NVRs) para sustentar a operação.</p>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-extrabold text-gray-500 uppercase tracking-wider">Rank</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-extrabold text-gray-500 uppercase tracking-wider">Grupo / ISP</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-extrabold text-gray-500 uppercase tracking-wider">Estratégia SVA / Produto</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-extrabold text-gray-500 uppercase tracking-wider">Est. Compra Mensal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">1</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Brisanet</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Casa Inteligente + 5G</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~15.000 un.</td>
+                            </tr>
+                            <tr class="bg-gray-50 hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">2</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Alloha Fibra (Giga+)</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Casa Conectada / Bundling</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~12.000 un.</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">3</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Desktop Internet</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Segurança Premium</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~10.000 un.</td>
+                            </tr>
+                            <tr class="bg-gray-50 hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">4</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Vero Internet</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Vero Casa Segura</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~8.500 un.</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">5</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Unifique</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-teal-100 text-teal-800 px-2 py-1 rounded text-xs">Monitoramento em Nuvem</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~8.000 un.</td>
+                            </tr>
+                            <tr class="bg-gray-50 hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">6</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">BrasilTecpar</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs">Monitoramento / Amigo Internet</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~6.000 un.</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">7</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Alares</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs">SVA Segurança</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~5.500 un.</td>
+                            </tr>
+                            <tr class="bg-gray-50 hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">8</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Algar Telecom</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs">Smart Home B2C / B2B</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~5.000 un.</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">9</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Ligga</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-pink-100 text-pink-800 px-2 py-1 rounded text-xs">Casa Conectada IoT</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~4.000 un.</td>
+                            </tr>
+                            <tr class="bg-gray-50 hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">10</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Valenet</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs">Segurança B2C</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~3.000 un.</td>
+                            </tr>
+                            <tr class="hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">11</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">MHNet</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs">Monitoramento Integrado</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~2.500 un.</td>
+                            </tr>
+                            <tr class="bg-gray-50 hover:bg-blue-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-500">12</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold theme-navy-text">Triple Play (Conexão)</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600"><span class="bg-gray-200 text-gray-800 px-2 py-1 rounded text-xs">Casa Inteligente Básico</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-bold text-gray-900">~2.000 un.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Análise de Fornecedores Atuais -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-bold theme-navy-text mb-4">Panorama de Fornecedores Atuais (A Concorrência)</h2>
+                <p class="text-gray-600 mb-6">
+                    Para entender como penetrar neste mercado, é crucial mapear de quem esses provedores compram hoje. O mercado de hardware SVA para ISPs é dominado por players consolidados, marcas de entrada e importação direta.
+                </p>
+
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Gráfico Doughnut Market Share -->
+                    <div class="w-full lg:w-1/3 bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-center">
+                        <h3 class="text-center font-bold text-gray-800 mb-4 text-sm uppercase tracking-wider">Est. Market Share (Hardware ISP)</h3>
+                        <div class="chart-container-small">
+                            <canvas id="chartFornecedoresCanvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Cards Analíticos dos Concorrentes -->
+                    <div class="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        <div class="bg-white p-5 rounded-lg border-l-4 border-green-500 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-bold text-lg text-gray-900">Intelbras</h4>
+                                <span class="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded">Líder Absoluta</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Linhas Mibo e Izy dominam os provedores regionais. Possuem a maior capilaridade de distribuição DDP do país.</p>
+                            <div class="text-xs bg-gray-50 p-2 rounded text-gray-700">
+                                <strong>Ponto de Ataque:</strong> Margem do ISP costuma ser achatada. Oportunidade para a FiberHome oferecer melhor Custo x Benefício.
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-lg border-l-4 border-blue-500 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-bold text-lg text-gray-900">Multi / Giga Security</h4>
+                                <span class="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded">Preço Agressivo</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Atacam pesadamente os ISPs com kits de entrada baseados no ecossistema Tuya Smart (marca branca chinesa).</p>
+                            <div class="text-xs bg-gray-50 p-2 rounded text-gray-700">
+                                <strong>Ponto de Ataque:</strong> Qualidade percebida e suporte técnico. A FiberHome pode se posicionar como "Premium Acessível".
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-lg border-l-4 border-red-600 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-bold text-lg text-gray-900">Hikvision & Dahua</h4>
+                                <span class="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded">Gigantes Globais</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Fortes no B2B profissional de segurança. Atuam no ISP via sub-marcas de varejo (Ezviz e Imou).</p>
+                            <div class="text-xs bg-gray-50 p-2 rounded text-gray-700">
+                                <strong>Ponto de Ataque:</strong> Foco fragmentado. A FiberHome vende a "Rede (OLT) + O Edge (Câmera)" como um pacote único convergente.
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-lg border-l-4 border-purple-500 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-bold text-lg text-gray-900">Importação Direta (OEM)</h4>
+                                <span class="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded">FOB / Whitelabel</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Grandes ISPs do Top 10 frequentemente importam da Ásia com marca própria (Tuya) para fugir dos distribuidores locais.</p>
+                            <div class="text-xs bg-gray-50 p-2 rounded text-gray-700">
+                                <strong>Nossa Oportunidade:</strong> Operar como a "Fábrica Confiável" FOB para esses ISPs, garantindo controle de qualidade.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico de Crescimento -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+                <h2 class="text-xl font-bold theme-navy-text mb-4">Projeção de Adoção de Câmeras em ISPs (Em milhões de acessos)</h2>
+                <div class="chart-container">
+                    <canvas id="chartMercadoCanvas"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 2: Portfólio -->
+        <section id="portfolio" class="tab-content">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold theme-navy-text mb-2">Portfólio & Estratégia de Preço</h1>
+                <p class="text-gray-600 text-lg">
+                    Integração do "Backbone" (rede FTTx) ao "Edge" (equipamentos SVA). Abaixo apresentamos nossa oferta conceitual e o benchmarking de preços contra os líderes de mercado.
+                </p>
+            </div>
+
+            <!-- Grid de Categorias -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Segurança -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="theme-orange-bg px-6 py-4 border-b border-orange-600 flex items-center justify-between">
+                        <h2 class="text-xl font-bold text-white">📷 Soluções de Segurança (Edge)</h2>
+                        <span class="px-3 py-1 bg-white text-[#F26522] text-xs font-extrabold rounded-full shadow-sm">Alta Margem SVA</span>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-5">
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">🏠</span>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-lg">Câmeras Wi-Fi (Indoor/Outdoor)</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Foco no consumidor residencial (B2B2C). Fácil instalação (Plug&Play), áudio bidirecional e visão noturna.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">🏢</span>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-lg">Câmeras IP Profissionais</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Modelos Bullet/Dome para projetos corporativos do ISP (condomínios, B2B, comércio local). Integração PoE.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">💾</span>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-lg">NVR (Network Video Recorder)</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Equipamento para clientes corporativos que exigem gravação local robusta e gestão centralizada.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Infraestrutura -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="theme-navy-bg px-6 py-4 border-b border-[#001026] flex items-center justify-between">
+                        <h2 class="text-xl font-bold text-white">🔌 Infraestrutura FTTx & Rede</h2>
+                        <span class="px-3 py-1 bg-white text-[#001533] text-xs font-extrabold rounded-full shadow-sm">Core ISP</span>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-5">
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">📡</span>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-lg">OLTs (Optical Line Terminal)</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Equipamento central no provedor. Gerencia o tráfego da fibra óptica para milhares de clientes.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">🌐</span>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-lg">ONUs / ONTs Wi-Fi 6</h4>
+                                    <p class="text-sm text-gray-600 mt-1">O equipamento na casa do cliente. A porta de entrada para suportar múltiplas câmeras sem gargalo na rede.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">🖧</span>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 text-lg">Switches de Agregação</h4>
+                                    <p class="text-sm text-gray-600 mt-1">Para o anel óptico do ISP e para projetos robustos de CFTV corporativo em malha.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOVA TABELA: Top 5 Produtos e Preços -->
+            <div class="mb-8 bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
+                <div class="theme-navy-bg px-6 py-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Top 5 Produtos ISP: Benchmarking & Tabela de Preços (DDP Brasil)</h2>
+                        <p class="text-blue-200 text-xs mt-1">Análise comparativa de preços de atacado repassados aos provedores.</p>
+                    </div>
+                    <div class="bg-[#F26522] border-2 border-orange-300 text-white px-3 py-1.5 rounded-lg flex items-center shadow-md">
+                        <span class="text-lg mr-2">🎯</span>
+                        <div class="text-xs">
+                            <span class="block font-bold">Meta FiberHome:</span>
+                            <span>10% abaixo do 2º Colocado (Multi)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-extrabold text-gray-500 uppercase tracking-wider w-1/4">Produto / Categoria</th>
+                                <th scope="col" class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Intelbras<br><span class="text-[10px] font-normal text-gray-400">(1º - Premium)</span></th>
+                                <th scope="col" class="px-4 py-3 text-right text-xs font-bold text-blue-600 uppercase tracking-wider bg-blue-50 border-l border-r border-blue-100">Multi / Giga<br><span class="text-[10px] font-normal text-blue-400">(2º Volume/Alvo)</span></th>
+                                <th scope="col" class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Hikvision/Ezviz<br><span class="text-[10px] font-normal text-gray-400">(Varejo Forte)</span></th>
+                                <th scope="col" class="px-4 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">OEM / Importado<br><span class="text-[10px] font-normal text-gray-400">(Referência FOB/Grey)</span></th>
+                                <th scope="col" class="px-6 py-3 text-right text-sm font-black text-[#F26522] uppercase tracking-wider bg-orange-50">Proposta FiberHome<br><span class="text-[10px] font-bold text-orange-600">(-10% vs Multi)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Produto 1 -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-gray-900 text-sm">Câmera Wi-Fi Interna (Pan/Tilt)</div>
+                                    <div class="text-xs text-gray-500">1080p, Áudio 2 Vias (Carro-chefe Comodato)</div>
+                                </td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-600">R$ 180,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm font-bold text-gray-800 bg-blue-50 border-l border-r border-blue-100">R$ 140,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-600">R$ 160,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-400">R$ 110,00</td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap text-base font-black text-[#F26522] bg-orange-50 shadow-inner">R$ 126,00</td>
+                            </tr>
+                            
+                            <!-- Produto 2 -->
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-gray-900 text-sm">Câmera Wi-Fi Externa (Bullet)</div>
+                                    <div class="text-xs text-gray-500">IP67, Visão Noturna Color, 1080p</div>
+                                </td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-600">R$ 260,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm font-bold text-gray-800 bg-blue-50 border-l border-r border-blue-100">R$ 210,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-600">R$ 230,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-400">R$ 170,00</td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap text-base font-black text-[#F26522] bg-orange-50 shadow-inner">R$ 189,00</td>
+                            </tr>
+
+                            <!-- Produto 3 -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-gray-900 text-sm">Câmera IP Profissional PoE</div>
+                                    <div class="text-xs text-gray-500">Bullet/Dome 2MP, p/ Projetos B2B do ISP</div>
+                                </td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-600">R$ 320,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm font-bold text-gray-800 bg-blue-50 border-l border-r border-blue-100">R$ 250,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-600">R$ 280,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-400">R$ 190,00</td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap text-base font-black text-[#F26522] bg-orange-50 shadow-inner">R$ 225,00</td>
+                            </tr>
+
+                            <!-- Produto 4 -->
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-gray-900 text-sm">NVR Corporativo (8 Canais)</div>
+                                    <div class="text-xs text-gray-500">Sem HD, Compressão H.265+</div>
+                                </td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-600">R$ 450,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm font-bold text-gray-800 bg-blue-50 border-l border-r border-blue-100">R$ 350,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-600">R$ 390,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-400">R$ 280,00</td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap text-base font-black text-[#F26522] bg-orange-50 shadow-inner">R$ 315,00</td>
+                            </tr>
+
+                            <!-- Produto 5 -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="font-bold text-gray-900 text-sm flex items-center">
+                                        ONU / ONT Wi-Fi 6
+                                        <span class="ml-2 px-1.5 py-0.5 bg-[#001533] text-white text-[10px] rounded">CORE</span>
+                                    </div>
+                                    <div class="text-xs text-gray-500">AX1500/AX3000, Gateway Principal</div>
+                                </td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-600">R$ 280,00</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm font-bold text-gray-800 bg-blue-50 border-l border-r border-blue-100">R$ 240,00 <span class="text-[10px] font-normal text-gray-500 block">(ZTE proxy)</span></td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-400">-</td>
+                                <td class="px-4 py-4 text-right whitespace-nowrap text-sm text-gray-400">R$ 160,00</td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap text-base font-black text-[#F26522] bg-orange-50 shadow-inner">R$ 216,00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-6 py-3 bg-gray-50 border-t border-gray-200 text-xs text-gray-500 flex items-start">
+                    <span class="mr-2">📝</span>
+                    <span><strong>Premissas da Tabela:</strong> Preços estimados para modalidade <strong>DDP (Estoque Nacional Brasil)</strong> em lotes médios (Tier 2 ISPs). A coluna "OEM" ilustra o custo mínimo teórico via importação FOB direta, sujeita a variação cambial, frete marítimo e frete interno não contabilizados integralmente.</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ABA 3: Suprimentos -->
+        <section id="supply" class="tab-content">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold theme-navy-text mb-2">Estratégia de Suprimentos: FOB Asiático vs DDP Nacional</h1>
+                <p class="text-gray-600 text-lg">
+                    Modelos de negócio para abastecimento dos ISPs, balanceando custo unitário contra fluxo de caixa e agilidade logística.
+                </p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8 mb-8">
+                <div class="w-full lg:w-1/2">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-full">
+                        <h3 class="text-lg font-bold mb-4 text-center theme-navy-text">Matriz de Benefícios (ISP)</h3>
+                        <!-- CONTAINER DO GRÁFICO OBRIGATÓRIO -->
+                        <div class="chart-container" style="height: 40vh;">
+                            <canvas id="chartSupplyCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="w-full lg:w-1/2 space-y-6">
+                    <!-- DDP Card -->
+                    <div class="p-5 border border-blue-200 bg-blue-50 rounded-lg relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-2 h-full theme-orange-bg"></div>
+                        <h4 class="text-xl font-bold theme-navy-text flex items-center"><span class="text-2xl mr-2">🇧🇷</span> Modelo DDP (Estoque Nacional)</h4>
+                        <p class="mt-2 text-sm text-gray-700">Equipamentos importados, nacionalizados e armazenados no Brasil. Pronta entrega.</p>
+                        <ul class="mt-3 text-sm text-gray-700 list-disc pl-5 space-y-1">
+                            <li><strong>Alvo:</strong> ISPs Pequenos e Médios (até 30k assinantes).</li>
+                            <li><strong>Prós ISP:</strong> Entrega JIT (Just-in-time), zero risco aduaneiro, preservação de capital de giro, menor pedido mínimo (MOQ).</li>
+                            <li><strong>Nosso Modelo:</strong> Maior margem bruta unitária, forte relacionamento e cross-sell rápido.</li>
+                        </ul>
+                    </div>
+
+                    <!-- FOB Card -->
+                    <div class="p-5 border border-gray-200 bg-gray-50 rounded-lg relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-2 h-full theme-navy-bg"></div>
+                        <h4 class="text-xl font-bold text-gray-800 flex items-center"><span class="text-2xl mr-2">🚢</span> Modelo FOB (Importação Direta)</h4>
+                        <p class="mt-2 text-sm text-gray-700">Compra de lotes fechados diretos da fábrica asiática. O ISP é o importador oficial.</p>
+                        <ul class="mt-3 text-sm text-gray-700 list-disc pl-5 space-y-1">
+                            <li><strong>Alvo:</strong> Top 50 ISPs (+50k assinantes) e Atacadistas.</li>
+                            <li><strong>Prós ISP:</strong> Preço agressivo (custo mínimo), opção de personalização de embalagem (OEM/Whitelabel).</li>
+                            <li><strong>Nosso Modelo:</strong> Atuamos em alto volume, risco logístico mitigado, geração de faturamento em escala.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 4: B2B2C / Comodato -->
+        <section id="b2b2c" class="tab-content">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold theme-navy-text mb-2">Estratégia Sell-out e Opções B2C</h1>
+                <p class="text-gray-600 text-lg">
+                    O sucesso do nosso B2B depende de quão bem o ISP vende para o assinante final (B2C). Abaixo estruturamos os modelos de comercialização e o fluxo financeiro.
+                </p>
+            </div>
+
+            <!-- Opções de Venda B2C e Preços -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold theme-navy-text mb-4">Opções de Venda ao Consumidor Final (Mercado Atual)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Opção 1: Comodato -->
+                    <div class="bg-white rounded-xl shadow-sm border-2 border-[#001533] overflow-hidden flex flex-col">
+                        <div class="theme-navy-bg text-white text-center py-3 font-bold">1. Comodato (Recomendado)</div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <p class="text-sm text-gray-600 mb-3">O ISP cede o equipamento em regime de aluguel atrelado ao plano de fibra.</p>
+                            <div class="mt-auto">
+                                <div class="text-xs text-gray-500 uppercase font-bold">Preço Praticado no Mercado</div>
+                                <div class="text-2xl font-black theme-navy-text mb-1">R$ 29,90 a R$ 49,90 <span class="text-sm font-normal text-gray-500">/mês</span></div>
+                                <div class="text-xs text-gray-600 bg-gray-100 p-2 rounded">Instalação: Geralmente Grátis ou +R$ 90 taxa única.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opção 2: Venda Direta -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+                        <div class="bg-gray-100 text-gray-800 border-b border-gray-200 text-center py-3 font-bold">2. Venda Direta (Hardware)</div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <p class="text-sm text-gray-600 mb-3">O assinante compra a câmera e ela passa a ser dele. O provedor lucra na margem do hardware.</p>
+                            <div class="mt-auto">
+                                <div class="text-xs text-gray-500 uppercase font-bold">Preço Praticado no Mercado</div>
+                                <div class="text-2xl font-black text-gray-800 mb-1">R$ 250 a R$ 350 <span class="text-sm font-normal text-gray-500">/unidade</span></div>
+                                <div class="text-xs text-gray-600 bg-gray-100 p-2 rounded">Vantagem: Fluxo de caixa imediato para o ISP.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opção 3: Serviço Nuvem -->
+                    <div class="bg-white rounded-xl shadow-sm border-2 border-[#F26522] overflow-hidden flex flex-col">
+                        <div class="theme-orange-bg text-white text-center py-3 font-bold flex justify-center items-center">3. Upsell Nuvem (Cloud) <span class="ml-2 text-xs bg-white text-[#F26522] px-1 rounded">MRR</span></div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <p class="text-sm text-gray-600 mb-3">Receita recorrente pura. O cliente paga para reter gravações por 3, 7 ou 30 dias na nuvem.</p>
+                            <div class="mt-auto">
+                                <div class="text-xs text-gray-500 uppercase font-bold">Preço Praticado no Mercado</div>
+                                <div class="text-2xl font-black theme-orange-text mb-1">R$ 14,90 a R$ 29,90 <span class="text-sm font-normal text-gray-500">/mês</span></div>
+                                <div class="text-xs text-gray-600 bg-orange-50 text-orange-800 p-2 rounded">Zero custo de hardware adicional para o provedor.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulação Comodato -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4">
+                    <div>
+                        <h2 class="text-xl font-bold theme-navy-text">Simulador de ROI do Comodato (Por Cliente)</h2>
+                        <p class="text-sm text-gray-500">Ferramenta de argumento de vendas para o nosso time B2B convencer o ISP.</p>
+                    </div>
+                    <select id="pricingSelector" onchange="updateB2B2CChart()" class="mt-3 md:mt-0 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#001533] focus:border-[#001533] p-2 font-semibold shadow-sm">
+                        <option value="agressive">Locação Agressiva: R$ 29,90/mês</option>
+                        <option value="standard" selected>Locação Padrão: R$ 39,90/mês</option>
+                        <option value="premium">Locação + Nuvem: R$ 54,90/mês</option>
+                    </select>
+                </div>
+                
+                <!-- CONTAINER DO GRÁFICO OBRIGATÓRIO -->
+                <div class="chart-container">
+                    <canvas id="chartComodatoCanvas"></canvas>
+                </div>
+
+                <div class="mt-6 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 text-center">
+                    <div class="w-full md:w-1/4 p-3 border-r border-gray-100">
+                        <div class="text-2xl mb-1">📦</div>
+                        <p class="text-xs text-gray-500">Custo Base Câmera:<br><strong class="text-gray-800">~R$ 126,00 <span class="text-[#F26522] text-[10px]">(Preço FH)</span></strong></p>
+                    </div>
+                    <div class="text-gray-300 hidden md:block">➔</div>
+                    <div class="w-full md:w-1/4 p-3 border-r border-gray-100">
+                        <div class="text-2xl mb-1">⏱️</div>
+                        <p class="text-xs text-gray-500">Payback Médio:<br><strong class="text-gray-800">3 a 4 meses</strong></p>
+                    </div>
+                    <div class="text-gray-300 hidden md:block">➔</div>
+                    <div class="w-full md:w-1/4 p-3">
+                        <div class="text-2xl mb-1">💰</div>
+                        <p class="text-xs text-gray-500">Resultado 24 Meses:<br><strong class="theme-orange-text font-bold">Lucro Líquido + Retenção</strong></p>
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <span class="text-xl font-extrabold italic text-[#001533]">Fiber<span class="text-[#F26522]">Home</span></span>
+            <p class="text-gray-400 text-xs mt-2">Relatório Executivo Confidencial • Estratégia de Mercado ISP & SVA Brasil</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. Lógica de Navegação em Abas (SPA) ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => { el.classList.remove('active'); });
+            document.querySelectorAll('.tab-btn').forEach(el => { el.classList.remove('active'); });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
+            if(activeBtn) activeBtn.classList.add('active');
+
+            if(tabId === 'mercado') {
+                initMercadoChart();
+                initFornecedoresChart();
+            }
+            if(tabId === 'supply') initSupplyChart();
+            if(tabId === 'b2b2c') initB2B2CChart();
+        }
+
+        // --- Variáveis globais Chart.js ---
+        let mercadoChartInstance = null;
+        let fornecedoresChartInstance = null;
+        let supplyChartInstance = null;
+        let comodatoChartInstance = null;
+
+        // Configurações Globais (FiberHome Palette)
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#64748B';
+        const brandNavy = '#001533';
+        const brandOrange = '#F26522';
+        const lightGray = '#E2E8F0';
+
+        // --- Lógica Gráfico Fornecedores (Doughnut) ---
+        function initFornecedoresChart() {
+            const ctx = document.getElementById('chartFornecedoresCanvas').getContext('2d');
+            if (fornecedoresChartInstance) fornecedoresChartInstance.destroy();
+
+            fornecedoresChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Intelbras', 'Multi / Positivo', 'Hikvision / Dahua', 'Importação Direta (OEM)'],
+                    datasets: [{
+                        data: [45, 20, 15, 20],
+                        backgroundColor: [
+                            '#22C55E', // Green (Intelbras proxy)
+                            '#3B82F6', // Blue (Multi proxy)
+                            '#EF4444', // Red (Hikvision proxy)
+                            '#A855F7'  // Purple (OEM proxy)
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return ' ' + context.label + ': ' + context.parsed + '%'; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Lógica do Gráfico de Mercado ---
+        function initMercadoChart() {
+            const ctx = document.getElementById('chartMercadoCanvas').getContext('2d');
+            if (mercadoChartInstance) mercadoChartInstance.destroy();
+
+            mercadoChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['2021', '2022', '2023', '2024 (Est)', '2025 (Proj)'],
+                    datasets: [
+                        {
+                            label: 'Apenas Internet (Milhões)',
+                            data: [15.2, 17.5, 18.0, 16.5, 14.0],
+                            backgroundColor: lightGray,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Câmeras SVA (Milhões)',
+                            data: [0.8, 1.5, 3.2, 6.0, 9.5],
+                            backgroundColor: brandOrange,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        x: { stacked: true, grid: { display: false } },
+                        y: { stacked: true, title: { display: true, text: 'Acessos Fixos (Milhões)' } }
+                    }
+                }
+            });
+        }
+
+        // --- Lógica do Gráfico Supply Chain (Radar) ---
+        function initSupplyChart() {
+            const ctx = document.getElementById('chartSupplyCanvas').getContext('2d');
+            if (supplyChartInstance) supplyChartInstance.destroy();
+
+            supplyChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Custo Baixo', 'Velocidade Entrega', 'Capital de Giro (ISP)', 'Facilidade Operacional', 'Escalabilidade'],
+                    datasets: [
+                        {
+                            label: 'Nacional DDP',
+                            data: [4, 10, 9, 9, 6],
+                            fill: true,
+                            backgroundColor: 'rgba(0, 21, 51, 0.15)',
+                            borderColor: brandNavy,
+                            pointBackgroundColor: brandNavy,
+                            pointBorderColor: '#fff',
+                        },
+                        {
+                            label: 'Importação FOB',
+                            data: [10, 3, 3, 4, 10],
+                            fill: true,
+                            backgroundColor: 'rgba(242, 101, 34, 0.2)',
+                            borderColor: brandOrange,
+                            pointBackgroundColor: brandOrange,
+                            pointBorderColor: '#fff',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { display: true, color: 'rgba(0,0,0,0.05)' },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            ticks: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Lógica do Gráfico B2B2C ---
+        const custoHardware = 126; // Atualizado para usar o preço base proposto pela FiberHome (P1 Wi-Fi Interna)
+        const meses = ['Compra (Mês 0)', 'Mês 2', 'Mês 4', 'Mês 6', 'Mês 12', 'Mês 18', 'Mês 24'];
+        
+        function calculateROI(monthlyFee) {
+            let acumulado = -custoHardware;
+            let timeline = [acumulado];
+            const intervalos = [2, 2, 2, 6, 6, 6]; 
+            
+            intervalos.forEach(gap => {
+                acumulado += (monthlyFee * gap);
+                timeline.push(acumulado);
+            });
+            return timeline;
+        }
+
+        function initB2B2CChart() {
+            const ctx = document.getElementById('chartComodatoCanvas').getContext('2d');
+            if (comodatoChartInstance) comodatoChartInstance.destroy();
+
+            const feeType = document.getElementById('pricingSelector').value;
+            let fee = 39.90; // standard
+            if(feeType === 'agressive') fee = 29.90;
+            if(feeType === 'premium') fee = 54.90;
+
+            const dataROI = calculateROI(fee);
+
+            comodatoChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: meses,
+                    datasets: [
+                        {
+                            label: 'Lucro/Prejuízo Acumulado ISP (R$)',
+                            data: dataROI,
+                            borderColor: brandNavy,
+                            backgroundColor: 'rgba(0, 21, 51, 0.05)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: brandOrange,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        },
+                        {
+                            label: 'Ponto Zero (Equilíbrio)',
+                            data: Array(meses.length).fill(0),
+                            borderColor: '#94A3B8',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            title: { display: true, text: 'Caixa do Provedor (R$)' },
+                            ticks: { callback: function(value) { return 'R$ ' + value; } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateB2B2CChart() { initB2B2CChart(); }
+
+        window.onload = function() {
+            initMercadoChart();
+            initFornecedoresChart();
+        };
+
+    </script>
+</body>
+</html>

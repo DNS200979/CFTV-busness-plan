@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estratégia Varejo: Segurança Eletrônica Fiberhome</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; scroll-behavior: smooth; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin: 0 auto; height: 350px; }
+        .timeline-step { border-left: 4px solid #f97316; padding-left: 1.5rem; position: relative; margin-bottom: 2.5rem; }
+        .timeline-step::before {
+            content: ''; position: absolute; left: -10px; top: 0; width: 16px; height: 16px;
+            border-radius: 50%; background-color: #051129; border: 2px solid #f97316;
+        }
+        .section-divider { border-bottom: 1px solid #e2e8f0; margin: 4rem 0; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #051129; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <header class="w-full bg-[#051129] py-6 px-10 sticky top-0 z-50 shadow-md">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white tracking-tight">Fiberhome <span class="text-orange-500">Retail</span></h1>
+            <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold hidden sm:block">Estratégia de Segurança Eletrônica</span>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto p-6 md:p-12">
+
+        <section id="overview" class="mb-16">
+            <header class="mb-10 text-center">
+                <h2 class="text-4xl font-bold text-slate-900 mb-4">Entrada no Varejo Brasileiro</h2>
+                <p class="text-slate-600 text-xl leading-relaxed max-w-3xl mx-auto">Mapeamento dos principais canais de distribuição e estratégia de precificação para a linha de segurança eletrônica.</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-t-orange-500">
+                    <h3 class="font-bold text-slate-900 text-lg">Oportunidade</h3>
+                    <p class="text-sm text-slate-500 mt-2">Crescimento de 15% a.a. no segmento DIY.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-t-orange-500">
+                    <h3 class="font-bold text-slate-900 text-lg">Desafio</h3>
+                    <p class="text-sm text-slate-500 mt-2">Migração para o conceito "Plug & Play".</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border-t-4 border-t-orange-500">
+                    <h3 class="font-bold text-slate-900 text-lg">Valor</h3>
+                    <p class="text-sm text-slate-500 mt-2">Confiabilidade Carrier-class no ambiente residencial.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section id="market" class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center">📊 Análise de Mercado</h2>
+            <p class="text-slate-500 mb-8">Principais parceiros estratégicos para o volume de vendas no Brasil.</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="space-y-4">
+                    <h3 class="font-semibold text-[#051129] uppercase tracking-wider text-sm flex items-center">
+                        <span class="w-2 h-2 bg-orange-500 rounded-full mr-2"></span> Top 10 Clientes Foco
+                    </h3>
+                    <div class="grid grid-cols-1 gap-2">
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">01</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Mercado Livre</span>
+                                <p class="text-[10px] text-slate-400">Líder em volume e Fulfillment (Prioridade Digital)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">02</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Amazon Brasil</span>
+                                <p class="text-[10px] text-slate-400">Foco em ecossistema Alexa e Smart Home</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">03</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Magazine Luiza (Magalu)</span>
+                                <p class="text-[10px] text-slate-400">Presença física massiva e Marketplace robusto</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">04</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Via (Casas Bahia / Ponto)</span>
+                                <p class="text-[10px] text-slate-400">Penetração nas classes C e D para segurança básica</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">05</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Leroy Merlin</span>
+                                <p class="text-[10px] text-slate-400">Líder em Home Center e soluções DIY avançadas</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">06</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Kalunga</span>
+                                <p class="text-[10px] text-slate-400">Foco estratégico em SMB (Pequenas empresas) e Home Office</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">07</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Kabum!</span>
+                                <p class="text-[10px] text-slate-400">Público entusiasta de tecnologia e early adopters</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">08</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Fast Shop</span>
+                                <p class="text-[10px] text-slate-400">Posicionamento Premium e integração de sistemas</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">09</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Grupo Americanas</span>
+                                <p class="text-[10px] text-slate-400">Recuperação de share em eletrônicos de entrada</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-orange-200 transition-colors">
+                            <span class="w-8 font-black text-orange-500">10</span>
+                            <div class="ml-4">
+                                <span class="font-bold text-slate-800">Sodimac</span>
+                                <p class="text-[10px] text-slate-400">Foco em construção e reforma com kits de segurança</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-[#051129] p-8 rounded-3xl shadow-xl flex flex-col justify-center">
+                    <h3 class="font-semibold text-slate-400 text-sm mb-8 text-center uppercase tracking-widest">Share de Fornecedores Varejo (%)</h3>
+                    <div class="chart-container">
+                        <canvas id="marketShareChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-8 text-center leading-relaxed">
+                        A **Intelbras** detém a maior fatia do mercado (~65%). A estratégia da Fiberhome deve focar nos clientes 01 e 02 para ganhar visibilidade rápida e agilidade logística.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section id="portfolio" class="mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">🛒 Portfólio de Entrada</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="product-grid"></div>
+        </section>
+
+        <section id="roadmap" class="mb-20">
+            <h2 class="text-3xl font-bold text-slate-900 mb-10 text-center">🗺️ Roadmap de Execução</h2>
+            <div class="max-w-3xl mx-auto" id="timeline-container"></div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 py-12 text-center">
+        <p class="text-slate-500 text-sm">Fiberhome Brasil - Estratégia B2C/SMB 2026</p>
+    </footer>
+
+    <script>
+        const FH_BLUE = '#051129';
+        const FH_ORANGE = '#f97316';
+
+        const products = [
+            { name: "FiberCam Smart 1080p", price: 189.90, icon: "📷", cat: "Interna" },
+            { name: "FiberCam Outdoor IP67", price: 349.90, icon: "📹", cat: "Externa" },
+            { name: "Smart Lock Biométrica", price: 599.00, icon: "🚪", cat: "Fechadura" },
+            { name: "Video Porteiro Wi-Fi", price: 459.00, icon: "🔔", cat: "Acesso" },
+            { name: "Kit Alarme Smart DIY", price: 299.00, icon: "🚨", cat: "Alarme" },
+            { name: "Kit NVR Wireless 4CH", price: 1299.00, icon: "📼", cat: "NVR" }
+        ];
+
+        const roadmapData = [
+            { p: "Q1: Homologação Anatel", d: "Certificação de hardware e localização de manuais/embalagens." },
+            { p: "Q2: Digital D2C", d: "Launch em Mercado Livre e Amazon (Fulfillment)." },
+            { p: "Q3: B2B2C / Distribuição", d: "Parcerias com Leroy Merlin e Kalunga para atingir público regional." },
+            { p: "Q4: Varejo Físico", d: "Entrada em Magazine Luiza e Fast Shop com material PDV especializado." }
+        ];
+
+        function init() {
+            const grid = document.getElementById('product-grid');
+            products.forEach(p => {
+                grid.innerHTML += `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="text-3xl mb-4">${p.icon}</div>
+                        <h4 class="font-bold text-slate-800">${p.name}</h4>
+                        <span class="text-[9px] font-black text-orange-600 bg-orange-50 px-2 py-0.5 rounded uppercase">${p.cat}</span>
+                        <div class="mt-6 flex justify-between items-baseline border-t pt-4 border-slate-50">
+                            <span class="text-xl font-black text-[#051129]">R$ ${p.price.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                    </div>`;
+            });
+
+            const roadmap = document.getElementById('timeline-container');
+            roadmapData.forEach(item => {
+                roadmap.innerHTML += `
+                    <div class="timeline-step">
+                        <h4 class="font-bold text-[#051129] text-lg">${item.p}</h4>
+                        <p class="text-slate-500 text-sm mt-1">${item.d}</p>
+                    </div>`;
+            });
+
+            new Chart(document.getElementById('marketShareChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Intelbras', 'Hikvision', 'Giga/Multi', 'Outros'],
+                    datasets: [{
+                        data: [65, 12, 10, 13],
+                        backgroundColor: [FH_ORANGE, '#1e293b', '#1e293b', '#475569'],
+                        borderRadius: 8
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { display: false },
+                        x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+        window.onload = init;
+    </script>
+</body>
+</html>
