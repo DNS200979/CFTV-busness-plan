@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiberhome Security - Business Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Navy Blue (#001035) and Orange (#f36d21) from Fiberhome Logo -->
+    <!-- Application Structure Plan: 
+         1. Hero: Branding e Proposta de Valor.
+         2. Comparativo de Preços: Gráfico interativo Fiberhome vs Concorrentes.
+         3. Tabela de Produtos: O Top 10 do mercado detalhado.
+         4. Seção Software: Preços de mercado e alternativas Open Source.
+         5. Estratégia de Clientes: Construtoras e Distribuidores.
+    -->
+    <!-- Visualization & Content Choices:
+         - Bar Chart (Chart.js): Demonstrar visualmente a economia de 15-20% da Fiberhome.
+         - Interactive Grid: Listagem do Top 10 com hover state.
+         - Comparison Cards: Diferenciação entre Software Pago e Open Source.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        :root {
+            --fh-navy: #001035;
+            --fh-orange: #f36d21;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .bg-fh-navy { background-color: var(--fh-navy); }
+        .text-fh-orange { color: var(--fh-orange); }
+        .bg-fh-orange { background-color: var(--fh-orange); }
+        .border-fh-orange { border-color: var(--fh-orange); }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            height: 400px;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        transition-all { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header / Hero -->
+    <header class="bg-fh-navy text-white py-16 border-b-4 border-fh-orange">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-5xl font-bold mb-4 italic tracking-tighter">Fiber<span class="text-fh-orange">Home</span> <span class="font-light not-italic">Security</span></h1>
+            <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                Plano de Expansão para o Mercado Condominial: Alta tecnologia de fibra óptica aplicada à segurança eletrônica com o melhor custo-benefício do mercado.
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <a href="#precos" class="bg-fh-orange hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full transition-all">Ver Comparativo de Preços</a>
+                <a href="#software" class="border border-white hover:bg-white/10 text-white font-bold py-3 px-8 rounded-full transition-all">Soluções de Software</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Positioning & Market Analysis -->
+    <section class="py-20 px-4 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <h2 class="text-3xl font-bold text-fh-navy mb-6 border-l-8 border-fh-orange pl-4">Posicionamento de Mercado</h2>
+                <p class="text-lg text-slate-600 mb-6">
+                    A Fiberhome entra no mercado de segurança condominial utilizando sua capilaridade em infraestrutura GPON para oferecer uma solução integrada. 
+                    O diferencial estratégico é o <strong>Posicionamento de Preço Abaixo da Média (Aggressive Pricing)</strong>, visando desbancar líderes como Intelbras e Hikvision através da economia de escala em fabricação de chipsets.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                        <span class="text-fh-orange text-2xl font-bold">15-20%</span>
+                        <span class="text-sm font-medium">Preço médio abaixo dos principais concorrentes nacionais.</span>
+                    </div>
+                    <div class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+                        <span class="text-fh-orange text-2xl font-bold">Converge</span>
+                        <span class="text-sm font-medium">Único player que integra Fibra + Segurança + Interfonia na mesma ONU.</span>
+                    </div>
+                </div>
+            </div>
+            <div id="precos" class="bg-white p-8 rounded-2xl shadow-xl border border-slate-200">
+                <h3 class="text-center font-bold text-fh-navy mb-6 uppercase tracking-wider">Benchmark: Fiberhome vs Mercado (R$)</h3>
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
+                <p class="text-[10px] text-center mt-4 text-slate-400">*Valores médios estimados para venda em volume para integradores/distribuidores.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top 10 Product List -->
+    <section class="bg-slate-100 py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-fh-navy mb-12 text-center">Top 10 Produtos: Mercado vs Fiberhome</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Item 1 -->
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Leitor Facial IP</h4>
+                    <p class="text-sm font-semibold h-10">Reconhecimento Facial (High End)</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 2.450</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 1.950</div>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Câmera LPR</h4>
+                    <p class="text-sm font-semibold h-10">Leitura de Placas com AI</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 1.800</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 1.450</div>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Vídeo Interfonia</h4>
+                    <p class="text-sm font-semibold h-10">Terminal Externo SIP IP</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 1.650</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 1.320</div>
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Switch POE</h4>
+                    <p class="text-sm font-semibold h-10">Managed 24 Portas L2</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 1.500</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 1.150</div>
+                    </div>
+                </div>
+                <!-- Item 5 -->
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">NVR 32 Canais</h4>
+                    <p class="text-sm font-semibold h-10">Gravação 4K c/ Analítico</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 1.400</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 1.100</div>
+                    </div>
+                </div>
+                <!-- Row 2 -->
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Câmera Dome</h4>
+                    <p class="text-sm font-semibold h-10">Câmera IP 4MP Varifocal</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 850</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 680</div>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Leitor Biométrico</h4>
+                    <p class="text-sm font-semibold h-10">Leitor Digital Standalone</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 450</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 340</div>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Receptor UHF</h4>
+                    <p class="text-sm font-semibold h-10">Antena para Tags Veiculares</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 1.200</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 950</div>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Controladora</h4>
+                    <p class="text-sm font-semibold h-10">Hub de Acesso para 4 Portas</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 980</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 780</div>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow border-t-4 border-fh-navy card-hover transition-all">
+                    <h4 class="font-bold text-xs uppercase text-slate-400 mb-2">Módulo I/O</h4>
+                    <p class="text-sm font-semibold h-10">Módulo de Automação IoT</p>
+                    <div class="mt-4">
+                        <div class="text-[10px] text-slate-400">Concorrente:</div>
+                        <div class="text-red-500 font-bold">R$ 380</div>
+                        <div class="text-[10px] text-slate-400 mt-1">Fiberhome:</div>
+                        <div class="text-fh-orange font-bold text-lg">R$ 290</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software Management & Open Source -->
+    <section id="software" class="py-20 px-4 max-w-7xl mx-auto">
+        <h2 class="text-3xl font-bold text-fh-navy mb-4 border-l-8 border-fh-orange pl-4">Ecossistema de Software (SW)</h2>
+        <p class="text-slate-600 mb-12">A tendência de gerenciamento hoje é baseada em Cloud e Inteligência na Borda. Abaixo, detalhamos os custos de mercado e as alternativas para operadoras que desejam independência tecnológica.</p>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Paid Software -->
+            <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">
+                <h3 class="text-xl font-bold text-fh-navy mb-6 flex items-center gap-2">
+                    <span class="p-2 bg-slate-100 rounded">💰</span> Soluções Proprietárias (Preços Atuais)
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Situator (Seventh) - Gestão Remota</span>
+                        <span class="font-bold">R$ 18 - 25 <small>/unidade</small></span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Segware Sigma - Central de Monitoramento</span>
+                        <span class="font-bold">R$ 22 - 30 <small>/unidade</small></span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span>uCondo / Noknox - App Morador</span>
+                        <span class="font-bold">R$ 300 - 800 <small>/condomínio</small></span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span>Licenças VMS (Intelbras/Hikvision)</span>
+                        <span class="font-bold">R$ 150 - 450 <small>/canal (fixo)</small></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Open Source -->
+            <div class="bg-fh-navy p-8 rounded-xl shadow-lg text-white">
+                <h3 class="text-xl font-bold text-fh-orange mb-6 flex items-center gap-2">
+                    <span class="p-2 bg-white/10 rounded">🔓</span> Alternativas Open Source
+                </h3>
+                <p class="text-sm text-slate-300 mb-6">Para redução drástica de OPEX, a Fiberhome pode oferecer hardware compatível com protocolos abertos (ONVIF/SIP):</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white/5 p-4 rounded border border-white/10">
+                        <strong class="block text-fh-orange">ZoneMinder / Shinobi</strong>
+                        <p class="text-xs">Substitutos para NVRs proprietários e análise de vídeo IP.</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded border border-white/10">
+                        <strong class="block text-fh-orange">Home Assistant</strong>
+                        <p class="text-xs">A plataforma de automação IoT definitiva para gerir áreas comuns.</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded border border-white/10">
+                        <strong class="block text-fh-orange">Asterisk / Linphone</strong>
+                        <p class="text-xs">Gestão de interfonia SIP em nuvem sem custo de licença por ramal.</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded border border-white/10">
+                        <strong class="block text-fh-orange">Keycloak</strong>
+                        <p class="text-xs">Autenticação centralizada para acesso via aplicativos próprios.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customers & Partners -->
+    <section id="clientes" class="bg-white py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-fh-navy mb-12 text-center">Clientes em Potencial e Estratégia de Venda</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200">
+                    <h3 class="text-2xl font-bold text-fh-navy mb-4">1. Construtoras e Incorporadoras</h3>
+                    <p class="text-slate-600 mb-6">O foco aqui é o <strong>VGV (Valor Geral de Vendas)</strong>. Entregar um prédio com infraestrutura Fiberhome pronta para portaria remota valoriza o imóvel.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2">
+                            <span class="text-fh-orange">●</span> 
+                            <span><strong>Solução em Planta:</strong> Instalação de dutos e fibras durante a obra para reduzir custos de instalação em 60%.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-fh-orange">●</span> 
+                            <span><strong>Diferencial Tecnológico:</strong> "Smart Condo" - O morador já recebe o apartamento com app de controle facial integrado.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="p-8 rounded-2xl bg-fh-navy text-white shadow-xl">
+                    <h3 class="text-2xl font-bold text-fh-orange mb-4">2. Distribuidores Especializados</h3>
+                    <p class="text-slate-300 mb-6">Distribuidores buscam rotatividade e suporte técnico. A Fiberhome deve atuar como o player de volume.</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2">
+                            <span class="text-fh-orange">●</span> 
+                            <span><strong>Políticas de Rebate:</strong> Incentivos agressivos para distribuidores que baterem metas de volume de ONUs e Câmeras.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-fh-orange">●</span> 
+                            <span><strong>Estoque Local:</strong> Manter hubs de peças de reposição (RMA) para garantir confiança em projetos críticos.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-fh-navy text-slate-400 py-12 px-4 border-t border-fh-orange">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-2xl font-bold italic">Fiber<span class="text-fh-orange">Home</span></div>
+            <p class="text-xs uppercase tracking-widest">© 2024 Business Intelligence - Security Division</p>
+            <div class="flex gap-4">
+                <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center">L</div>
+                <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center">T</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Faciais', 'Câmeras LPR', 'Interfonia IP', 'Switches', 'NVRs'],
+                    datasets: [
+                        {
+                            label: 'Preço Médio Mercado',
+                            data: [2450, 1800, 1650, 1500, 1400],
+                            backgroundColor: '#94a3b8',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Preço Fiberhome',
+                            data: [1950, 1450, 1320, 1150, 1100],
+                            backgroundColor: '#f36d21',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { weight: 'bold' } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
